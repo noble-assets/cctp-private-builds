@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/globalfee/ante"
+	"github.com/circlefin/noble-cctp-router-private/x/globalfee/ante"
 )
 
 type feeUtilsTestSuite struct {

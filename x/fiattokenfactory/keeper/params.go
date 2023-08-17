@@ -1,8 +1,8 @@
 package keeper
 
 import (
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
 )
 
 // GetParams get all parameters as types.Params

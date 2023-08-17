@@ -6,11 +6,11 @@ import (
 	"cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
 )
 
 func CmdDepositForBurn() *cobra.Command {

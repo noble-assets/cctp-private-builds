@@ -3,9 +3,9 @@ package cli
 import (
 	"fmt"
 
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
 )
 
 // GetTxCmd returns the transaction commands for this module

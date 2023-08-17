@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
-	keepertest "github.com/strangelove-ventures/noble-cctp-router-private/testutil/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/nullify"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
+	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
+	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

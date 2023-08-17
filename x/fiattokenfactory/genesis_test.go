@@ -3,10 +3,10 @@ package fiattokenfactory_test
 import (
 	"testing"
 
-	keepertest "github.com/strangelove-ventures/noble-cctp-router-private/testutil/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/nullify"
-	fiattokenfactory "github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
+	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
+	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	fiattokenfactory "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 
 	"github.com/stretchr/testify/require"
 )

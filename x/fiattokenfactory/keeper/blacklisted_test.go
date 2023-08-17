@@ -4,12 +4,12 @@ import (
 	"strconv"
 	"testing"
 
+	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
+	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	keepertest "github.com/strangelove-ventures/noble-cctp-router-private/testutil/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/nullify"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/sample"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
 	"github.com/stretchr/testify/require"
 )
 

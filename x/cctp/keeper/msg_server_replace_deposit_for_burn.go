@@ -6,9 +6,9 @@ import (
 	"encoding/hex"
 
 	sdkerrors "cosmossdk.io/errors"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
 )
 
 func (k msgServer) ReplaceDepositForBurn(goCtx context.Context, msg *types.MsgReplaceDepositForBurn) (*types.MsgReplaceDepositForBurnResponse, error) {

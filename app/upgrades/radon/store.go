@@ -5,9 +5,9 @@ import (
 	storeTypes "github.com/cosmos/cosmos-sdk/store/types"
 
 	// GlobalFee
-	globalFeeTypes "github.com/strangelove-ventures/noble-cctp-router-private/x/globalfee/types"
+	globalFeeTypes "github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
 	// Tariff
-	tariffTypes "github.com/strangelove-ventures/noble-cctp-router-private/x/tariff/types"
+	tariffTypes "github.com/circlefin/noble-cctp-router-private/x/tariff/types"
 	// Upgrade
 	upgradeTypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 )

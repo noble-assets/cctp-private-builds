@@ -3,12 +3,12 @@ package keeper
 import (
 	"strconv"
 
+	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-router-private/x/router/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	clienttypes "github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
-	cctptypes "github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
 )
 
 func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {

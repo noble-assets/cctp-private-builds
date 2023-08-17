@@ -6,11 +6,11 @@ import (
 
 	paramauthoritykeeper "github.com/strangelove-ventures/paramauthority/x/params/keeper"
 
+	fiattokenfactorykeeper "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
+	globalfeetypes "github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	fiattokenfactorykeeper "github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	globalfeetypes "github.com/strangelove-ventures/noble-cctp-router-private/x/globalfee/types"
 
-	tarifftypes "github.com/strangelove-ventures/noble-cctp-router-private/x/tariff/types"
+	tarifftypes "github.com/circlefin/noble-cctp-router-private/x/tariff/types"
 )
 
 func CreateRadonUpgradeHandler(

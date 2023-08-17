@@ -10,9 +10,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	keepertest "github.com/strangelove-ventures/noble-cctp-router-private/testutil/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/nullify"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
+	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
+	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 )
 
 // Prevent strconv unused error

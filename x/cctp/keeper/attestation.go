@@ -7,8 +7,8 @@ import (
 	"math/big"
 
 	sdkerrors "cosmossdk.io/errors"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
 )
 
 const (

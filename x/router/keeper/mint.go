@@ -1,8 +1,8 @@
 package keeper
 
 import (
+	"github.com/circlefin/noble-cctp-router-private/x/router/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

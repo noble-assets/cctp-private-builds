@@ -1,7 +1,7 @@
 syntax = "proto3";
 package noble.fiattokenfactory;
 
-option go_package = "github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types";
+option go_package = "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types";
 
 message MinterController {
   string minter = 1;

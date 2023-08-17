@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"

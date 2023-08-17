@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 )
 
 func (k msgServer) LinkTokenPair(goCtx context.Context, msg *types.MsgLinkTokenPair) (*types.MsgLinkTokenPairResponse, error) {

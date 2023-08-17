@@ -3,9 +3,9 @@ package cli
 import (
 	"fmt"
 
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

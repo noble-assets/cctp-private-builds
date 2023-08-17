@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"

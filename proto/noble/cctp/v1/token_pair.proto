@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package noble.cctp.v1;
 
-option go_package = "github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types";
+option go_package = "github.com/circlefin/noble-cctp-router-private/x/cctp/types";
 
 /**
  * TokenPair is used to look up the Noble token (i.e. "uusdc") from a remote domain token address

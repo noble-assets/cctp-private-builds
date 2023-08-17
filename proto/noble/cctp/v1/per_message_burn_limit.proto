@@ -4,7 +4,7 @@ package noble.cctp.v1;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types";
+option go_package = "github.com/circlefin/noble-cctp-router-private/x/cctp/types";
 
 /**
  * PerMessageBurnLimit is the maximum amount of a certain denom that can be burned in an single burn

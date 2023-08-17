@@ -1,11 +1,11 @@
 package argon
 
 import (
+	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	routertypes "github.com/circlefin/noble-cctp-router-private/x/router/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	storeTypes "github.com/cosmos/cosmos-sdk/store/types"
 	upgradeTypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	cctptypes "github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
-	routertypes "github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
 )
 
 func CreateStoreLoader(upgradeHeight int64) baseapp.StoreLoader {

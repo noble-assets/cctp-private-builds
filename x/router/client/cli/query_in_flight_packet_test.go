@@ -6,9 +6,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/network"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/nullify"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
+	"github.com/circlefin/noble-cctp-router-private/testutil/network"
+	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	"github.com/circlefin/noble-cctp-router-private/x/router/types"
 )
 
 func networkWithInFlightPacketObjects(t *testing.T, n int) (*network.Network, []types.InFlightPacket) {

@@ -1,8 +1,8 @@
 package tariff
 
 import (
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tariff/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tariff/types"
+	"github.com/circlefin/noble-cctp-router-private/x/tariff/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/tariff/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

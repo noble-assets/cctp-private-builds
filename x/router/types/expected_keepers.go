@@ -3,9 +3,9 @@ package types
 import (
 	"context"
 
+	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
-	cctptypes "github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
 )
 
 // TransferKeeper defines the expected transfer keeper

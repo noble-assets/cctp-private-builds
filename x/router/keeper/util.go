@@ -4,8 +4,8 @@ import (
 	"math/big"
 
 	sdkerrors "cosmossdk.io/errors"
+	"github.com/circlefin/noble-cctp-router-private/x/router/types"
 	"github.com/gogo/protobuf/proto"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
 )
 
 type BurnMessage struct {

@@ -11,14 +11,14 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
+	"github.com/circlefin/noble-cctp-router-private/x/router/client/cli"
+	"github.com/circlefin/noble-cctp-router-private/x/router/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/router/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/client/cli"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
 )
 
 var (

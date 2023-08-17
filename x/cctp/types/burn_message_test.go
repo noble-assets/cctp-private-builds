@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
 	"github.com/stretchr/testify/require"
 )
 

@@ -10,10 +10,10 @@ import (
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/status"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/network"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/nullify"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/client/cli"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-router-private/testutil/network"
+	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/client/cli"
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 )
 
 func networkWithMintingDenomObjects(t *testing.T) (*network.Network, types.MintingDenom) {

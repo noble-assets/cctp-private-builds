@@ -5,8 +5,8 @@ import (
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/app"
-	"github.com/strangelove-ventures/noble-cctp-router-private/cmd"
+	"github.com/circlefin/noble-cctp-router-private/app"
+	"github.com/circlefin/noble-cctp-router-private/cmd"
 )
 
 func main() {

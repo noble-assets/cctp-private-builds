@@ -1,9 +1,9 @@
 package fiattokenfactory
 
 import (
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

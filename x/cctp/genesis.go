@@ -1,9 +1,9 @@
 package cctp
 
 import (
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	_ "github.com/cosmos/cosmos-sdk/types/errors" // sdkerrors
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

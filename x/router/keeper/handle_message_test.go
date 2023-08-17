@@ -5,12 +5,12 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/circlefin/noble-cctp-router-private/x/router/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/router/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
 
-	keepertest "github.com/strangelove-ventures/noble-cctp-router-private/testutil/keeper"
+	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
 	"github.com/stretchr/testify/require"
 )
 

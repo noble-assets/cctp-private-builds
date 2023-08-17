@@ -3,9 +3,9 @@ package types_test
 import (
 	"testing"
 
+	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/sample"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
 
 	"github.com/stretchr/testify/require"
 )

@@ -9,7 +9,7 @@ import "router/in_flight_packet.proto";
 import "router/mint.proto";
 import "router/params.proto";
 
-option go_package = "github.com/strangelove-ventures/noble-cctp-router-private/x/router/types";
+option go_package = "github.com/circlefin/noble-cctp-router-private/x/router/types";
 
 // Query defines the gRPC querier service.
 service Query {

@@ -3,8 +3,8 @@ package ante
 import (
 	"math"
 
+	globalfeetypes "github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	globalfeetypes "github.com/strangelove-ventures/noble-cctp-router-private/x/globalfee/types"
 	tmstrings "github.com/tendermint/tendermint/libs/strings"
 )
 

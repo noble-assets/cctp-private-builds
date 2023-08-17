@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
+	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	fiattokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	keepertest "github.com/strangelove-ventures/noble-cctp-router-private/testutil/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
-	fiattokenfactorytypes "github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
 	"github.com/stretchr/testify/require"
 )
 

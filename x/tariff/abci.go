@@ -1,8 +1,8 @@
 package tariff
 
 import (
+	"github.com/circlefin/noble-cctp-router-private/x/tariff/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tariff/keeper"
 )
 
 // BeginBlocker sets the proposer for determining distribution during endblock

@@ -3,9 +3,9 @@ package types
 import (
 	"testing"
 
+	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/sample"
 	"github.com/stretchr/testify/require"
 )
 

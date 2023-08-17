@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	tokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	"github.com/cosmos/cosmos-sdk/types"
 	"github.com/icza/dyno"
@@ -13,7 +14,6 @@ import (
 	"github.com/strangelove-ventures/interchaintest/v3/ibc"
 	"github.com/strangelove-ventures/interchaintest/v3/relayer"
 	"github.com/strangelove-ventures/interchaintest/v3/relayer/rly"
-	tokenfactorytypes "github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
 	proposaltypes "github.com/strangelove-ventures/paramauthority/x/params/types/proposal"
 	upgradetypes "github.com/strangelove-ventures/paramauthority/x/upgrade/types"
 )

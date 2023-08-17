@@ -3,7 +3,7 @@ package types_test
 import (
 	"testing"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
+	"github.com/circlefin/noble-cctp-router-private/x/router/types"
 
 	"github.com/stretchr/testify/require"
 )

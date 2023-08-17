@@ -1,9 +1,9 @@
 package keeper
 
 import (
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
 )
 
 // SetBlacklisted set a specific blacklisted in the store from its index

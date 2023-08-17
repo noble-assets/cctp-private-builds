@@ -2,6 +2,7 @@ package router
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	"github.com/circlefin/noble-cctp-router-private/x/router/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/capability/types"
@@ -9,7 +10,6 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
 	porttypes "github.com/cosmos/ibc-go/v3/modules/core/05-port/types"
 	"github.com/cosmos/ibc-go/v3/modules/core/exported"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/keeper"
 )
 
 var _ porttypes.IBCModule = IBCMiddleware{}

@@ -1,8 +1,8 @@
 package keeper
 
 import (
+	"github.com/circlefin/noble-cctp-router-private/x/router/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/router/types"
 )
 
 // GetParams get all parameters as types.Params

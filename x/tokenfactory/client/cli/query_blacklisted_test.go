@@ -5,18 +5,18 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/sample"
 	"github.com/stretchr/testify/require"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/network"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/nullify"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/client/cli"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-router-private/testutil/network"
+	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/client/cli"
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 )
 
 // Prevent strconv unused error

@@ -3,6 +3,9 @@ package keeper
 import (
 	"testing"
 
+	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/store"
@@ -10,9 +13,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/sample"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
 	"github.com/stretchr/testify/require"
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"

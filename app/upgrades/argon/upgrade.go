@@ -4,12 +4,12 @@ import (
 	"fmt"
 
 	"cosmossdk.io/math"
+	cctpkeeper "github.com/circlefin/noble-cctp-router-private/x/cctp/keeper"
+	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	fiattokenfactorykeeper "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradeTypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	cctpkeeper "github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/keeper"
-	cctptypes "github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
-	fiattokenfactorykeeper "github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/keeper"
 	paramauthoritykeeper "github.com/strangelove-ventures/paramauthority/x/params/keeper"
 )
 

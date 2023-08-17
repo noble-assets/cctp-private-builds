@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/circlefin/noble-cctp-router-private/cmd"
 	"github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 	"github.com/strangelove-ventures/interchaintest/v3"
 	"github.com/strangelove-ventures/interchaintest/v3/chain/cosmos"
 	"github.com/strangelove-ventures/interchaintest/v3/testreporter"
-	"github.com/strangelove-ventures/noble-cctp-router-private/cmd"
 	proposaltypes "github.com/strangelove-ventures/paramauthority/x/params/types/proposal"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"

@@ -1,11 +1,11 @@
 package cli
 
 import (
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
 )
 
 func CmdEnableAttester() *cobra.Command {

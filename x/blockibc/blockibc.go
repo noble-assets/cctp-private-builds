@@ -1,6 +1,10 @@
 package blockibc
 
 import (
+	fiatKeeper "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
+	fiat_types "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -9,10 +13,6 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
 	porttypes "github.com/cosmos/ibc-go/v3/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v3/modules/core/exported"
-	fiatKeeper "github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	fiat_types "github.com/strangelove-ventures/noble-cctp-router-private/x/fiattokenfactory/types"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
 )
 
 var _ porttypes.IBCModule = &IBCMiddleware{}

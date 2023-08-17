@@ -6,7 +6,7 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 )
 
 func (k msgServer) DisableAttester(goCtx context.Context, msg *types.MsgDisableAttester) (*types.MsgDisableAttesterResponse, error) {

@@ -14,10 +14,10 @@ import (
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/status"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/network"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/nullify"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/client/cli"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-router-private/testutil/network"
+	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/client/cli"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 )
 
 func networkWithAttesterObjects(t *testing.T, n int) (*network.Network, []types.Attester) {

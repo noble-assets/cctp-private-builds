@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
-	"github.com/strangelove-ventures/noble-cctp-router-private/testutil/sample"
+	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"

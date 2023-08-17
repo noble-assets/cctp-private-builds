@@ -3,8 +3,8 @@ package keeper_test
 import (
 	"testing"
 
-	keepertest "github.com/strangelove-ventures/noble-cctp-router-private/testutil/keeper"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
+	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	"github.com/stretchr/testify/require"
 )
 

@@ -3,7 +3,7 @@ package cli
 import (
 	"strconv"
 
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"

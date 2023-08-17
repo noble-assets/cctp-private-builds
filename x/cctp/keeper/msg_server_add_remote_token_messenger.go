@@ -4,9 +4,9 @@ import (
 	"context"
 	"strings"
 
+	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/strangelove-ventures/noble-cctp-router-private/x/cctp/types"
 )
 
 func (k msgServer) AddRemoteTokenMessenger(goCtx context.Context, msg *types.MsgAddRemoteTokenMessenger) (*types.MsgAddRemoteTokenMessengerResponse, error) {
