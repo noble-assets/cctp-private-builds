@@ -11,9 +11,9 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/client/cli"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/keeper"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/client/cli"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"

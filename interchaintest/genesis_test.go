@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	tokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	tokenfactorytypes "github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	"github.com/cosmos/cosmos-sdk/types"
 	"github.com/icza/dyno"

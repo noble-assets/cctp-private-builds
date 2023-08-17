@@ -9,9 +9,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
 func TestTokenPairQuerySingle(t *testing.T) {

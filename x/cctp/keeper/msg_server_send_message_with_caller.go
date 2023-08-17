@@ -7,7 +7,7 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
 func (k msgServer) SendMessageWithCaller(goCtx context.Context, msg *types.MsgSendMessageWithCaller) (*types.MsgSendMessageWithCallerResponse, error) {

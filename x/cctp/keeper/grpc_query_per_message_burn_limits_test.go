@@ -11,9 +11,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
 func TestPerMessageBurnLimitQuery(t *testing.T) {

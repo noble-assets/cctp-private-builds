@@ -1,8 +1,8 @@
 package argon
 
 import (
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
-	routertypes "github.com/circlefin/noble-cctp-router-private/x/router/types"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	routertypes "github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	storeTypes "github.com/cosmos/cosmos-sdk/store/types"
 	upgradeTypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"

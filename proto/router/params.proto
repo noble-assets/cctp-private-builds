@@ -3,7 +3,7 @@ package noble.router;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/circlefin/noble-cctp-router-private/x/router/types";
+option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/types";
 
 // Params defines the parameters for the module.
 message Params {

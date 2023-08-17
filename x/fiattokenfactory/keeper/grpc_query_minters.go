@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"

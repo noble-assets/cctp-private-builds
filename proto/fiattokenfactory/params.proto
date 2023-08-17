@@ -3,7 +3,7 @@ package noble.fiattokenfactory;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types";
+option go_package = "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types";
 
 // Params defines the parameters for the module.
 message Params { option (gogoproto.goproto_stringer) = false; }

@@ -3,13 +3,13 @@ package ante
 import (
 	"errors"
 
-	"github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/globalfee/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/circlefin/noble-cctp-router-private/x/globalfee"
+	"github.com/circlefin/noble-cctp-private-builds/x/globalfee"
 )
 
 // FeeWithBypassDecorator will check if the transaction's fee is at least as large

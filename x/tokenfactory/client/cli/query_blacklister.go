@@ -3,7 +3,7 @@ package cli
 import (
 	"context"
 
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"

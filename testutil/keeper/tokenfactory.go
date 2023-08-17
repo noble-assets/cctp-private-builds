@@ -3,8 +3,8 @@ package keeper
 import (
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/keeper"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/store"

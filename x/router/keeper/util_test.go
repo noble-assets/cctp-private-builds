@@ -6,11 +6,11 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/x/router/keeper"
-	"github.com/circlefin/noble-cctp-router-private/x/router/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	"github.com/gogo/protobuf/proto"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
 	"github.com/stretchr/testify/require"
 )
 

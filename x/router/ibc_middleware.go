@@ -2,7 +2,7 @@ package router
 
 import (
 	errorsmod "cosmossdk.io/errors"
-	"github.com/circlefin/noble-cctp-router-private/x/router/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/capability/types"

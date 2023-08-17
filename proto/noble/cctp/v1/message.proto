@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package noble.cctp.v1;
 
-option go_package = "github.com/circlefin/noble-cctp-router-private/x/cctp/types";
+option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types";
 
 /**
  * Generic message header for all messages passing through CCTP

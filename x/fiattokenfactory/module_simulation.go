@@ -3,9 +3,9 @@ package fiattokenfactory
 import (
 	"math/rand"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
-	tokenfactorysimulation "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/simulation"
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
+	tokenfactorysimulation "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/simulation"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"

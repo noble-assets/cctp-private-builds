@@ -12,8 +12,8 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
-	fiattokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	fiattokenfactorytypes "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 )
 
 func (k msgServer) DepositForBurn(goCtx context.Context, msg *types.MsgDepositForBurn) (*types.MsgDepositForBurnResponse, error) {

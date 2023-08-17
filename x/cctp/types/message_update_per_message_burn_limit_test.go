@@ -3,7 +3,7 @@ package types
 import (
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"

@@ -3,7 +3,7 @@ package types
 import (
 	"context"
 
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 )

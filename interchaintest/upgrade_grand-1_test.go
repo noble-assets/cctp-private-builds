@@ -54,7 +54,15 @@ func TestGrand1ChainUpgrade(t *testing.T) {
 		},
 		{
 			upgradeName: "argon",
-			image:       nobleImageInfo[0],
+			image: ibc.DockerImage{
+				Repository: "ghcr.io/strangelove-ventures/noble",
+				Version:    "v4.0.0-alpha1",
+				UidGid:     containerUidGid,
+			},
+		},
+		{
+			// post argon patch upgrade (will be applied as rolling upgrade due to lack of upgradeName)
+			image: nobleImageInfo[0],
 		},
 	}
 

@@ -3,8 +3,8 @@ package simulation
 import (
 	"math/rand"
 
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"

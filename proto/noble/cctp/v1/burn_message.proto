@@ -4,7 +4,7 @@ package noble.cctp.v1;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/circlefin/noble-cctp-router-private/x/cctp/types";
+option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types";
 
 /**
  * Message format for BurnMessages

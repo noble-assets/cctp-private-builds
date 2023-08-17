@@ -3,7 +3,7 @@ package types_test
 import (
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/stretchr/testify/require"
 )
 

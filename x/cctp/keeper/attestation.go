@@ -7,7 +7,7 @@ import (
 	"math/big"
 
 	sdkerrors "cosmossdk.io/errors"
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 

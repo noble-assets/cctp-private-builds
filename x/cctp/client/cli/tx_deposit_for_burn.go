@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"

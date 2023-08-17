@@ -14,10 +14,10 @@ import (
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/status"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/network"
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/client/cli"
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/network"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/client/cli"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
 func networkWithTokenPairObjects(t *testing.T, n int) (*network.Network, []types.TokenPair) {

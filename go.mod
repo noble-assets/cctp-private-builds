@@ -1,4 +1,4 @@
-module github.com/circlefin/noble-cctp-router-private
+module github.com/circlefin/noble-cctp-private-builds
 
 go 1.19
 

@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/circlefin/noble-cctp-router-private/cmd"
+	"github.com/circlefin/noble-cctp-private-builds/cmd"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -28,9 +28,9 @@ import (
 	"go.uber.org/zap/zaptest"
 
 	cosmossdk_io_math "cosmossdk.io/math"
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 
-	routertypes "github.com/circlefin/noble-cctp-router-private/x/router/types"
+	routertypes "github.com/circlefin/noble-cctp-private-builds/x/router/types"
 )
 
 // run `make local-image`to rebuild updated binary before running test

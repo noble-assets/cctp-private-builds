@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/cmd"
+	"github.com/circlefin/noble-cctp-private-builds/cmd"
 	"github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 	"github.com/icza/dyno"
 	"github.com/strangelove-ventures/interchaintest/v3"

@@ -3,10 +3,10 @@ package router_test
 import (
 	"testing"
 
-	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
-	"github.com/circlefin/noble-cctp-router-private/x/router"
-	"github.com/circlefin/noble-cctp-router-private/x/router/types"
+	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/x/router"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	"github.com/stretchr/testify/require"
 )
 

@@ -1,16 +1,16 @@
-module github.com/strangelove-ventures/noble-cctp-router-private/interchaintest
+module github.com/circlefin/noble-cctp-private-builds/interchaintest
 
 go 1.19
 
 require (
 	cosmossdk.io/math v1.0.0-beta.4
+	github.com/circlefin/noble-cctp-private-builds v0.0.0-00010101000000-000000000000
 	github.com/cosmos/cosmos-sdk v0.45.16
 	github.com/cosmos/ibc-go/v3 v3.4.0
 	github.com/ethereum/go-ethereum v1.10.20
 	github.com/golang/protobuf v1.5.3
 	github.com/icza/dyno v0.0.0-20220812133438-f0b6f8a18845
 	github.com/strangelove-ventures/interchaintest/v3 v3.0.0-20230622221919-28c608364e27
-	github.com/strangelove-ventures/noble-cctp-router-private v0.0.0-00010101000000-000000000000
 	github.com/strangelove-ventures/paramauthority v0.2.0
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.24.0
@@ -20,7 +20,6 @@ require (
 	cosmossdk.io/api v0.2.6 // indirect
 	cosmossdk.io/core v0.5.1 // indirect
 	cosmossdk.io/depinject v1.0.0-alpha.3 // indirect
-	cosmossdk.io/errors v1.0.0-beta.7 // indirect
 	filippo.io/edwards25519 v1.0.0 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
 	github.com/99designs/keyring v1.2.2 // indirect
@@ -182,10 +181,10 @@ replace (
 	github.com/ChainSafe/go-schnorrkel => github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d
 	github.com/ChainSafe/go-schnorrkel/1 => github.com/ChainSafe/go-schnorrkel v1.0.0
 
-	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
-
 	// For this nested module, you always want to replace the parent reference with the current worktree.
-	github.com/strangelove-ventures/noble-cctp-router-private => ../
+	github.com/circlefin/noble-cctp-private-builds => ../
+
+	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
 	// cometbft
 	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.27

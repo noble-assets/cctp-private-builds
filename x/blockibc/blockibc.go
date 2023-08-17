@@ -1,10 +1,10 @@
 package blockibc
 
 import (
-	fiatKeeper "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	fiat_types "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/keeper"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	fiatKeeper "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/keeper"
+	fiat_types "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"

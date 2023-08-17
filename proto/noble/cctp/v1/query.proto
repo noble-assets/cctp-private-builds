@@ -16,7 +16,7 @@ import "noble/cctp/v1/sending_and_receiving_messages_paused.proto";
 import "noble/cctp/v1/signature_threshold.proto";
 import "noble/cctp/v1/token_pair.proto";
 
-option go_package = "github.com/circlefin/noble-cctp-router-private/x/cctp/types";
+option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types";
 
 // Query defines the gRPC querier service.
 service Query {

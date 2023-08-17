@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	sdkerrors "cosmossdk.io/errors"
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
-	fiattokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	fiattokenfactorytypes "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"

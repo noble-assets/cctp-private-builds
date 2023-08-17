@@ -3,7 +3,7 @@ package keeper
 import (
 	"fmt"
 
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/cosmos/cosmos-sdk/codec"

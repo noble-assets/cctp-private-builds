@@ -3,8 +3,8 @@ package keeper
 import (
 	"strconv"
 
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
-	"github.com/circlefin/noble-cctp-router-private/x/router/types"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"

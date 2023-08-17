@@ -3,9 +3,9 @@ package keeper
 import (
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/store"
