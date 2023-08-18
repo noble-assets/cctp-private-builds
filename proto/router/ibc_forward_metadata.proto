@@ -6,7 +6,8 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/types";
 
-// StoreIBCForwardMetadata are stored so incoming mints can check for a forward message
+// StoreIBCForwardMetadata are stored so incoming mints can check for a forward
+// message
 // @param source_domain_sender
 // @param nonce
 // @param port
@@ -20,7 +21,8 @@ message StoreIBCForwardMetadata {
   bool ack_error = 4;
 }
 
-// IBCForwardMetadata is the information a user includes in their depositForBurnWithMetadata data field
+// IBCForwardMetadata is the information a user includes in their
+// depositForBurnWithMetadata data field
 // TODO
 // @param port
 // @param channel

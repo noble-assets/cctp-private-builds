@@ -50,6 +50,7 @@ func TestNoble1ChainUpgrade(t *testing.T) {
 		{
 			upgradeName: "argon",
 			image:       nobleImageInfo[0],
+			postUpgrade: testPostArgonUpgrade,
 		},
 	}
 

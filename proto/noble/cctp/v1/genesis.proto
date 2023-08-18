@@ -25,14 +25,16 @@ message GenesisState {
   string pauser = 4;
   string token_controller = 5;
 
-  repeated Attester attester_list = 6 [(gogoproto.nullable) = false];
-  repeated PerMessageBurnLimit per_message_burn_limit_list = 7 [(gogoproto.nullable) = false];
+  repeated Attester attester_list = 6 [ (gogoproto.nullable) = false ];
+  repeated PerMessageBurnLimit per_message_burn_limit_list = 7
+      [ (gogoproto.nullable) = false ];
   BurningAndMintingPaused burning_and_minting_paused = 8;
   SendingAndReceivingMessagesPaused sending_and_receiving_messages_paused = 9;
   MaxMessageBodySize max_message_body_size = 10;
   Nonce next_available_nonce = 11;
   SignatureThreshold signature_threshold = 12;
-  repeated TokenPair token_pair_list = 13 [(gogoproto.nullable) = false];
-  repeated Nonce used_nonces_list = 14 [(gogoproto.nullable) = false];
-  repeated RemoteTokenMessenger token_messenger_list = 15 [(gogoproto.nullable) = false];
+  repeated TokenPair token_pair_list = 13 [ (gogoproto.nullable) = false ];
+  repeated Nonce used_nonces_list = 14 [ (gogoproto.nullable) = false ];
+  repeated RemoteTokenMessenger token_messenger_list = 15
+      [ (gogoproto.nullable) = false ];
 }

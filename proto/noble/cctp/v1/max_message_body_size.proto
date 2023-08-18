@@ -8,6 +8,4 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types
  * Message format for BurningAndMintingPaused
  * @param paused true if paused, false if not paused
  */
-message MaxMessageBodySize {
-  uint64 amount = 1;
-}
+message MaxMessageBodySize { uint64 amount = 1; }

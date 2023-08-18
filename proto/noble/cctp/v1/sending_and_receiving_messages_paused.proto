@@ -8,6 +8,4 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types
  * Message format for SendingAndReceivingMessagesPaused
  * @param paused true if paused, false if not paused
  */
-message SendingAndReceivingMessagesPaused {
-  bool paused = 1;
-}
+message SendingAndReceivingMessagesPaused { bool paused = 1; }

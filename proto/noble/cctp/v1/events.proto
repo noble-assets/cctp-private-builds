@@ -14,17 +14,13 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types
  * Emitted when an attester is enabled
  * @param attester newly enabled attester
  */
-message AttesterEnabled {
-  string attester = 1;
-}
+message AttesterEnabled { string attester = 1; }
 
 /**
  * Emitted when an attester is disabled
  * @param attester newly disabled attester
  */
-message AttesterDisabled {
-  string attester = 1;
-}
+message AttesterDisabled { string attester = 1; }
 
 /**
  * Emitted when threshold number of attestations (m in m/n multisig) is updated
@@ -72,11 +68,14 @@ message SendingAndReceivingUnpausedEvent {}
  * @param burn_token address of token burnt on source domain
  * @param amount deposit amount
  * @param depositor address where deposit is transferred from
- * @param mint_recipient address receiving minted tokens on destination domain as bytes32
+ * @param mint_recipient address receiving minted tokens on destination domain
+ * as bytes32
  * @param destination_domain destination domain
- * @param destination_token_messenger address of TokenMessenger on destination domain as bytes32
- * @param destination_caller authorized caller as bytes32 of receiveMessage() on destination domain, if not equal to bytes32(0).
- * If equal to bytes32(0), any address can call receiveMessage().
+ * @param destination_token_messenger address of TokenMessenger on destination
+ * domain as bytes32
+ * @param destination_caller authorized caller as bytes32 of receiveMessage() on
+ * destination domain, if not equal to bytes32(0). If equal to bytes32(0), any
+ * address can call receiveMessage().
  */
 message DepositForBurn {
   uint64 nonce = 1;
@@ -135,9 +134,7 @@ message TokenPairUnlinked {
  * Emitted when a new message is dispatched
  * @param message Raw bytes of message
  */
-message MessageSent {
-  bytes message = 1;
-}
+message MessageSent { bytes message = 1; }
 
 /**
  * Emitted when a new message is received
@@ -159,9 +156,7 @@ message MessageReceived {
  * Emitted when max message body size is updated
  * @param new_max_message_body_size new maximum message body size, in bytes
  */
-message MaxMessageBodySizeUpdated {
-  uint64 new_max_message_body_size = 1;
-}
+message MaxMessageBodySizeUpdated { uint64 new_max_message_body_size = 1; }
 
 /**
  * Emitted when a RemoteTokenMessenger is added

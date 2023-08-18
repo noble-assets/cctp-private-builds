@@ -37,7 +37,7 @@ type chainUpgrade struct {
 	image       ibc.DockerImage
 	upgradeName string // if upgradeName is empty, assumes patch/rolling update
 	preUpgrade  func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet)
-	postUpgrade func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet)
+	postUpgrade func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority, owner ibc.Wallet)
 }
 
 func testNobleChainUpgrade(
@@ -259,7 +259,7 @@ func testNobleChainUpgrade(
 		}
 
 		if upgrade.postUpgrade != nil {
-			upgrade.postUpgrade(t, ctx, noble, gw.paramAuthority)
+			upgrade.postUpgrade(t, ctx, noble, gw.paramAuthority, gw.fiatTfRoles.Owner)
 		}
 	}
 }

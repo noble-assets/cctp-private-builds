@@ -8,10 +8,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func CmdUpdateOwner() *cobra.Command {
+func CmdUpdateTokenController() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-owner [address]",
-		Short: "Broadcast message update-owner",
+		Use:   "update-token-controller [address]",
+		Short: "Broadcast message update-token-controller",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -19,7 +19,7 @@ func CmdUpdateOwner() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateOwner(
+			msg := types.NewMsgUpdateTokenController(
 				clientCtx.GetFromAddress().String(),
 				args[0],
 			)

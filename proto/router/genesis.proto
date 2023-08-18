@@ -11,8 +11,10 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/typ
 
 // GenesisState defines the router module's genesis state.
 message GenesisState {
-  Params params = 1 [(gogoproto.nullable) = false];
-  repeated Mint mints = 3 [(gogoproto.nullable) = false];
-  repeated StoreIBCForwardMetadata ibc_forwards = 4 [(gogoproto.nullable) = false];
-  repeated InFlightPacket in_flight_packets = 5 [(gogoproto.nullable) = false];
+  Params params = 1 [ (gogoproto.nullable) = false ];
+  repeated Mint mints = 3 [ (gogoproto.nullable) = false ];
+  repeated StoreIBCForwardMetadata ibc_forwards = 4
+      [ (gogoproto.nullable) = false ];
+  repeated InFlightPacket in_flight_packets = 5
+      [ (gogoproto.nullable) = false ];
 }

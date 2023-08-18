@@ -7,6 +7,4 @@ import "tariff/params.proto";
 option go_package = "github.com/circlefin/noble-cctp-private-builds/x/tariff/types";
 
 // GenesisState defines the tariff module's genesis state.
-message GenesisState {
-  Params params = 1 [ (gogoproto.nullable) = false ];
-}
+message GenesisState { Params params = 1 [ (gogoproto.nullable) = false ]; }

@@ -33,7 +33,7 @@ const (
 )
 
 var (
-	OwnerKey           = []byte("owner")
+	OwnerKey           = []byte("Authority/value/")
 	PendingOwnerKey    = []byte("pending-owner")
 	AttesterManagerKey = []byte("attester-manager")
 	PauserKey          = []byte("pauser")
