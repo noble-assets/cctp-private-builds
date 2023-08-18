@@ -36,8 +36,8 @@ type ParamsQueryResponse struct {
 type chainUpgrade struct {
 	image       ibc.DockerImage
 	upgradeName string // if upgradeName is empty, assumes patch/rolling update
-	preUpgrade  func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet)
-	postUpgrade func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority, owner ibc.Wallet)
+	preUpgrade  func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet, roles NobleRoles)
+	postUpgrade func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet, roles NobleRoles)
 }
 
 func testNobleChainUpgrade(
@@ -127,7 +127,7 @@ func testNobleChainUpgrade(
 
 	for _, upgrade := range upgrades {
 		if upgrade.preUpgrade != nil {
-			upgrade.preUpgrade(t, ctx, noble, gw.paramAuthority)
+			upgrade.preUpgrade(t, ctx, noble, gw.paramAuthority, gw.fiatTfRoles)
 		}
 
 		if upgrade.upgradeName == "" {
@@ -259,7 +259,7 @@ func testNobleChainUpgrade(
 		}
 
 		if upgrade.postUpgrade != nil {
-			upgrade.postUpgrade(t, ctx, noble, gw.paramAuthority, gw.fiatTfRoles.Owner)
+			upgrade.postUpgrade(t, ctx, noble, gw.paramAuthority, gw.fiatTfRoles)
 		}
 	}
 }

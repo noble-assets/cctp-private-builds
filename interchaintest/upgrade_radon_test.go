@@ -18,7 +18,7 @@ func testPostRadonUpgrade(
 	ctx context.Context,
 	noble *cosmos.CosmosChain,
 	paramAuthority ibc.Wallet,
-	owner ibc.Wallet,
+	roles NobleRoles,
 ) {
 	queryResult, _, err := noble.Validators[0].ExecQuery(ctx, "globalfee", "parameters")
 	require.NoError(t, err, "error querying globalfee params")
