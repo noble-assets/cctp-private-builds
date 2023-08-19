@@ -10,14 +10,18 @@ func (k Keeper) DeletePendingOwner(ctx sdk.Context) {
 	ctx.KVStore(k.storeKey).Delete(types.PendingOwnerKey)
 }
 
-// GetOwner returns the owner of the CCTP module from state.
-func (k Keeper) GetOwner(ctx sdk.Context) (owner string) {
-	bz := ctx.KVStore(k.storeKey).Get(types.OwnerKey)
-	if bz == nil {
+// GetOwner returns owner
+func (k Keeper) GetOwner(ctx sdk.Context) string {
+	store := ctx.KVStore(k.storeKey)
+
+	b := store.Get(types.KeyPrefix(types.AuthorityKey))
+	if b == nil {
 		panic("cctp owner not found in state")
 	}
 
-	return string(bz)
+	var authority types.Authority
+	k.cdc.MustUnmarshal(b, &authority)
+	return authority.Address
 }
 
 // GetPendingOwner returns the pending owner of the CCTP module from state.
@@ -60,10 +64,14 @@ func (k Keeper) GetTokenController(ctx sdk.Context) (tokenController string) {
 	return string(bz)
 }
 
-// SetOwner stores the owner of the CCTP module in state.
+// SetOwner sets owner in the store
 func (k Keeper) SetOwner(ctx sdk.Context, owner string) {
-	bz := []byte(owner)
-	ctx.KVStore(k.storeKey).Set(types.OwnerKey, bz)
+	store := ctx.KVStore(k.storeKey)
+	authority := types.Authority{
+		Address: owner,
+	}
+	b := k.cdc.MustMarshal(&authority)
+	store.Set(types.KeyPrefix(types.AuthorityKey), b)
 }
 
 // SetPendingOwner stores the pending owner of the CCTP module in state.

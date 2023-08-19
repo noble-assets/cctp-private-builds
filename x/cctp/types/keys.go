@@ -19,6 +19,7 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_" + StoreKey
 
+	AuthorityKey                         = "Authority/value/"
 	BurningAndMintingPausedKey           = "BurningAndMintingPaused/value/"
 	MaxMessageBodySizeKey                = "MaxMessageBodySize/value/"
 	NextAvailableNonceKey                = "NextAvailableNonce/value/"
@@ -33,7 +34,6 @@ const (
 )
 
 var (
-	OwnerKey           = []byte("Authority/value/")
 	PendingOwnerKey    = []byte("pending-owner")
 	AttesterManagerKey = []byte("attester-manager")
 	PauserKey          = []byte("pauser")
