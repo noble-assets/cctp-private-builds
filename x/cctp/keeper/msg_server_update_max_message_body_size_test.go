@@ -36,19 +36,6 @@ func TestUpdateMaxMessageBodySizeHappyPath(t *testing.T) {
 	require.Equal(t, message.MessageSize, actual.Amount)
 }
 
-func TestUpdateMaxMessageBodySizeAuthorityNotSet(t *testing.T) {
-	testkeeper, ctx := keepertest.CctpKeeper(t)
-	server := keeper.NewMsgServerImpl(testkeeper)
-
-	message := types.MsgUpdateMaxMessageBodySize{
-		From:        sample.AccAddress(),
-		MessageSize: uint64(1023),
-	}
-	_, err := server.UpdateMaxMessageBodySize(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
-}
-
 func TestUpdateMaxMessageBodySizeInvalidAuthority(t *testing.T) {
 	testkeeper, ctx := keepertest.CctpKeeper(t)
 	server := keeper.NewMsgServerImpl(testkeeper)

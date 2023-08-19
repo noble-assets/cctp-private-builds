@@ -18,42 +18,35 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/strangelove-ventures/interchaintest/v3"
 	"github.com/strangelove-ventures/interchaintest/v3/chain/cosmos"
 	"github.com/strangelove-ventures/interchaintest/v3/ibc"
 	"github.com/stretchr/testify/require"
 
-	"github.com/circlefin/noble-cctp-private-builds/cmd"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
-func testPostArgonUpgrade(
+func testPostArgonUpgradeTestnet(
 	t *testing.T,
 	ctx context.Context,
 	noble *cosmos.CosmosChain,
 	paramAuthority ibc.Wallet,
-	roles NobleRoles,
 ) {
 
-	var maxMsgBodySize cctptypes.MaxMessageBodySize
+	nobleChainCfg := noble.Config()
 
-	_, err := noble.Validators[0].ExecTx(ctx, roles.Owner.KeyName(), "cctp", "update-max-message-body-size", "500")
-	require.NoError(t, err, "error updating max message body size")
+	newAttesterManager := sample.AccAddress()
+	newTokenController := sample.AccAddress()
+	newPauser := sample.AccAddress()
 
-	queryMaxMsgBodySize, _, err := noble.Validators[0].ExecQuery(ctx, "cctp", "show-max-message-body-size")
-	require.NoError(t, err, "error querying cctp max message body size")
-
-	err = json.Unmarshal(queryMaxMsgBodySize, &maxMsgBodySize)
-	require.NoError(t, err, "failed to unmarshall max message body size")
-
-	require.Equal(t, uint64(500), maxMsgBodySize.Amount)
-
-	_, err = noble.Validators[0].ExecTx(ctx, roles.Owner.KeyName(), "cctp", "update-attester-manager", roles.Owner2.FormattedAddress())
+	_, err := noble.Validators[0].ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-attester-manager", newAttesterManager)
 	require.NoError(t, err, "error updating attester manager")
 
-	_, err = noble.Validators[0].ExecTx(ctx, roles.Owner.KeyName(), "cctp", "update-token-controller", roles.Blacklister.FormattedAddress())
+	_, err = noble.Validators[0].ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-token-controller", newTokenController)
 	require.NoError(t, err, "error updating token controller")
 
-	_, err = noble.Validators[0].ExecTx(ctx, roles.Owner.KeyName(), "cctp", "update-pauser", roles.Pauser.FormattedAddress())
+	_, err = noble.Validators[0].ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-pauser", newPauser)
 	require.NoError(t, err, "error updating pauser")
 
 	queryRolesResults, _, err := noble.Validators[0].ExecQuery(ctx, "cctp", "roles")
@@ -63,14 +56,28 @@ func testPostArgonUpgrade(
 	err = json.Unmarshal(queryRolesResults, &cctpRoles)
 	require.NoError(t, err, "failed to unmarshall cctp roles")
 
-	require.Equal(t, roles.Owner.FormattedAddress(), cctpRoles.Owner)
-	require.Equal(t, roles.Owner2.FormattedAddress(), cctpRoles.AttesterManager)
-	require.Equal(t, roles.Blacklister.FormattedAddress(), cctpRoles.TokenController)
-	require.Equal(t, roles.Pauser.FormattedAddress(), cctpRoles.Pauser)
+	require.Equal(t, paramAuthority.FormattedAddress(), cctpRoles.Owner)
+	require.Equal(t, newAttesterManager, cctpRoles.AttesterManager)
+	require.Equal(t, newTokenController, cctpRoles.TokenController)
+	require.Equal(t, newPauser, cctpRoles.Pauser)
 
-	nobleChainCfg := noble.Config()
+	queryRolesResults, _, err = noble.Validators[0].ExecQuery(ctx, "cctp", "roles")
+	require.NoError(t, err, "error querying cctp roles")
 
-	cmd.SetPrefixes(nobleChainCfg.Bech32Prefix)
+	t.Log("Roles! ----", string(queryRolesResults), "PARAMAUTH ADD: ", paramAuthority.FormattedAddress())
+
+	var maxMsgBodySize cctptypes.MaxMessageBodySize
+
+	_, err = noble.Validators[0].ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-max-message-body-size", "500")
+	require.NoError(t, err, "error updating max message body size")
+
+	queryMaxMsgBodySize, _, err := noble.Validators[0].ExecQuery(ctx, "cctp", "show-max-message-body-size")
+	require.NoError(t, err, "error querying cctp max message body size")
+
+	err = json.Unmarshal(queryMaxMsgBodySize, &maxMsgBodySize)
+	require.NoError(t, err, "failed to unmarshall max message body size")
+
+	require.Equal(t, uint64(500), maxMsgBodySize.Amount)
 
 	attesters := make([]*ecdsa.PrivateKey, 2)
 	msgs := make([]sdk.Msg, 2)
@@ -88,7 +95,7 @@ func testPostArgonUpgrade(
 
 		// Adding an attester to protocal
 		msgs[i] = &cctptypes.MsgEnableAttester{
-			From:     roles.Owner.FormattedAddress(),
+			From:     paramAuthority.FormattedAddress(),
 			Attester: []byte(attesterPub),
 		}
 	}
@@ -104,7 +111,7 @@ func testPostArgonUpgrade(
 
 	// maps remote token on remote domain to a local token -- used for minting
 	msgs = append(msgs, &cctptypes.MsgLinkTokenPair{
-		From:         roles.Owner.FormattedAddress(),
+		From:         paramAuthority.FormattedAddress(),
 		RemoteDomain: 0,
 		RemoteToken:  "0x" + burnTokenStr,
 		LocalToken:   denomMetadataDrachma.Base,
@@ -116,7 +123,7 @@ func testPostArgonUpgrade(
 	tx, err := cosmos.BroadcastTx(
 		bCtx,
 		broadcaster,
-		roles.Owner,
+		paramAuthority,
 		msgs...,
 	)
 	require.NoError(t, err, "error submitting add public keys tx")
@@ -128,12 +135,33 @@ func testPostArgonUpgrade(
 
 	cctpModuleAccount := authtypes.NewModuleAddress(cctptypes.ModuleName).String()
 
-	_, err = nobleValidator.ExecTx(ctx, roles.MasterMinter.KeyName(),
-		"fiat-tokenfactory", "configure-minter-controller", roles.MinterController.FormattedAddress(), cctpModuleAccount, "-b", "block",
+	const masterMinterKeyName = "master-minter"
+	masterMinter := interchaintest.GetAndFundTestUsers(t, ctx, masterMinterKeyName, 1, noble)
+
+	// err = noble.CreateKey(ctx, masterMinterKeyName)
+	// require.NoError(t, err, "failed to create master-minter key")
+
+	// masterMinter, err := noble.GetAddress(ctx, masterMinterKeyName)
+	// require.NoError(t, err, "failed to get master minter address")
+
+	_, err = nobleValidator.ExecTx(ctx, paramAuthority.KeyName(),
+		"fiat-tokenfactory", "update-master-minter", masterMinter[0].FormattedAddress(), "-b", "block")
+	require.NoError(t, err, "failed to execute update master minter tx")
+
+	const minterControllerKeyName = "minter-controller"
+	minterController := interchaintest.GetAndFundTestUsers(t, ctx, minterControllerKeyName, 1, noble)
+	// err = noble.CreateKey(ctx, minterControllerKeyName)
+	// require.NoError(t, err, "failed to create master-minter key")
+
+	// minterController, err := noble.GetAddress(ctx, minterControllerKeyName)
+	// require.NoError(t, err, "failed to get master minter address")
+
+	_, err = nobleValidator.ExecTx(ctx, "master-minter",
+		"fiat-tokenfactory", "configure-minter-controller", minterController[0].FormattedAddress(), cctpModuleAccount, "-b", "block",
 	)
 	require.NoError(t, err, "failed to execute configure minter controller tx")
 
-	_, err = nobleValidator.ExecTx(ctx, roles.MinterController.KeyName(),
+	_, err = nobleValidator.ExecTx(ctx, minterController[0].KeyName(),
 		"fiat-tokenfactory", "configure-minter", cctpModuleAccount, "1000000"+denomMetadataDrachma.Base, "-b", "block",
 	)
 	require.NoError(t, err, "failed to execute configure minter tx")
@@ -168,7 +196,7 @@ func testPostArgonUpgrade(
 	var tokenMessengerRecipient = crypto.Keccak256([]byte("cctp/TokenMessenger"))
 
 	destinationCaller := make([]byte, 32)
-	copy(destinationCaller[12:], roles.Owner.Address())
+	copy(destinationCaller[12:], paramAuthority.Address())
 
 	wrappedDepositForBurn := cctptypes.Message{
 		Version:           0,
@@ -210,9 +238,9 @@ func testPostArgonUpgrade(
 	tx, err = cosmos.BroadcastTx(
 		bCtx,
 		broadcaster,
-		roles.Owner,
+		paramAuthority,
 		&cctptypes.MsgReceiveMessage{ //note: all messages that go to noble go through MsgReceiveMessage
-			From:        roles.Owner.FormattedAddress(),
+			From:        paramAuthority.FormattedAddress(),
 			Message:     wrappedDepositForBurnBz,
 			Attestation: attestationBurn,
 		},

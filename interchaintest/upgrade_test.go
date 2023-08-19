@@ -36,8 +36,8 @@ type ParamsQueryResponse struct {
 type chainUpgrade struct {
 	image       ibc.DockerImage
 	upgradeName string // if upgradeName is empty, assumes patch/rolling update
-	preUpgrade  func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet, roles NobleRoles)
-	postUpgrade func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet, roles NobleRoles)
+	preUpgrade  func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet)
+	postUpgrade func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet)
 }
 
 func testNobleChainUpgrade(
@@ -64,7 +64,7 @@ func testNobleChainUpgrade(
 
 	var gw genesisWrapper
 
-	cs := nobleChainSpec(ctx, &gw, "noble-1", numberOfValidators, numberOfFullNodes, false, false, false, false)
+	cs := nobleChainSpec(ctx, &gw, chainID, numberOfValidators, numberOfFullNodes, false, false, false, false)
 
 	cs.ChainConfig.PreGenesis = func(cc ibc.ChainConfig) error {
 		val := gw.chain.Validators[0]
@@ -127,7 +127,7 @@ func testNobleChainUpgrade(
 
 	for _, upgrade := range upgrades {
 		if upgrade.preUpgrade != nil {
-			upgrade.preUpgrade(t, ctx, noble, gw.paramAuthority, gw.fiatTfRoles)
+			upgrade.preUpgrade(t, ctx, noble, gw.paramAuthority)
 		}
 
 		if upgrade.upgradeName == "" {
@@ -259,7 +259,7 @@ func testNobleChainUpgrade(
 		}
 
 		if upgrade.postUpgrade != nil {
-			upgrade.postUpgrade(t, ctx, noble, gw.paramAuthority, gw.fiatTfRoles)
+			upgrade.postUpgrade(t, ctx, noble, gw.paramAuthority)
 		}
 	}
 }

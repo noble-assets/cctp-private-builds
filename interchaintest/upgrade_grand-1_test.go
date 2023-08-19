@@ -63,7 +63,7 @@ func TestGrand1ChainUpgrade(t *testing.T) {
 		{
 			// post argon patch upgrade (will be applied as rolling upgrade due to lack of upgradeName)
 			image:       nobleImageInfo[0],
-			postUpgrade: testPostArgonUpgrade,
+			postUpgrade: testPostArgonUpgradeTestnet,
 		},
 	}
 
