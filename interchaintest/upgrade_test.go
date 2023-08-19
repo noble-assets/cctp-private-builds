@@ -21,6 +21,7 @@ import (
 )
 
 const (
+	ghcrRepo        = "ghcr.io/strangelove-ventures/noble"
 	containerUidGid = "1025:1025"
 
 	haltHeightDelta    = uint64(10) // will propose upgrade this many blocks in the future
@@ -38,6 +39,14 @@ type chainUpgrade struct {
 	upgradeName string // if upgradeName is empty, assumes patch/rolling update
 	preUpgrade  func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet)
 	postUpgrade func(t *testing.T, ctx context.Context, noble *cosmos.CosmosChain, paramAuthority ibc.Wallet)
+}
+
+func ghcrImage(version string) ibc.DockerImage {
+	return ibc.DockerImage{
+		Repository: ghcrRepo,
+		Version:    version,
+		UidGid:     containerUidGid,
+	}
 }
 
 func testNobleChainUpgrade(

@@ -61,11 +61,6 @@ func testPostArgonUpgradeTestnet(
 	require.Equal(t, newTokenController, cctpRoles.TokenController)
 	require.Equal(t, newPauser, cctpRoles.Pauser)
 
-	queryRolesResults, _, err = noble.Validators[0].ExecQuery(ctx, "cctp", "roles")
-	require.NoError(t, err, "error querying cctp roles")
-
-	t.Log("Roles! ----", string(queryRolesResults), "PARAMAUTH ADD: ", paramAuthority.FormattedAddress())
-
 	var maxMsgBodySize cctptypes.MaxMessageBodySize
 
 	_, err = noble.Validators[0].ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-max-message-body-size", "500")
@@ -195,8 +190,11 @@ func testPostArgonUpgradeTestnet(
 	var sender = []byte("12345678901234567890123456789012")
 	var tokenMessengerRecipient = crypto.Keccak256([]byte("cctp/TokenMessenger"))
 
+	const destinationCallerKeyName = "destination-caller"
+	destinationCallerUser := interchaintest.GetAndFundTestUsers(t, ctx, destinationCallerKeyName, 1, noble)
+
 	destinationCaller := make([]byte, 32)
-	copy(destinationCaller[12:], paramAuthority.Address())
+	copy(destinationCaller[12:], destinationCallerUser[0].Address())
 
 	wrappedDepositForBurn := cctptypes.Message{
 		Version:           0,
@@ -238,9 +236,9 @@ func testPostArgonUpgradeTestnet(
 	tx, err = cosmos.BroadcastTx(
 		bCtx,
 		broadcaster,
-		paramAuthority,
+		destinationCallerUser[0],
 		&cctptypes.MsgReceiveMessage{ //note: all messages that go to noble go through MsgReceiveMessage
-			From:        paramAuthority.FormattedAddress(),
+			From:        destinationCallerUser[0].FormattedAddress(),
 			Message:     wrappedDepositForBurnBz,
 			Attestation: attestationBurn,
 		},

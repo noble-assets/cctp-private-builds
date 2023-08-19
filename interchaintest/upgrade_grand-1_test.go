@@ -15,11 +15,7 @@ func TestGrand1ChainUpgrade(t *testing.T) {
 		numFullNodes  = 0
 	)
 
-	var grand1Genesis = ibc.DockerImage{
-		Repository: "ghcr.io/strangelove-ventures/noble",
-		Version:    "v0.3.0",
-		UidGid:     containerUidGid,
-	}
+	var grand1Genesis = ghcrImage("v0.3.0")
 
 	var grand1Upgrades = []chainUpgrade{
 		{
@@ -28,41 +24,28 @@ func TestGrand1ChainUpgrade(t *testing.T) {
 			// As such, v0.4.2 was required to complete the upgrade, which changed the upgrade
 			// name in the code to "v0.4.1" as a workaround.
 			upgradeName: "v0.4.1",
-			image: ibc.DockerImage{
-				Repository: "ghcr.io/strangelove-ventures/noble",
-				Version:    "v0.4.2",
-				UidGid:     containerUidGid,
-			},
+			image:       ghcrImage("v0.4.2"),
 		},
 		{
 			upgradeName: "radon",
-			image: ibc.DockerImage{
-				Repository: "ghcr.io/strangelove-ventures/noble",
-				// testnet actually upgraded to v0.5.0, but that required a hack to fix the consensus min fee. v0.5.1 fixes that.
-				Version: "v0.5.1",
-				UidGid:  containerUidGid,
-			},
+			image:       ghcrImage("v0.5.1"), // testnet actually upgraded to v0.5.0, but that required a hack to fix the consensus min fee. v0.5.1 fixes that
 			postUpgrade: testPostRadonUpgrade,
 		},
 		{
 			// post radon patch upgrade (will be applied as rolling upgrade due to lack of upgradeName)
-			image: ibc.DockerImage{
-				Repository: "ghcr.io/strangelove-ventures/noble",
-				Version:    "v3.0.0",
-				UidGid:     containerUidGid,
-			},
+			image: ghcrImage("v3.0.0"),
 		},
 		{
 			upgradeName: "argon",
-			image: ibc.DockerImage{
-				Repository: "ghcr.io/strangelove-ventures/noble",
-				Version:    "v4.0.0-alpha1",
-				UidGid:     containerUidGid,
-			},
+			image:       ghcrImage("v4.0.0-alpha1"),
 		},
 		{
 			// post argon patch upgrade (will be applied as rolling upgrade due to lack of upgradeName)
-			image:       nobleImageInfo[0],
+			image: ibc.DockerImage{
+				Repository: "ghcr.io/strangelove-ventures/noble",
+				Version:    "v4.0.0-alpha2",
+				UidGid:     containerUidGid,
+			},
 			postUpgrade: testPostArgonUpgradeTestnet,
 		},
 	}
