@@ -61,7 +61,7 @@ func testPostArgonUpgradeTestnet(
 	require.Equal(t, newTokenController, cctpRoles.TokenController)
 	require.Equal(t, newPauser, cctpRoles.Pauser)
 
-	var maxMsgBodySize cctptypes.MaxMessageBodySize
+	var maxMsgBodySize cctptypes.QueryGetMaxMessageBodySizeResponse
 
 	_, err = noble.Validators[0].ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-max-message-body-size", "500")
 	require.NoError(t, err, "error updating max message body size")
@@ -72,7 +72,7 @@ func testPostArgonUpgradeTestnet(
 	err = json.Unmarshal(queryMaxMsgBodySize, &maxMsgBodySize)
 	require.NoError(t, err, "failed to unmarshall max message body size")
 
-	require.Equal(t, uint64(500), maxMsgBodySize.Amount)
+	require.Equal(t, uint64(500), maxMsgBodySize.Amount.Amount)
 
 	attesters := make([]*ecdsa.PrivateKey, 2)
 	msgs := make([]sdk.Msg, 2)
