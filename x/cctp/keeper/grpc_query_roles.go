@@ -16,7 +16,7 @@ func (k Keeper) Roles(goCtx context.Context, req *types.QueryRolesRequest) (*typ
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	roles := types.QueryRolesResponse{
-		Owner:           k.GetAttesterManager(ctx),
+		Owner:           k.GetOwner(ctx),
 		AttesterManager: k.GetAttesterManager(ctx),
 		Pauser:          k.GetPauser(ctx),
 		TokenController: k.GetTokenController(ctx),
