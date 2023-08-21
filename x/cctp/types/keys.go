@@ -24,7 +24,7 @@ const (
 	MaxMessageBodySizeKey                = "MaxMessageBodySize/value/"
 	NextAvailableNonceKey                = "NextAvailableNonce/value/"
 	SendingAndReceivingMessagesPausedKey = "SendingAndReceivingMessagesPaused/value/"
-	SignatureThresholdKey                = "SignatureThreshold/value/"
+	SignatureThresholdKey                = "SignatureThreshold/value//"
 
 	AttesterKeyPrefix             = "Attester/value/"
 	PerMessageBurnLimitKeyPrefix  = "PerMessageBurnLimit/value/"

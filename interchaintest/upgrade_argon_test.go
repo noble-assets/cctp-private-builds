@@ -27,14 +27,6 @@ import (
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
-const (
-	attesterManagerKeyName  = "cctp-attester-manager"
-	tokenControllerKeyName  = "cctp-token-controller"
-	pauserKeyName           = "cctp-pauser"
-	masterMinterKeyName     = "fiat-master-minter"
-	minterControllerKeyName = "fiat-minter-controller"
-)
-
 func testPostArgonUpgradeTestnet(
 	t *testing.T,
 	ctx context.Context,
@@ -43,19 +35,22 @@ func testPostArgonUpgradeTestnet(
 ) {
 	nobleChainCfg := noble.Config()
 
-	masterMinter, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, masterMinterKeyName, "", 1, noble)
+	fiatOwner, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "fiat-owner", "leg stove oblige forest occur range jar observe ahead morning street forward amazing negative digital syrup bar doctor fortune purpose buddy quote laptop civil", 1, noble)
 	require.NoError(t, err)
 
-	minterController, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, minterControllerKeyName, "", 1, noble)
+	fiatMasterMinter, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "fiat-master-minter", "", 1, noble)
 	require.NoError(t, err)
 
-	attesterManager, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, attesterManagerKeyName, "", 1, noble)
+	fiatMinterController, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "fiat-minter-controller", "", 1, noble)
 	require.NoError(t, err)
 
-	tokenController, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, tokenControllerKeyName, "", 1, noble)
+	cctpAttesterManager, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "cctp-attester-manager", "", 1, noble)
 	require.NoError(t, err)
 
-	pauser, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, pauserKeyName, "", 1, noble)
+	cctpTokenController, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "cctp-token-controller", "", 1, noble)
+	require.NoError(t, err)
+
+	cctpPauser, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "cctp-pauser", "", 1, noble)
 	require.NoError(t, err)
 
 	err = testutil.WaitForBlocks(ctx, 2, noble)
@@ -63,13 +58,19 @@ func testPostArgonUpgradeTestnet(
 
 	val := noble.Validators[0]
 
-	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-attester-manager", attesterManager.FormattedAddress())
+	keysToRestore := []ibc.Wallet{fiatOwner, fiatMasterMinter, fiatMinterController}
+
+	for _, wallet := range keysToRestore {
+		val.RecoverKey(ctx, wallet.KeyName(), wallet.Mnemonic())
+	}
+
+	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-attester-manager", cctpAttesterManager.FormattedAddress())
 	require.NoError(t, err, "error updating attester manager")
 
-	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-token-controller", tokenController.FormattedAddress())
+	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-token-controller", cctpTokenController.FormattedAddress())
 	require.NoError(t, err, "error updating token controller")
 
-	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-pauser", pauser.FormattedAddress())
+	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-pauser", cctpPauser.FormattedAddress())
 	require.NoError(t, err, "error updating pauser")
 
 	queryRolesResults, _, err := val.ExecQuery(ctx, "cctp", "roles")
@@ -80,9 +81,9 @@ func testPostArgonUpgradeTestnet(
 	require.NoError(t, err, "failed to unmarshall cctp roles")
 
 	require.Equal(t, paramAuthority.FormattedAddress(), cctpRoles.Owner)
-	require.Equal(t, attesterManager.FormattedAddress(), cctpRoles.AttesterManager)
-	require.Equal(t, tokenController.FormattedAddress(), cctpRoles.TokenController)
-	require.Equal(t, pauser.FormattedAddress(), cctpRoles.Pauser)
+	require.Equal(t, cctpAttesterManager.FormattedAddress(), cctpRoles.AttesterManager)
+	require.Equal(t, cctpTokenController.FormattedAddress(), cctpRoles.TokenController)
+	require.Equal(t, cctpPauser.FormattedAddress(), cctpRoles.Pauser)
 
 	//var maxMsgBodySize cctptypes.QueryGetMaxMessageBodySizeResponse
 
@@ -115,7 +116,7 @@ func testPostArgonUpgradeTestnet(
 
 		// Adding an attester to protocol
 		msgs[i] = &cctptypes.MsgEnableAttester{
-			From:     attesterManager.FormattedAddress(),
+			From:     cctpAttesterManager.FormattedAddress(),
 			Attester: []byte(attesterPub),
 		}
 	}
@@ -135,7 +136,7 @@ func testPostArgonUpgradeTestnet(
 	tx, err := cosmos.BroadcastTx(
 		bCtx,
 		broadcaster,
-		attesterManager,
+		cctpAttesterManager,
 		msgs...,
 	)
 	require.NoError(t, err, "error submitting add public keys tx")
@@ -146,10 +147,10 @@ func testPostArgonUpgradeTestnet(
 	tx, err = cosmos.BroadcastTx(
 		bCtx,
 		broadcaster,
-		tokenController,
+		cctpTokenController,
 		// maps remote token on remote domain to a local token -- used for minting
 		&cctptypes.MsgLinkTokenPair{
-			From:         tokenController.FormattedAddress(),
+			From:         cctpTokenController.FormattedAddress(),
 			RemoteDomain: 0,
 			RemoteToken:  "0x" + burnTokenStr,
 			LocalToken:   denomMetadataDrachma.Base,
@@ -163,16 +164,16 @@ func testPostArgonUpgradeTestnet(
 	cctpModuleAccount := authtypes.NewModuleAddress(cctptypes.ModuleName).String()
 
 	// we don't have access to the fiat tokenfactory owner, so this fails.
-	_, err = val.ExecTx(ctx, paramAuthority.KeyName(),
-		"fiat-tokenfactory", "update-master-minter", masterMinter.FormattedAddress(), "-b", "block")
+	_, err = val.ExecTx(ctx, fiatOwner.KeyName(),
+		"fiat-tokenfactory", "update-master-minter", fiatMasterMinter.FormattedAddress(), "-b", "block")
 	require.NoError(t, err, "failed to execute update master minter tx")
 
-	_, err = val.ExecTx(ctx, masterMinterKeyName,
-		"fiat-tokenfactory", "configure-minter-controller", minterController.FormattedAddress(), cctpModuleAccount, "-b", "block",
+	_, err = val.ExecTx(ctx, fiatMasterMinter.KeyName(),
+		"fiat-tokenfactory", "configure-minter-controller", fiatMinterController.FormattedAddress(), cctpModuleAccount, "-b", "block",
 	)
 	require.NoError(t, err, "failed to execute configure minter controller tx")
 
-	_, err = val.ExecTx(ctx, minterControllerKeyName,
+	_, err = val.ExecTx(ctx, fiatMinterController.KeyName(),
 		"fiat-tokenfactory", "configure-minter", cctpModuleAccount, "1000000"+denomMetadataDrachma.Base, "-b", "block",
 	)
 	require.NoError(t, err, "failed to execute configure minter tx")

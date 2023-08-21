@@ -2,8 +2,6 @@ package interchaintest_test
 
 import (
 	"testing"
-
-	"github.com/strangelove-ventures/interchaintest/v3/ibc"
 )
 
 // run `make local-image`to rebuild updated binary before running test
@@ -24,7 +22,7 @@ func TestGrand1ChainUpgrade(t *testing.T) {
 			// As such, v0.4.2 was required to complete the upgrade, which changed the upgrade
 			// name in the code to "v0.4.1" as a workaround.
 			upgradeName: "v0.4.1",
-			image:       ghcrImage("v0.4.2"),
+			image:       ghcrImage("dan-neon-control-test"), //this is an adjusted version that gives us control of the fiat-tokenfactory owner
 		},
 		{
 			upgradeName: "radon",
@@ -41,11 +39,7 @@ func TestGrand1ChainUpgrade(t *testing.T) {
 		},
 		{
 			// post argon patch upgrade (will be applied as rolling upgrade due to lack of upgradeName)
-			image: ibc.DockerImage{
-				Repository: "ghcr.io/strangelove-ventures/noble",
-				Version:    "v4.0.0-alpha2",
-				UidGid:     containerUidGid,
-			},
+			image:       nobleImageInfo[0],
 			postUpgrade: testPostArgonUpgradeTestnet,
 		},
 	}
