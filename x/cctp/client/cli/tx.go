@@ -38,7 +38,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdUnpauseSendingAndReceivingMessages())
 	cmd.AddCommand(CmdUpdateOwner())
 	cmd.AddCommand(CmdUpdateMaxMessageBodySize())
-	cmd.AddCommand(CmdUpdatePerMessageBurnLimit())
+	cmd.AddCommand(CmdSetMaxBurnAmountPerMessage())
 	cmd.AddCommand(CmdUpdateSignatureThreshold())
 	cmd.AddCommand(CmdUpdateAttesterManager())
 	cmd.AddCommand(CmdUpdateTokenController())

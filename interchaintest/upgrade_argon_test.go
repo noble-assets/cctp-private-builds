@@ -61,10 +61,10 @@ func testPostArgonUpgradeTestnet(
 
 	val := noble.Validators[0]
 
-	keysToRestore := []ibc.Wallet{fiatOwner, fiatMasterMinter, fiatMinterController, fiatPauser}
-	for _, wallet := range keysToRestore {
-		val.RecoverKey(ctx, wallet.KeyName(), wallet.Mnemonic())
-	}
+	// keysToRestore := []ibc.Wallet{fiatOwner, fiatMasterMinter, fiatMinterController, fiatPauser}
+	// for _, wallet := range keysToRestore {
+	// 	val.RecoverKey(ctx, wallet.KeyName(), wallet.Mnemonic())
+	// }
 
 	_, err = val.ExecTx(ctx, fiatOwner.KeyName(),
 		"fiat-tokenfactory", "update-pauser", fiatPauser.FormattedAddress(), "-b", "block",

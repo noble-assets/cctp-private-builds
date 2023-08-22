@@ -43,8 +43,7 @@ service Msg {
   rpc UpdatePauser(MsgUpdatePauser) returns (MsgUpdatePauserResponse);
   rpc UpdateMaxMessageBodySize(MsgUpdateMaxMessageBodySize)
       returns (MsgUpdateMaxMessageBodySizeResponse);
-  rpc UpdatePerMessageBurnLimit(MsgUpdatePerMessageBurnLimit)
-      returns (MsgUpdatePerMessageBurnLimitResponse);
+  rpc SetMaxBurnAmountPerMessage(MsgSetMaxBurnAmountPerMessage) returns (MsgSetMaxBurnAmountPerMessageResponse);
   rpc UpdateSignatureThreshold(MsgUpdateSignatureThreshold)
       returns (MsgUpdateSignatureThresholdResponse);
 }
@@ -119,16 +118,16 @@ message MsgUpdateMaxMessageBodySize {
 
 message MsgUpdateMaxMessageBodySizeResponse {}
 
-message MsgUpdatePerMessageBurnLimit {
+message MsgSetMaxBurnAmountPerMessage {
   string from = 1;
-  string denom = 2;
+  string local_token = 2;
   string amount = 3 [
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
 }
 
-message MsgUpdatePerMessageBurnLimitResponse {}
+message MsgSetMaxBurnAmountPerMessageResponse {}
 
 message MsgDepositForBurn {
   string from = 1;
