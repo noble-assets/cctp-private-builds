@@ -38,6 +38,9 @@ func testPostArgonUpgradeTestnet(
 	fiatOwner, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "fiat-owner", "leg stove oblige forest occur range jar observe ahead morning street forward amazing negative digital syrup bar doctor fortune purpose buddy quote laptop civil", 1, noble)
 	require.NoError(t, err)
 
+	fiatPauser, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "fiat-pauser", "", 1, noble)
+	require.NoError(t, err)
+
 	fiatMasterMinter, err := interchaintest.GetAndFundTestUserWithMnemonic(ctx, "fiat-master-minter", "", 1, noble)
 	require.NoError(t, err)
 
@@ -58,11 +61,18 @@ func testPostArgonUpgradeTestnet(
 
 	val := noble.Validators[0]
 
-	keysToRestore := []ibc.Wallet{fiatOwner, fiatMasterMinter, fiatMinterController}
-
+	keysToRestore := []ibc.Wallet{fiatOwner, fiatMasterMinter, fiatMinterController, fiatPauser}
 	for _, wallet := range keysToRestore {
 		val.RecoverKey(ctx, wallet.KeyName(), wallet.Mnemonic())
 	}
+
+	_, err = val.ExecTx(ctx, fiatOwner.KeyName(),
+		"fiat-tokenfactory", "update-pauser", fiatPauser.FormattedAddress(), "-b", "block",
+	)
+	require.NoError(t, err, "failed to update pauser")
+
+	_, err = val.ExecTx(ctx, fiatPauser.KeyName(), "fiat-tokenfactory", "unpause")
+	require.NoError(t, err, "failed to set fiat-tokenfactory paused state")
 
 	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-attester-manager", cctpAttesterManager.FormattedAddress())
 	require.NoError(t, err, "error updating attester manager")
@@ -85,9 +95,7 @@ func testPostArgonUpgradeTestnet(
 	require.Equal(t, cctpTokenController.FormattedAddress(), cctpRoles.TokenController)
 	require.Equal(t, cctpPauser.FormattedAddress(), cctpRoles.Pauser)
 
-	//var maxMsgBodySize cctptypes.QueryGetMaxMessageBodySizeResponse
-
-	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-max-message-body-size", "500")
+	_, err = val.ExecTx(ctx, paramAuthority.KeyName(), "cctp", "update-max-message-body-size", "9000")
 	require.NoError(t, err, "error updating max message body size")
 
 	queryMaxMsgBodySize, _, err := val.ExecQuery(ctx, "cctp", "show-max-message-body-size")

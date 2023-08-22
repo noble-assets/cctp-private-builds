@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package noble.cctp.v1;
+package circle.cctp.v1;
 
 option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types";
 
@@ -8,4 +8,4 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types
  * Message format for BurningAndMintingPaused
  * @param paused true if paused, false if not paused
  */
-message BurningAndMintingPaused { bool paused = 1; }
+message MaxMessageBodySize { uint64 amount = 1; }
