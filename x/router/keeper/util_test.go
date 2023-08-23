@@ -16,7 +16,7 @@ import (
 )
 
 func TestDecodeIBCForward(t *testing.T) {
-	recipient := sdk.MustAccAddressFromBech32(sample.AccAddress())
+	recipient := sample.AccAddress()
 
 	for _, tc := range []struct {
 		desc     string
@@ -26,12 +26,12 @@ func TestDecodeIBCForward(t *testing.T) {
 	}{
 		{
 			desc: "Happy path",
-			msg:  createIBCMetadata(42, "channel-0", recipient, "Hello, World!"),
+			msg:  createMockMetadata(42, "channel-0", sdk.Bech32PrefixAccAddr, recipient, "Hello, World!"),
 			expected: types.IBCForwardMetadata{
 				Nonce:                42,
 				Port:                 "transfer",
 				Channel:              "channel-0",
-				DestinationReceiver:  recipient.String(),
+				DestinationReceiver:  recipient,
 				Memo:                 "Hello, World!",
 				TimeoutInNanoseconds: 0,
 			},
@@ -43,7 +43,7 @@ func TestDecodeIBCForward(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			result, err := keeper.DecodeIBCForward(tc.msg)
+			result, err := keeper.DecodeMetadata(tc.msg)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -118,7 +118,7 @@ func uint256ToBytes(value *big.Int) []byte {
 	return arr
 }
 
-func createIBCMetadata(nonce uint64, channel string, destinationRecipient sdk.AccAddress, memo string) (res []byte) {
+func createMockMetadata(nonce uint64, channel string, prefix string, recipient string, memo string) (res []byte) {
 	nonceBz := make([]byte, 8)
 	binary.BigEndian.PutUint64(nonceBz, nonce)
 
@@ -126,12 +126,19 @@ func createIBCMetadata(nonce uint64, channel string, destinationRecipient sdk.Ac
 	rawChannel, _ := channelTypes.ParseChannelSequence(channel)
 	binary.BigEndian.PutUint64(channelBz, rawChannel)
 
-	destinationRecipientBz := make([]byte, 32)
-	copy(destinationRecipientBz[32-len(destinationRecipient.Bytes()):], destinationRecipient.Bytes())
+	prefixBz := make([]byte, 32)
+	rawPrefix := []byte(prefix)
+	copy(prefixBz[32-len(rawPrefix):], rawPrefix)
+
+	recipientBz := make([]byte, 32)
+	rawRecipient, _ := sdk.GetFromBech32(recipient, prefix)
+	copy(recipientBz[32-len(rawRecipient):], rawRecipient)
 
 	res = append(res, nonceBz...)
+	res = append(res, make([]byte, 32)...) // sender
 	res = append(res, channelBz...)
-	res = append(res, destinationRecipientBz...)
+	res = append(res, prefixBz...)
+	res = append(res, recipientBz...)
 	res = append(res, []byte(memo)...)
 	return
 }

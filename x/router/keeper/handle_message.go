@@ -50,7 +50,7 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 	}
 
 	// parse internal message into IBCForward
-	if ibcForward, err := DecodeIBCForward(outerMessage.MessageBody); err == nil {
+	if ibcForward, err := DecodeMetadata(outerMessage.MessageBody); err == nil {
 		if storedForward, ok := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
 			if storedForward.AckError {
 				if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/circlefin/noble-cctp-private-builds/x/router/keeper"
 	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
@@ -85,7 +86,7 @@ func TestForwardOnAckErrWithExistingMint(t *testing.T) {
 		Sender:            []byte(sourceDomainSender),
 		Recipient:         fillByteArray(32, 32),
 		DestinationCaller: fillByteArray(64, 32),
-		MessageBody:       createIBCMetadata(nonce, channel, sdk.AccAddress{}, "12345"),
+		MessageBody:       createMockMetadata(nonce, channel, sdk.Bech32PrefixAccAddr, sample.AccAddress(), "12345"),
 	})
 
 	err := routerKeeper.HandleMessage(ctx, msg)
@@ -126,7 +127,7 @@ func TestForwardOnAckErrWithNoMint(t *testing.T) {
 		Sender:            []byte(sourceDomainSender),
 		Recipient:         fillByteArray(32, 32),
 		DestinationCaller: fillByteArray(64, 32),
-		MessageBody:       createIBCMetadata(nonce, channel, sdk.AccAddress{}, "12345"),
+		MessageBody:       createMockMetadata(nonce, channel, sdk.Bech32PrefixAccAddr, sample.AccAddress(), "12345"),
 	})
 
 	require.Panics(t, func() {
@@ -166,7 +167,7 @@ func TestForwardWithFoundForwardAndNoAckError(t *testing.T) {
 		Sender:            []byte(sourceDomainSender),
 		Recipient:         fillByteArray(32, 32),
 		DestinationCaller: fillByteArray(64, 32),
-		MessageBody:       createIBCMetadata(nonce, channel, sdk.AccAddress{}, "12345"),
+		MessageBody:       createMockMetadata(nonce, channel, sdk.Bech32PrefixAccAddr, sample.AccAddress(), "12345"),
 	})
 
 	err := routerKeeper.HandleMessage(ctx, msg)
@@ -202,7 +203,7 @@ func TestForwardWithNoForwardFoundAndExistingMint(t *testing.T) {
 		Sender:            []byte(sourceDomainSender),
 		Recipient:         fillByteArray(32, 32),
 		DestinationCaller: fillByteArray(64, 32),
-		MessageBody:       createIBCMetadata(nonce, channel, sdk.AccAddress{}, "12345"),
+		MessageBody:       createMockMetadata(nonce, channel, sdk.Bech32PrefixAccAddr, sample.AccAddress(), "12345"),
 	})
 
 	err := routerKeeper.HandleMessage(ctx, msg)
@@ -232,7 +233,7 @@ func TestForwardWithNoForwardFoundAndNoMint(t *testing.T) {
 		Sender:            []byte(sourceDomainSender),
 		Recipient:         fillByteArray(32, 32),
 		DestinationCaller: fillByteArray(64, 32),
-		MessageBody:       createIBCMetadata(nonce, channel, sdk.AccAddress{}, "12345"),
+		MessageBody:       createMockMetadata(nonce, channel, sdk.Bech32PrefixAccAddr, sample.AccAddress(), "12345"),
 	})
 
 	err := routerKeeper.HandleMessage(ctx, msg)

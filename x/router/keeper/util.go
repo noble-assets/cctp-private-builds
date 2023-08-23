@@ -55,34 +55,39 @@ const (
 	Bytes32Len = 32
 )
 
-func DecodeIBCForward(msg []byte) (types.IBCForwardMetadata, error) {
+func DecodeMetadata(msg []byte) (types.IBCForwardMetadata, error) {
+	// MESSAGE FORMAT:  <nonce> <sender> [ <channel> <bech32 prefix> <recipient> <memo> ]
 	const (
-		NonceIndex                 = 0
-		NonceLength                = 8
-		ChannelIndex               = NonceIndex + NonceLength
-		ChannelLength              = 8
-		DestinationRecipientIndex  = ChannelIndex + ChannelLength
-		DestinationRecipientLength = 32
-		MemoIndex                  = DestinationRecipientIndex + DestinationRecipientLength
+		NonceIndex   = 0
+		NonceLength  = 8
+		SenderIndex  = NonceIndex + NonceLength
+		SenderLength = 32
+
+		ChannelIndex    = SenderIndex + SenderLength
+		ChannelLength   = 8
+		PrefixIndex     = ChannelIndex + ChannelLength
+		PrefixLength    = 32
+		RecipientIndex  = PrefixIndex + PrefixLength
+		RecipientLength = 32
+		MemoIndex       = RecipientIndex + RecipientLength
 	)
 
 	if len(msg) < MemoIndex {
 		return types.IBCForwardMetadata{}, types.ErrDecodingIBCForward
 	}
 
-	nonce := binary.BigEndian.Uint64(msg[NonceIndex:ChannelIndex])
+	nonce := binary.BigEndian.Uint64(msg[NonceIndex:SenderIndex])
 	channel := channelTypes.FormatChannelIdentifier(
-		binary.BigEndian.Uint64(msg[ChannelIndex:DestinationRecipientIndex]),
+		binary.BigEndian.Uint64(msg[ChannelIndex:PrefixIndex]),
 	)
-	destinationRecipient := sdk.AccAddress(
-		bytes.TrimLeft(msg[DestinationRecipientIndex:MemoIndex], string(byte(0))),
-	)
+	prefix := string(bytes.TrimLeft(msg[PrefixIndex:RecipientIndex], string(byte(0))))
+	recipient := bytes.TrimLeft(msg[RecipientIndex:MemoIndex], string(byte(0)))
 
 	return types.IBCForwardMetadata{
 		Nonce:                nonce,
 		Port:                 "transfer",
 		Channel:              channel,
-		DestinationReceiver:  destinationRecipient.String(),
+		DestinationReceiver:  sdk.MustBech32ifyAddressBytes(prefix, recipient),
 		Memo:                 string(msg[MemoIndex:]),
 		TimeoutInNanoseconds: 0,
 	}, nil
