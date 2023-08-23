@@ -19,30 +19,6 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 		return err
 	}
 
-	// parse internal message into IBCForward
-	if ibcForward, err := DecodeIBCForward(outerMessage.MessageBody); err == nil {
-		if storedForward, ok := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
-			if storedForward.AckError {
-				if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
-					return k.ForwardPacket(ctx, ibcForward, existingMint)
-				}
-				panic("unexpected state")
-			}
-
-			return sdkerrors.Wrapf(types.ErrHandleMessage, "previous operation still in progress")
-		}
-		// this is the first time we are seeing this forward info -> store it.
-		k.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
-			SourceDomain:       outerMessage.SourceDomain,
-			SourceDomainSender: string(outerMessage.Sender),
-			Metadata:           &ibcForward,
-		})
-		if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
-			return k.ForwardPacket(ctx, ibcForward, existingMint)
-		}
-		return nil
-	}
-
 	// try to parse internal message into burn (representing a remote burn -> local mint)
 	if burnMessage, err := new(cctptypes.BurnMessage).Parse(outerMessage.MessageBody); err == nil {
 		tokenPair, found := k.cctpKeeper.GetTokenPair(ctx, outerMessage.SourceDomain, burnMessage.BurnToken)
@@ -71,6 +47,30 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 		if existingIBCForward, found := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(burnMessage.MessageSender), outerMessage.Nonce); found {
 			return k.ForwardPacket(ctx, *existingIBCForward.Metadata, mint)
 		}
+	}
+
+	// parse internal message into IBCForward
+	if ibcForward, err := DecodeIBCForward(outerMessage.MessageBody); err == nil {
+		if storedForward, ok := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+			if storedForward.AckError {
+				if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+					return k.ForwardPacket(ctx, ibcForward, existingMint)
+				}
+				panic("unexpected state")
+			}
+
+			return sdkerrors.Wrapf(types.ErrHandleMessage, "previous operation still in progress")
+		}
+		// this is the first time we are seeing this forward info -> store it.
+		k.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
+			SourceDomain:       outerMessage.SourceDomain,
+			SourceDomainSender: string(outerMessage.Sender),
+			Metadata:           &ibcForward,
+		})
+		if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+			return k.ForwardPacket(ctx, ibcForward, existingMint)
+		}
+		return nil
 	}
 
 	return nil

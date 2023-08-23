@@ -1,11 +1,13 @@
 package keeper
 
 import (
+	"bytes"
+	"encoding/binary"
 	"math/big"
 
-	sdkerrors "cosmossdk.io/errors"
 	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
-	"github.com/gogo/protobuf/proto"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	channelTypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
 )
 
 type BurnMessage struct {
@@ -54,12 +56,36 @@ const (
 )
 
 func DecodeIBCForward(msg []byte) (types.IBCForwardMetadata, error) {
-	var res types.IBCForwardMetadata
-	if err := proto.Unmarshal(msg, &res); err != nil {
-		return types.IBCForwardMetadata{}, sdkerrors.Wrapf(types.ErrDecodingIBCForward, "error decoding ibc forward")
+	const (
+		NonceIndex                 = 0
+		NonceLength                = 8
+		ChannelIndex               = NonceIndex + NonceLength
+		ChannelLength              = 8
+		DestinationRecipientIndex  = ChannelIndex + ChannelLength
+		DestinationRecipientLength = 32
+		MemoIndex                  = DestinationRecipientIndex + DestinationRecipientLength
+	)
+
+	if len(msg) < MemoIndex {
+		return types.IBCForwardMetadata{}, types.ErrDecodingIBCForward
 	}
 
-	return res, nil
+	nonce := binary.BigEndian.Uint64(msg[NonceIndex:ChannelIndex])
+	channel := channelTypes.FormatChannelIdentifier(
+		binary.BigEndian.Uint64(msg[ChannelIndex:DestinationRecipientIndex]),
+	)
+	destinationRecipient := sdk.AccAddress(
+		bytes.TrimLeft(msg[DestinationRecipientIndex:MemoIndex], string(byte(0))),
+	)
+
+	return types.IBCForwardMetadata{
+		Nonce:                nonce,
+		Port:                 "transfer",
+		Channel:              channel,
+		DestinationReceiver:  destinationRecipient.String(),
+		Memo:                 string(msg[MemoIndex:]),
+		TimeoutInNanoseconds: 0,
+	}, nil
 }
 
 func bytesToBigInt(data []byte) big.Int {
