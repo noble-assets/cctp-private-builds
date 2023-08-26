@@ -45,12 +45,14 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 		}
 		k.SetMint(ctx, mint)
 		if existingIBCForward, found := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(burnMessage.MessageSender), outerMessage.Nonce); found {
-			return k.ForwardPacket(ctx, *existingIBCForward.Metadata, mint)
+			return k.ForwardPacket(ctx, existingIBCForward.Metadata, mint)
 		}
+
+		return nil
 	}
 
 	// parse internal message into IBCForward
-	if ibcForward, err := DecodeMetadata(outerMessage.MessageBody); err == nil {
+	if ibcForward, err := new(types.IBCForwardMetadata).Parse(outerMessage.MessageBody); err == nil {
 		if storedForward, ok := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
 			if storedForward.AckError {
 				if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
@@ -65,18 +67,19 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 		k.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
 			SourceDomain:       outerMessage.SourceDomain,
 			SourceDomainSender: string(outerMessage.Sender),
-			Metadata:           &ibcForward,
+			Metadata:           ibcForward,
 		})
 		if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
 			return k.ForwardPacket(ctx, ibcForward, existingMint)
 		}
+
 		return nil
 	}
 
 	return nil
 }
 
-func (k Keeper) ForwardPacket(ctx sdk.Context, ibcForward types.IBCForwardMetadata, mint types.Mint) error {
+func (k Keeper) ForwardPacket(ctx sdk.Context, ibcForward *types.IBCForwardMetadata, mint types.Mint) error {
 	timeout := ibcForward.TimeoutInNanoseconds
 	if timeout == 0 {
 		timeout = transfertypes.DefaultRelativePacketTimeoutTimestamp

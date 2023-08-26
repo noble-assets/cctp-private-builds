@@ -43,7 +43,7 @@ func TestDecodeIBCForward(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			result, err := keeper.DecodeMetadata(tc.msg)
+			result, err := new(types.IBCForwardMetadata).Parse(tc.msg)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {

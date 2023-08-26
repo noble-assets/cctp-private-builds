@@ -88,7 +88,7 @@ func (im IBCMiddleware) OnTimeoutPacket(ctx sdk.Context, packet channeltypes.Pac
 		if !found {
 			panic("no existing mint in store for in flight packet")
 		}
-		return im.keeper.ForwardPacket(ctx, *existingIBCForward.Metadata, existingMint)
+		return im.keeper.ForwardPacket(ctx, existingIBCForward.Metadata, existingMint)
 	}
 
 	return im.app.OnTimeoutPacket(ctx, packet, relayer)

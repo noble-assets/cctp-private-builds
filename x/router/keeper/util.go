@@ -1,13 +1,7 @@
 package keeper
 
 import (
-	"bytes"
-	"encoding/binary"
 	"math/big"
-
-	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	channelTypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
 )
 
 type BurnMessage struct {
@@ -54,44 +48,6 @@ const (
 
 	Bytes32Len = 32
 )
-
-func DecodeMetadata(msg []byte) (types.IBCForwardMetadata, error) {
-	// MESSAGE FORMAT:  <nonce> <sender> [ <channel> <bech32 prefix> <recipient> <memo> ]
-	const (
-		NonceIndex   = 0
-		NonceLength  = 8
-		SenderIndex  = NonceIndex + NonceLength
-		SenderLength = 32
-
-		ChannelIndex    = SenderIndex + SenderLength
-		ChannelLength   = 8
-		PrefixIndex     = ChannelIndex + ChannelLength
-		PrefixLength    = 32
-		RecipientIndex  = PrefixIndex + PrefixLength
-		RecipientLength = 32
-		MemoIndex       = RecipientIndex + RecipientLength
-	)
-
-	if len(msg) < MemoIndex {
-		return types.IBCForwardMetadata{}, types.ErrDecodingIBCForward
-	}
-
-	nonce := binary.BigEndian.Uint64(msg[NonceIndex:SenderIndex])
-	channel := channelTypes.FormatChannelIdentifier(
-		binary.BigEndian.Uint64(msg[ChannelIndex:PrefixIndex]),
-	)
-	prefix := string(bytes.TrimLeft(msg[PrefixIndex:RecipientIndex], string(byte(0))))
-	recipient := bytes.TrimLeft(msg[RecipientIndex:MemoIndex], string(byte(0)))
-
-	return types.IBCForwardMetadata{
-		Nonce:                nonce,
-		Port:                 "transfer",
-		Channel:              channel,
-		DestinationReceiver:  sdk.MustBech32ifyAddressBytes(prefix, recipient),
-		Memo:                 string(msg[MemoIndex:]),
-		TimeoutInNanoseconds: 0,
-	}, nil
-}
 
 func bytesToBigInt(data []byte) big.Int {
 	value := big.Int{}

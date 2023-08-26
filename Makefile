@@ -102,6 +102,10 @@ lint:
 test:
 	go test -v -race ./...
 
+test-cctp:
+	@cd interchaintest && go test -v -race -run ^TestCCTP_DepForBurnNoCallerOnEth$$ .
+	@cd interchaintest && go test -v -race -run ^TestCCTP_DepForBurnWithCallerOnEth$$ .
+
 ictest-tkn-factory:
 	cd interchaintest && go test -race -v -run ^TestNobleChain$$ .
 

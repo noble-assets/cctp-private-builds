@@ -18,7 +18,6 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/golang/protobuf/proto"
 	"github.com/strangelove-ventures/interchaintest/v3"
 	"github.com/strangelove-ventures/interchaintest/v3/chain/cosmos"
 	"github.com/strangelove-ventures/interchaintest/v3/ibc"
@@ -222,14 +221,16 @@ func TestCCTP_DepForBurnWithCallerOnEth(t *testing.T) {
 	require.NoError(t, err)
 
 	// in mainnet this would forward to dydx chain
-	forward, err := proto.Marshal(&routertypes.IBCForwardMetadata{
+	forward := routertypes.IBCForwardMetadata{
 		Port:                "transfer",
 		Channel:             "channel-0",
 		DestinationReceiver: gaiaReceiver,
-	})
+	}
+
+	forwardBz, err := forward.Bytes(gaiaChainCfg.Bech32Prefix)
 	require.NoError(t, err)
 
-	wrappedForward := &cctptypes.Message{
+	wrappedForward := cctptypes.Message{
 		Version:           0,
 		SourceDomain:      0, // same source domain !
 		DestinationDomain: 4,
@@ -237,7 +238,7 @@ func TestCCTP_DepForBurnWithCallerOnEth(t *testing.T) {
 		Sender:            sender, // same sender !
 		Recipient:         burnRecipientPadded,
 		DestinationCaller: destinationCaller,
-		MessageBody:       forward,
+		MessageBody:       forwardBz,
 	}
 
 	wrappedForwardBz, err := wrappedForward.Bytes()
