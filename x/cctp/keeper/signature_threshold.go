@@ -9,8 +9,7 @@ import (
 
 // GetSignatureThreshold returns the SignatureThreshold
 func (k Keeper) GetSignatureThreshold(ctx sdk.Context) (val types.SignatureThreshold, found bool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), append(types.KeyPrefix(types.SignatureThresholdKey), []byte("/")...))
-
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SignatureThresholdKey))
 	b := store.Get(types.KeyPrefix(types.SignatureThresholdKey))
 	if b == nil {
 		return val, false
@@ -22,7 +21,7 @@ func (k Keeper) GetSignatureThreshold(ctx sdk.Context) (val types.SignatureThres
 
 // SetSignatureThreshold sets a SignatureThreshold in the store
 func (k Keeper) SetSignatureThreshold(ctx sdk.Context, key types.SignatureThreshold) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), append(types.KeyPrefix(types.SignatureThresholdKey), []byte("/")...))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SignatureThresholdKey))
 	b := k.cdc.MustMarshal(&key)
 	store.Set(types.KeyPrefix(types.SignatureThresholdKey), b)
 }
