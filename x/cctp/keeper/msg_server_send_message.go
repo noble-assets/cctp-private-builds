@@ -15,12 +15,15 @@ func (k msgServer) SendMessage(goCtx context.Context, msg *types.MsgSendMessage)
 
 	nonce := k.ReserveAndIncrementNonce(ctx)
 
+	sender := make([]byte, 32)
+	copy(sender[12:], sdk.MustAccAddressFromBech32(msg.From))
+
 	err := k.sendMessage(
 		ctx,
 		msg.DestinationDomain,
 		msg.Recipient,
 		make([]byte, types.DestinationCallerLen),
-		[]byte(msg.From),
+		sender,
 		nonce.Nonce,
 		msg.MessageBody)
 
