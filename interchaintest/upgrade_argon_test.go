@@ -213,7 +213,6 @@ func testPostArgonUpgradeTestnet(
 	require.NoError(t, err)
 
 	var sender = []byte("12345678901234567890123456789012")
-	var tokenMessengerRecipient = crypto.Keccak256([]byte("cctp/TokenMessenger"))
 
 	const destinationCallerKeyName = "destination-caller"
 	destinationCallerUser := interchaintest.GetAndFundTestUsers(t, ctx, destinationCallerKeyName, 1, noble)
@@ -227,7 +226,7 @@ func testPostArgonUpgradeTestnet(
 		DestinationDomain: 4, // Noble is 4
 		Nonce:             0, // dif per message
 		Sender:            sender,
-		Recipient:         tokenMessengerRecipient,
+		Recipient:         cctptypes.PaddedModuleAddress,
 		DestinationCaller: destinationCaller,
 		MessageBody:       depositForBurnBz,
 	}

@@ -201,7 +201,6 @@ func TestCCTP_DepForBurnWithCallerOnEth(t *testing.T) {
 	require.NoError(t, err)
 
 	var sender = []byte("12345678901234567890123456789012")
-	var tokenMessengerRecipient = crypto.Keccak256([]byte("cctp/TokenMessenger"))
 
 	destinationCaller := make([]byte, 32)
 	copy(destinationCaller[12:], gw.fiatTfRoles.Owner.Address())
@@ -212,7 +211,7 @@ func TestCCTP_DepForBurnWithCallerOnEth(t *testing.T) {
 		DestinationDomain: 4, // Noble is 4
 		Nonce:             0, // dif per message
 		Sender:            sender,
-		Recipient:         tokenMessengerRecipient,
+		Recipient:         cctptypes.PaddedModuleAddress,
 		DestinationCaller: destinationCaller,
 		MessageBody:       depositForBurnBz,
 	}
