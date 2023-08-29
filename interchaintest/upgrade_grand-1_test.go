@@ -38,7 +38,8 @@ func TestGrand1ChainUpgrade(t *testing.T) {
 			image:       ghcrImage("v4.0.0-alpha1"),
 		},
 		{
-			// post argon patch upgrade (will be applied as rolling upgrade due to lack of upgradeName)
+			// This upgrade is only relevant to the grand-1 testnet
+			upgradeName: "argon2",
 			image:       nobleImageInfo[0],
 			postUpgrade: testPostArgonUpgradeTestnet,
 		},

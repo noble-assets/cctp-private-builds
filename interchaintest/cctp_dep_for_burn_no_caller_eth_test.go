@@ -334,7 +334,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	// gaia.Validators[0].SendIBCTransfer(ctx, "channel-0", )
 
 	// depositForBurnNoble := &cctptypes.MsgDepositForBurn{
-	// 	BurnToken: "is this the sam as coming from e TRY UUSDC",
+	// 	BurnToken:uusdc
 	// 	Amount:    cosmossdk_io_math.NewInt(1000000),
 	// }
 
