@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/binary"
+
 	authTypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/ethereum/go-ethereum/crypto"
 )
@@ -41,7 +42,7 @@ func init() {
 }
 
 var (
-	OwnerKey           = []byte("Authority/value/")
+	OwnerKey           = []byte("owner")
 	PendingOwnerKey    = []byte("pending-owner")
 	AttesterManagerKey = []byte("attester-manager")
 	PauserKey          = []byte("pauser")
