@@ -926,7 +926,6 @@ func (app *App) setupUpgradeHandlers() {
 			app.mm,
 			app.configurator,
 			app.FiatTokenFactoryKeeper,
-			app.ParamsKeeper,
 			app.CCTPKeeper,
 		),
 	)
