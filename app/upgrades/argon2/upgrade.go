@@ -1,6 +1,8 @@
 package argon2
 
 import (
+	"fmt"
+
 	"cosmossdk.io/math"
 	cctpkeeper "github.com/circlefin/noble-cctp-private-builds/x/cctp/keeper"
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
@@ -8,18 +10,32 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradeTypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+	paramauthoritykeeper "github.com/strangelove-ventures/paramauthority/x/params/keeper"
 )
 
 func CreateUpgradeHandler(
 	mm *module.Manager,
 	configurator module.Configurator,
 	fiatTFKeeper *fiattokenfactorykeeper.Keeper,
+	paramauthoritykeeper paramauthoritykeeper.Keeper,
 	cctpKeeper *cctpkeeper.Keeper,
 ) upgradeTypes.UpgradeHandler {
 	return func(ctx sdk.Context, _ upgradeTypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
+		var authority string
+		if ctx.ChainID() == TestnetChainID {
+			authority = paramauthoritykeeper.GetAuthority(ctx)
+		} else {
+			owner, ok := fiatTFKeeper.GetOwner(ctx)
+			if !ok {
+				return nil, fmt.Errorf("fiat token factory owner not found")
+			}
+
+			authority = owner.Address
+		}
+
 		denom := fiatTFKeeper.GetMintingDenom(ctx)
 
-		cctpKeeper.SetOwner(ctx, "noble1h8nzdzjgp6gn746s42lsp37pkt8wpl82j4r50k")
+		cctpKeeper.SetOwner(ctx, authority)
 		cctpKeeper.SetAttesterManager(ctx, "noble1rx6vk9ll2vglwkrrlf8a7cl86lfz55uj8deunm")
 		cctpKeeper.SetPauser(ctx, "noble1hvm5pxssempk3jg0tgzugtsk85js42rze7cnxd")
 		cctpKeeper.SetTokenController(ctx, "noble1hl7nlkt3vyjzk0c4ytfveemmykw8ectspapcd3")
