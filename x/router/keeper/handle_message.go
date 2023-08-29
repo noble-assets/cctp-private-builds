@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"strconv"
+	"time"
 
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
@@ -10,6 +11,12 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	clienttypes "github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
 )
+
+// MinimumRelativePacketTimeoutTimestamp is the default minimum packet timeout timestamp (in nanoseconds)
+// relative to the current block timestamp of the counterparty chain provided by the client state. Incoming packets
+// with IBCForwardMetadata cannot have a timeout smaller than this value in order to prevent DoS styled attacks
+// on relayer resources.
+var MinimumRelativePacketTimeoutTimestamp = uint64((time.Duration(30) * time.Second).Nanoseconds())
 
 func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 
@@ -81,7 +88,7 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 
 func (k Keeper) ForwardPacket(ctx sdk.Context, ibcForward *types.IBCForwardMetadata, mint types.Mint) error {
 	timeout := ibcForward.TimeoutInNanoseconds
-	if timeout == 0 {
+	if timeout < MinimumRelativePacketTimeoutTimestamp {
 		timeout = transfertypes.DefaultRelativePacketTimeoutTimestamp
 	}
 
