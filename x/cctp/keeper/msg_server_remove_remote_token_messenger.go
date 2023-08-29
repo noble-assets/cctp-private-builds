@@ -2,12 +2,10 @@ package keeper
 
 import (
 	"context"
-	"strings"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (k msgServer) RemoveRemoteTokenMessenger(goCtx context.Context, msg *types.MsgRemoveRemoteTokenMessenger) (*types.MsgRemoveRemoteTokenMessengerResponse, error) {
@@ -27,7 +25,7 @@ func (k msgServer) RemoveRemoteTokenMessenger(goCtx context.Context, msg *types.
 
 	event := types.RemoteTokenMessengerRemoved{
 		Domain:               msg.DomainId,
-		RemoteTokenMessenger: []byte(strings.ToLower(existingRemoteTokenMessenger.Address)),
+		RemoteTokenMessenger: existingRemoteTokenMessenger.Address,
 	}
 	err := ctx.EventManager().EmitTypedEvent(&event)
 

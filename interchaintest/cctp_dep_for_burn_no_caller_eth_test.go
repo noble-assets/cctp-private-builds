@@ -10,13 +10,17 @@ import (
 	"testing"
 	"time"
 
+	cosmossdk_io_math "cosmossdk.io/math"
 	"github.com/circlefin/noble-cctp-private-builds/cmd"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	routertypes "github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/strangelove-ventures/interchaintest/v3"
 	"github.com/strangelove-ventures/interchaintest/v3/chain/cosmos"
@@ -25,11 +29,6 @@ import (
 	"github.com/strangelove-ventures/interchaintest/v3/testutil"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
-
-	cosmossdk_io_math "cosmossdk.io/math"
-	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
-
-	routertypes "github.com/circlefin/noble-cctp-private-builds/x/router/types"
 )
 
 // run `make local-image`to rebuild updated binary before running test
@@ -133,13 +132,14 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 
 	t.Log("preparing to submit add public keys tx")
 
-	burnTokenStr := "07865c6E87B9F70255377e024ace6630C1Eaa37F"
+	burnToken := make([]byte, 32)
+	copy(burnToken[12:], common.FromHex("0x07865c6E87B9F70255377e024ace6630C1Eaa37F"))
 
 	// maps remote token on remote domain to a local token -- used for minting
 	msgs = append(msgs, &cctptypes.MsgLinkTokenPair{
 		From:         gw.fiatTfRoles.Owner.FormattedAddress(),
 		RemoteDomain: 0,
-		RemoteToken:  "0x" + burnTokenStr,
+		RemoteToken:  burnToken,
 		LocalToken:   denomMetadataDrachma.Base,
 	})
 
@@ -184,14 +184,9 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 
 	burnRecipientPadded := append([]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, receiverBz...)
 
-	burnTokenBz, err := hex.DecodeString(burnTokenStr)
-	require.NoError(t, err)
-
-	burnTokenPadded := append(make([]byte, 12), burnTokenBz...)
-
 	// someone burned USDC on Etherium -> Mint on Noble
 	depositForBurn := cctptypes.BurnMessage{
-		BurnToken:     burnTokenPadded,
+		BurnToken:     burnToken,
 		MintRecipient: burnRecipientPadded,
 		Amount:        cosmossdk_io_math.NewInt(1000000),
 		MessageSender: burnRecipientPadded,

@@ -22,22 +22,23 @@ func CmdSendMessageWithCaller() *cobra.Command {
 				return err
 			}
 
+			recipient := make([]byte, 32)
+			copy(recipient[12:], common.FromHex(args[1]))
+
+			destinationCaller := make([]byte, 32)
+			copy(destinationCaller[12:], common.FromHex(args[3]))
+
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
-
-			recipient := make([]byte, 32)
-			copy(recipient[12:], common.FromHex(args[1]))
-			caller := make([]byte, 32)
-			copy(caller[12:], common.FromHex(args[3]))
 
 			msg := types.NewMsgSendMessageWithCaller(
 				clientCtx.GetFromAddress().String(),
 				uint32(destinationDomain),
 				recipient,
 				[]byte(args[2]),
-				caller,
+				destinationCaller,
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

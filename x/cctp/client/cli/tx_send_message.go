@@ -22,13 +22,13 @@ func CmdSendMessage() *cobra.Command {
 				return err
 			}
 
+			recipient := make([]byte, 32)
+			copy(recipient[12:], common.FromHex(args[1]))
+
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
-
-			recipient := make([]byte, 32)
-			copy(recipient[12:], common.FromHex(args[1]))
 
 			msg := types.NewMsgSendMessage(
 				clientCtx.GetFromAddress().String(),

@@ -115,7 +115,7 @@ message MintAndWithdraw {
 message TokenPairLinked {
   string local_token = 1;
   uint32 remote_domain = 2;
-  string remote_token = 3;
+  bytes remote_token = 3;
 }
 
 /**
@@ -127,7 +127,7 @@ message TokenPairLinked {
 message TokenPairUnlinked {
   string local_token = 1;
   uint32 remote_domain = 2;
-  string remote_token = 3;
+  bytes remote_token = 3;
 }
 
 /**

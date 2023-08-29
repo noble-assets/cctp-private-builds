@@ -213,7 +213,7 @@ message MsgUpdateSignatureThresholdResponse {}
 message MsgLinkTokenPair {
   string from = 1;
   uint32 remote_domain = 2;
-  string remote_token = 3;
+  bytes remote_token = 3;
   string local_token = 4;
 }
 
@@ -222,7 +222,7 @@ message MsgLinkTokenPairResponse {}
 message MsgUnlinkTokenPair {
   string from = 1;
   uint32 remote_domain = 2;
-  string remote_token = 3;
+  bytes remote_token = 3;
   string local_token = 4;
 }
 
@@ -231,7 +231,7 @@ message MsgUnlinkTokenPairResponse {}
 message MsgAddRemoteTokenMessenger {
   string from = 1;
   uint32 domain_id = 2;
-  string address = 3;
+  bytes address = 3;
 }
 
 message MsgAddRemoteTokenMessengerResponse {}

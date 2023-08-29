@@ -10,5 +10,5 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/cctp/types
  */
 message RemoteTokenMessenger {
   uint32 domain_id = 1;
-  string address = 2;
+  bytes address = 2;
 }
