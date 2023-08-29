@@ -1,8 +1,6 @@
 package argon2
 
 import (
-	"fmt"
-
 	"cosmossdk.io/math"
 	cctpkeeper "github.com/circlefin/noble-cctp-private-builds/x/cctp/keeper"
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
@@ -21,17 +19,7 @@ func CreateUpgradeHandler(
 	cctpKeeper *cctpkeeper.Keeper,
 ) upgradeTypes.UpgradeHandler {
 	return func(ctx sdk.Context, _ upgradeTypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
-		var authority string
-		if ctx.ChainID() == TestnetChainID {
-			authority = paramauthoritykeeper.GetAuthority(ctx)
-		} else {
-			owner, ok := fiatTFKeeper.GetOwner(ctx)
-			if !ok {
-				return nil, fmt.Errorf("fiat token factory owner not found")
-			}
-
-			authority = owner.Address
-		}
+		authority := paramauthoritykeeper.GetAuthority(ctx)
 
 		denom := fiatTFKeeper.GetMintingDenom(ctx)
 
