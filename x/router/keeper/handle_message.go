@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"strconv"
 	"time"
 
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
@@ -33,7 +32,7 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 			return sdkerrors.Wrapf(types.ErrHandleMessage, "unable to find local token denom for this burn")
 		}
 
-		addr, err := sdk.Bech32ifyAddressBytes("noble", burnMessage.MintRecipient[12:])
+		addr, err := sdk.Bech32ifyAddressBytes(sdk.GetConfig().GetBech32AccountAddrPrefix(), burnMessage.MintRecipient[12:])
 		if err != nil {
 			return sdkerrors.Wrapf(types.ErrHandleMessage, "error bech32 encoding mint recipient address")
 		}
@@ -47,7 +46,7 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 				Denom:  tokenPair.LocalToken,
 				Amount: sdk.NewIntFromBigInt(burnMessage.Amount.BigInt()),
 			},
-			DestinationDomain: strconv.Itoa(int(outerMessage.DestinationDomain)),
+			DestinationDomain: outerMessage.DestinationDomain,
 			MintRecipient:     addr,
 		}
 		k.SetMint(ctx, mint)
