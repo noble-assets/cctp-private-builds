@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/circlefin/noble-cctp-router-private/x/router/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
 )

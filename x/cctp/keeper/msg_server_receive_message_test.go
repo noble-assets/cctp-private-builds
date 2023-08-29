@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"cosmossdk.io/math"
-	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
-	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/keeper"
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/stretchr/testify/require"
@@ -56,7 +56,7 @@ func TestReceiveMessageHappyPath(t *testing.T) {
 		DestinationDomain: 4,
 		Nonce:             0,
 		Sender:            []byte("01234567890123456789012345678912"),
-		Recipient:         crypto.Keccak256([]byte("cctp/TokenMessenger")),
+		Recipient:         types.PaddedModuleAddress,
 		DestinationCaller: make([]byte, types.DestinationCallerLen),
 		MessageBody:       burnMessageBytes,
 	}
@@ -114,7 +114,7 @@ func TestReceiveMessageWithDestinationCallerHappyPath(t *testing.T) {
 		DestinationDomain: 4,
 		Nonce:             0,
 		Sender:            []byte("01234567890123456789012345678912"),
-		Recipient:         crypto.Keccak256([]byte("cctp/TokenMessenger")),
+		Recipient:         types.PaddedModuleAddress,
 		DestinationCaller: append([]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, destinationCaller.AddressBz...),
 		MessageBody:       burnMessageBytes,
 	}
@@ -262,7 +262,7 @@ func TestReceiveMessageIncorrectDestinationDomain(t *testing.T) {
 		DestinationDomain: 11, // not noble
 		Nonce:             0,
 		Sender:            []byte("01234567890123456789012345678912"),
-		Recipient:         crypto.Keccak256([]byte("cctp/TokenMessenger")),
+		Recipient:         types.PaddedModuleAddress,
 		DestinationCaller: make([]byte, types.DestinationCallerLen),
 		MessageBody:       burnMessageBytes,
 	}
@@ -318,7 +318,7 @@ func TestReceiveMessageIncorrectDestinationCaller(t *testing.T) {
 		DestinationDomain: 4,
 		Nonce:             0,
 		Sender:            []byte("01234567890123456789012345678912"),
-		Recipient:         crypto.Keccak256([]byte("cctp/TokenMessenger")),
+		Recipient:         types.PaddedModuleAddress,
 		DestinationCaller: []byte("01234567890123456789012345678912"),
 		MessageBody:       burnMessageBytes,
 	}
@@ -374,7 +374,7 @@ func TestReceiveMessageInvalidMessageVersion(t *testing.T) {
 		DestinationDomain: 4,
 		Nonce:             0,
 		Sender:            []byte("01234567890123456789012345678912"),
-		Recipient:         crypto.Keccak256([]byte("cctp/TokenMessenger")),
+		Recipient:         types.PaddedModuleAddress,
 		DestinationCaller: make([]byte, types.DestinationCallerLen),
 		MessageBody:       burnMessageBytes,
 	}
@@ -430,7 +430,7 @@ func TestReceiveMessageNonceAlreadyUsed(t *testing.T) {
 		DestinationDomain: 4,
 		Nonce:             18,
 		Sender:            []byte("01234567890123456789012345678912"),
-		Recipient:         crypto.Keccak256([]byte("cctp/TokenMessenger")),
+		Recipient:         types.PaddedModuleAddress,
 		DestinationCaller: make([]byte, types.DestinationCallerLen),
 		MessageBody:       burnMessageBytes,
 	}
@@ -492,7 +492,7 @@ func TestReceiveMessageInvalidMessageBodyVersion(t *testing.T) {
 		DestinationDomain: 4,
 		Nonce:             5,
 		Sender:            []byte("01234567890123456789012345678912"),
-		Recipient:         crypto.Keccak256([]byte("cctp/TokenMessenger")),
+		Recipient:         types.PaddedModuleAddress,
 		DestinationCaller: make([]byte, types.DestinationCallerLen),
 		MessageBody:       burnMessageBytes,
 	}
@@ -541,7 +541,7 @@ func TestReceiveMessageTokenPairNotFound(t *testing.T) {
 		DestinationDomain: 4,
 		Nonce:             0,
 		Sender:            []byte("01234567890123456789012345678912"),
-		Recipient:         crypto.Keccak256([]byte("cctp/TokenMessenger")),
+		Recipient:         types.PaddedModuleAddress,
 		DestinationCaller: make([]byte, types.DestinationCallerLen),
 		MessageBody:       burnMessageBytes,
 	}

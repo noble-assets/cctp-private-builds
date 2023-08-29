@@ -102,6 +102,10 @@ lint:
 test:
 	go test -v -race ./...
 
+test-cctp:
+	@cd interchaintest && go test -v -race -run ^TestCCTP_DepForBurnNoCallerOnEth$$ .
+	@cd interchaintest && go test -v -race -run ^TestCCTP_DepForBurnWithCallerOnEth$$ .
+
 ictest-tkn-factory:
 	cd interchaintest && go test -race -v -run ^TestNobleChain$$ .
 
@@ -156,7 +160,7 @@ proto-all: proto-format proto-lint proto-gen
 
 proto-gen:
 	@echo "Generating Protobuf files"
-	@if docker ps -a --format '{{.Names}}' | grep -Eq "^${containerProtoGen}$$"; then docker start -a $(containerProtoGen); else docker run --name $(containerProtoGen) -v $(CURDIR):/workspace --workdir /workspace $(containerProtoImage) \
+	@if docker ps -a --format '{{.Names}}' | grep -Eq "^${containerProtoGen}$$"; then docker start -a $(containerProtoGen); else docker run --name $(containerProtoGen) -v "$(PWD):/workspace" --workdir /workspace $(containerProtoImage) \
 		sh ./scripts/protocgen.sh; fi
 
 proto-format:

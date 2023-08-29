@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
 func (k msgServer) LinkTokenPair(goCtx context.Context, msg *types.MsgLinkTokenPair) (*types.MsgLinkTokenPairResponse, error) {
@@ -19,21 +19,16 @@ func (k msgServer) LinkTokenPair(goCtx context.Context, msg *types.MsgLinkTokenP
 	}
 
 	// check whether there already exists a mapping for this remote domain/token
-	_, found := k.GetTokenPairHex(ctx, msg.RemoteDomain, msg.RemoteToken)
+	_, found := k.GetTokenPair(ctx, msg.RemoteDomain, msg.RemoteToken)
 	if found {
 		return nil, sdkerrors.Wrapf(
 			types.ErrTokenPairAlreadyFound,
 			"Local token for this remote domain + remote token mapping already exists in store")
 	}
 
-	remoteTokenPadded, err := types.RemoteTokenPadded(msg.RemoteToken)
-	if err != nil {
-		return nil, err
-	}
-
 	newTokenPair := types.TokenPair{
 		RemoteDomain: msg.RemoteDomain,
-		RemoteToken:  remoteTokenPadded,
+		RemoteToken:  msg.RemoteToken,
 		LocalToken:   strings.ToLower(msg.LocalToken),
 	}
 
@@ -44,6 +39,6 @@ func (k msgServer) LinkTokenPair(goCtx context.Context, msg *types.MsgLinkTokenP
 		RemoteDomain: msg.RemoteDomain,
 		RemoteToken:  msg.RemoteToken,
 	}
-	err = ctx.EventManager().EmitTypedEvent(&event)
+	err := ctx.EventManager().EmitTypedEvent(&event)
 	return &types.MsgLinkTokenPairResponse{}, err
 }

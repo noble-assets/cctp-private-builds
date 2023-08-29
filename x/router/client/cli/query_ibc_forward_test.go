@@ -12,10 +12,10 @@ import (
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/status"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/network"
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
-	"github.com/circlefin/noble-cctp-router-private/x/router/client/cli"
-	"github.com/circlefin/noble-cctp-router-private/x/router/types"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/network"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/client/cli"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 )
 
 func networkWithIBCForwardObjects(t *testing.T, n int) (*network.Network, []types.StoreIBCForwardMetadata) {

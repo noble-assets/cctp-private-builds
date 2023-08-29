@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
 func (k msgServer) UnlinkTokenPair(goCtx context.Context, msg *types.MsgUnlinkTokenPair) (*types.MsgUnlinkTokenPairResponse, error) {
@@ -17,7 +17,7 @@ func (k msgServer) UnlinkTokenPair(goCtx context.Context, msg *types.MsgUnlinkTo
 		return nil, sdkerrors.Wrap(types.ErrUnauthorized, "this message sender cannot unlink token pairs")
 	}
 
-	tokenPair, found := k.GetTokenPairHex(ctx, msg.RemoteDomain, msg.RemoteToken)
+	tokenPair, found := k.GetTokenPair(ctx, msg.RemoteDomain, msg.RemoteToken)
 	if !found {
 		return nil, sdkerrors.Wrap(types.ErrTokenPairNotFound, "token pair doesn't exist in store")
 	}

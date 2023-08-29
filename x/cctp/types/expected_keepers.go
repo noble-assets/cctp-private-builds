@@ -1,7 +1,7 @@
 package types
 
 import (
-	fiattokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	fiattokenfactorytypes "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )

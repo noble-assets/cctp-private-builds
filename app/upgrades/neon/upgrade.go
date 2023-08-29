@@ -8,9 +8,9 @@ import (
 
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory"
-	fiattokenfactorykeeper "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	fiattokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory"
+	fiattokenfactorykeeper "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/keeper"
+	fiattokenfactorytypes "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 )
 

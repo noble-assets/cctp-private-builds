@@ -2,7 +2,7 @@ package router
 
 import (
 	errorsmod "cosmossdk.io/errors"
-	"github.com/circlefin/noble-cctp-router-private/x/router/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/capability/types"
@@ -88,7 +88,7 @@ func (im IBCMiddleware) OnTimeoutPacket(ctx sdk.Context, packet channeltypes.Pac
 		if !found {
 			panic("no existing mint in store for in flight packet")
 		}
-		return im.keeper.ForwardPacket(ctx, *existingIBCForward.Metadata, existingMint)
+		return im.keeper.ForwardPacket(ctx, existingIBCForward.Metadata, existingMint)
 	}
 
 	return im.app.OnTimeoutPacket(ctx, packet, relayer)

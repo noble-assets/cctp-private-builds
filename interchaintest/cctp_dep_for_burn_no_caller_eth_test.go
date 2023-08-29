@@ -10,15 +10,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/circlefin/noble-cctp-router-private/cmd"
+	cosmossdk_io_math "cosmossdk.io/math"
+	"github.com/circlefin/noble-cctp-private-builds/cmd"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	routertypes "github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/golang/protobuf/proto"
 	"github.com/strangelove-ventures/interchaintest/v3"
 	"github.com/strangelove-ventures/interchaintest/v3/chain/cosmos"
 	"github.com/strangelove-ventures/interchaintest/v3/ibc"
@@ -26,11 +29,6 @@ import (
 	"github.com/strangelove-ventures/interchaintest/v3/testutil"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
-
-	cosmossdk_io_math "cosmossdk.io/math"
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
-
-	routertypes "github.com/circlefin/noble-cctp-router-private/x/router/types"
 )
 
 // run `make local-image`to rebuild updated binary before running test
@@ -134,13 +132,14 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 
 	t.Log("preparing to submit add public keys tx")
 
-	burnTokenStr := "07865c6E87B9F70255377e024ace6630C1Eaa37F"
+	burnToken := make([]byte, 32)
+	copy(burnToken[12:], common.FromHex("0x07865c6E87B9F70255377e024ace6630C1Eaa37F"))
 
 	// maps remote token on remote domain to a local token -- used for minting
 	msgs = append(msgs, &cctptypes.MsgLinkTokenPair{
 		From:         gw.fiatTfRoles.Owner.FormattedAddress(),
 		RemoteDomain: 0,
-		RemoteToken:  "0x" + burnTokenStr,
+		RemoteToken:  burnToken,
 		LocalToken:   denomMetadataDrachma.Base,
 	})
 
@@ -185,14 +184,9 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 
 	burnRecipientPadded := append([]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, receiverBz...)
 
-	burnTokenBz, err := hex.DecodeString(burnTokenStr)
-	require.NoError(t, err)
-
-	burnTokenPadded := append(make([]byte, 12), burnTokenBz...)
-
 	// someone burned USDC on Etherium -> Mint on Noble
 	depositForBurn := cctptypes.BurnMessage{
-		BurnToken:     burnTokenPadded,
+		BurnToken:     burnToken,
 		MintRecipient: burnRecipientPadded,
 		Amount:        cosmossdk_io_math.NewInt(1000000),
 		MessageSender: burnRecipientPadded,
@@ -202,7 +196,6 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	require.NoError(t, err)
 
 	var sender = []byte("12345678901234567890123456789012")
-	var tokenMessengerRecipient = crypto.Keccak256([]byte("cctp/TokenMessenger"))
 
 	emptyDestinationCaller := make([]byte, 32)
 
@@ -212,7 +205,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 		DestinationDomain: 4, // Noble is 4
 		Nonce:             0, // dif per message
 		Sender:            sender,
-		Recipient:         tokenMessengerRecipient,
+		Recipient:         cctptypes.PaddedModuleAddress,
 		DestinationCaller: emptyDestinationCaller,
 		MessageBody:       depositForBurnBz,
 	}
@@ -221,14 +214,16 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	require.NoError(t, err)
 
 	// in mainnet this would forward to dydx chain
-	forward, err := proto.Marshal(&routertypes.IBCForwardMetadata{
+	forward := routertypes.IBCForwardMetadata{
 		Port:                "transfer",
 		Channel:             "channel-0",
 		DestinationReceiver: gaiaReceiver,
-	})
+	}
+
+	forwardBz, err := forward.Bytes(gaiaChainCfg.Bech32Prefix)
 	require.NoError(t, err)
 
-	wrappedForward := &cctptypes.Message{
+	wrappedForward := cctptypes.Message{
 		Version:           0,
 		SourceDomain:      0, // same source domain !
 		DestinationDomain: 4,
@@ -236,7 +231,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 		Sender:            sender, // same sender !
 		Recipient:         burnRecipientPadded,
 		DestinationCaller: emptyDestinationCaller,
-		MessageBody:       forward,
+		MessageBody:       forwardBz,
 	}
 
 	wrappedForwardBz, err := wrappedForward.Bytes()
@@ -334,7 +329,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	// gaia.Validators[0].SendIBCTransfer(ctx, "channel-0", )
 
 	// depositForBurnNoble := &cctptypes.MsgDepositForBurn{
-	// 	BurnToken: "is this the sam as coming from e TRY UUSDC",
+	// 	BurnToken:uusdc
 	// 	Amount:    cosmossdk_io_math.NewInt(1000000),
 	// }
 

@@ -3,10 +3,10 @@ package tokenfactory_test
 import (
 	"testing"
 
-	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 
 	"github.com/stretchr/testify/require"
 )

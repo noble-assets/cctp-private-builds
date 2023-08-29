@@ -87,32 +87,33 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/circlefin/noble-cctp-router-private/app/upgrades/argon"
-	"github.com/circlefin/noble-cctp-router-private/app/upgrades/neon"
-	"github.com/circlefin/noble-cctp-router-private/app/upgrades/radon"
-	"github.com/circlefin/noble-cctp-router-private/cmd"
-	"github.com/circlefin/noble-cctp-router-private/docs"
-	"github.com/circlefin/noble-cctp-router-private/x/blockibc"
-	fiattokenfactorymodule "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory"
-	fiattokenfactorymodulekeeper "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	fiattokenfactorymoduletypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
-	"github.com/circlefin/noble-cctp-router-private/x/globalfee"
-	tariff "github.com/circlefin/noble-cctp-router-private/x/tariff"
-	tariffkeeper "github.com/circlefin/noble-cctp-router-private/x/tariff/keeper"
-	tarifftypes "github.com/circlefin/noble-cctp-router-private/x/tariff/types"
-	tokenfactorymodule "github.com/circlefin/noble-cctp-router-private/x/tokenfactory"
-	tokenfactorymodulekeeper "github.com/circlefin/noble-cctp-router-private/x/tokenfactory/keeper"
-	tokenfactorymoduletypes "github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/argon"
+	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/argon2"
+	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/neon"
+	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/radon"
+	"github.com/circlefin/noble-cctp-private-builds/cmd"
+	"github.com/circlefin/noble-cctp-private-builds/docs"
+	"github.com/circlefin/noble-cctp-private-builds/x/blockibc"
+	fiattokenfactorymodule "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory"
+	fiattokenfactorymodulekeeper "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/keeper"
+	fiattokenfactorymoduletypes "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/globalfee"
+	tariff "github.com/circlefin/noble-cctp-private-builds/x/tariff"
+	tariffkeeper "github.com/circlefin/noble-cctp-private-builds/x/tariff/keeper"
+	tarifftypes "github.com/circlefin/noble-cctp-private-builds/x/tariff/types"
+	tokenfactorymodule "github.com/circlefin/noble-cctp-private-builds/x/tokenfactory"
+	tokenfactorymodulekeeper "github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/keeper"
+	tokenfactorymoduletypes "github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	cctp "github.com/circlefin/noble-cctp-router-private/x/cctp"
-	cctpkeeper "github.com/circlefin/noble-cctp-router-private/x/cctp/keeper"
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
-	router "github.com/circlefin/noble-cctp-router-private/x/router"
-	routerkeeper "github.com/circlefin/noble-cctp-router-private/x/router/keeper"
-	routertypes "github.com/circlefin/noble-cctp-router-private/x/router/types"
+	cctp "github.com/circlefin/noble-cctp-private-builds/x/cctp"
+	cctpkeeper "github.com/circlefin/noble-cctp-private-builds/x/cctp/keeper"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	router "github.com/circlefin/noble-cctp-private-builds/x/router"
+	routerkeeper "github.com/circlefin/noble-cctp-private-builds/x/router/keeper"
+	routertypes "github.com/circlefin/noble-cctp-private-builds/x/router/types"
 )
 
 const (
@@ -918,6 +919,17 @@ func (app *App) setupUpgradeHandlers() {
 			app.CCTPKeeper,
 		),
 	)
+	// argon2 upgrade
+	app.UpgradeKeeper.SetUpgradeHandler(
+		argon2.UpgradeName,
+		argon2.CreateUpgradeHandler(
+			app.mm,
+			app.configurator,
+			app.FiatTokenFactoryKeeper,
+			app.ParamsKeeper,
+			app.CCTPKeeper,
+		),
+	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
@@ -936,6 +948,8 @@ func (app *App) setupUpgradeHandlers() {
 		storeLoader = radon.CreateStoreLoader(upgradeInfo.Height)
 	case argon.UpgradeName:
 		storeLoader = argon.CreateStoreLoader(upgradeInfo.Height)
+	case argon2.UpgradeName:
+		storeLoader = argon2.CreateStoreLoader(upgradeInfo.Height)
 	}
 
 	if storeLoader != nil {

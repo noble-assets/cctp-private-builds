@@ -3,8 +3,8 @@ package keeper
 import (
 	"time"
 
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
-	"github.com/circlefin/noble-cctp-router-private/x/router/types"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
@@ -23,30 +23,6 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 	outerMessage, err := new(cctptypes.Message).Parse(msg)
 	if err != nil {
 		return err
-	}
-
-	// parse internal message into IBCForward
-	if ibcForward, err := DecodeIBCForward(outerMessage.MessageBody); err == nil {
-		if storedForward, ok := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
-			if storedForward.AckError {
-				if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
-					return k.ForwardPacket(ctx, ibcForward, existingMint)
-				}
-				panic("unexpected state")
-			}
-
-			return sdkerrors.Wrapf(types.ErrHandleMessage, "previous operation still in progress")
-		}
-		// this is the first time we are seeing this forward info -> store it.
-		k.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
-			SourceDomain:       outerMessage.SourceDomain,
-			SourceDomainSender: string(outerMessage.Sender),
-			Metadata:           &ibcForward,
-		})
-		if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
-			return k.ForwardPacket(ctx, ibcForward, existingMint)
-		}
-		return nil
 	}
 
 	// try to parse internal message into burn (representing a remote burn -> local mint)
@@ -75,14 +51,41 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 		}
 		k.SetMint(ctx, mint)
 		if existingIBCForward, found := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(burnMessage.MessageSender), outerMessage.Nonce); found {
-			return k.ForwardPacket(ctx, *existingIBCForward.Metadata, mint)
+			return k.ForwardPacket(ctx, existingIBCForward.Metadata, mint)
 		}
+
+		return nil
+	}
+
+	// parse internal message into IBCForward
+	if ibcForward, err := new(types.IBCForwardMetadata).Parse(outerMessage.MessageBody); err == nil {
+		if storedForward, ok := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+			if storedForward.AckError {
+				if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+					return k.ForwardPacket(ctx, ibcForward, existingMint)
+				}
+				panic("unexpected state")
+			}
+
+			return sdkerrors.Wrapf(types.ErrHandleMessage, "previous operation still in progress")
+		}
+		// this is the first time we are seeing this forward info -> store it.
+		k.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
+			SourceDomain:       outerMessage.SourceDomain,
+			SourceDomainSender: string(outerMessage.Sender),
+			Metadata:           ibcForward,
+		})
+		if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+			return k.ForwardPacket(ctx, ibcForward, existingMint)
+		}
+
+		return nil
 	}
 
 	return nil
 }
 
-func (k Keeper) ForwardPacket(ctx sdk.Context, ibcForward types.IBCForwardMetadata, mint types.Mint) error {
+func (k Keeper) ForwardPacket(ctx sdk.Context, ibcForward *types.IBCForwardMetadata, mint types.Mint) error {
 	timeout := ibcForward.TimeoutInNanoseconds
 	if timeout < MinimumRelativePacketTimeoutTimestamp {
 		timeout = transfertypes.DefaultRelativePacketTimeoutTimestamp

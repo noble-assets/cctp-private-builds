@@ -3,8 +3,8 @@ package types_test
 import (
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/stretchr/testify/require"

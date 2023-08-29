@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 )
 
 type msgServer struct {

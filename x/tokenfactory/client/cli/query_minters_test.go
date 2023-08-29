@@ -12,10 +12,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/network"
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/client/cli"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/network"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/client/cli"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 )
 
 // Prevent strconv unused error

@@ -1,7 +1,7 @@
 package globalfee
 
 import (
-	"github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/globalfee/types"
 )
 
 const (

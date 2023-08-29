@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/binary"
 
+	authTypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
@@ -31,6 +32,14 @@ const (
 	TokenPairKeyPrefix            = "TokenPair/value/"
 	UsedNonceKeyPrefix            = "UsedNonce/value/"
 )
+
+var ModuleAddress = authTypes.NewModuleAddress(ModuleName)
+
+var PaddedModuleAddress = make([]byte, 32)
+
+func init() {
+	copy(PaddedModuleAddress[12:], ModuleAddress)
+}
 
 var (
 	OwnerKey           = []byte("owner")

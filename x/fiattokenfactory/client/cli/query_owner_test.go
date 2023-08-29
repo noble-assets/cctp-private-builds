@@ -9,10 +9,10 @@ import (
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/status"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/network"
-	"github.com/circlefin/noble-cctp-router-private/testutil/nullify"
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/client/cli"
-	"github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/network"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/client/cli"
+	"github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 )
 
 func networkWithOwnerObjects(t *testing.T) (*network.Network, types.Owner) {

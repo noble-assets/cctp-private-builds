@@ -16,8 +16,8 @@ import (
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/circlefin/noble-cctp-router-private/x/globalfee/client/cli"
-	"github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/globalfee/client/cli"
+	"github.com/circlefin/noble-cctp-private-builds/x/globalfee/types"
 )
 
 var (

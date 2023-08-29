@@ -3,10 +3,11 @@ package cli
 import (
 	"strconv"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/spf13/cobra"
 )
 
@@ -21,6 +22,9 @@ func CmdUnlinkTokenPair() *cobra.Command {
 				return err
 			}
 
+			remoteToken := make([]byte, 32)
+			copy(remoteToken[12:], common.FromHex(args[1]))
+
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
@@ -29,7 +33,7 @@ func CmdUnlinkTokenPair() *cobra.Command {
 			msg := types.NewMsgUnlinkTokenPair(
 				clientCtx.GetFromAddress().String(),
 				args[0],
-				args[1],
+				remoteToken,
 				uint32(remoteDomain),
 			)
 

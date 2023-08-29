@@ -3,11 +3,11 @@ package keeper_test
 import (
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
 
 	"github.com/stretchr/testify/require"
 
-	keepertest "github.com/circlefin/noble-cctp-router-private/testutil/keeper"
+	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
 )
 
 func TestOwner(t *testing.T) {

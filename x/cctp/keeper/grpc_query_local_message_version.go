@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
 func (k Keeper) LocalMessageVersion(_ context.Context, _ *types.QueryLocalMessageVersionRequest) (*types.QueryLocalMessageVersionResponse, error) {

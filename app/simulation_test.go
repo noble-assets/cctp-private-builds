@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/circlefin/noble-cctp-router-private/app"
-	"github.com/circlefin/noble-cctp-router-private/cmd"
+	"github.com/circlefin/noble-cctp-private-builds/app"
+	"github.com/circlefin/noble-cctp-private-builds/cmd"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"

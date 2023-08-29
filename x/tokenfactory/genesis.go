@@ -1,8 +1,8 @@
 package tokenfactory
 
 import (
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/keeper"
-	"github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/keeper"
+	"github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"

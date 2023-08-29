@@ -3,10 +3,11 @@ package cli
 import (
 	"strconv"
 
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/spf13/cobra"
 )
 
@@ -21,6 +22,12 @@ func CmdSendMessageWithCaller() *cobra.Command {
 				return err
 			}
 
+			recipient := make([]byte, 32)
+			copy(recipient[12:], common.FromHex(args[1]))
+
+			destinationCaller := make([]byte, 32)
+			copy(destinationCaller[12:], common.FromHex(args[3]))
+
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
@@ -29,9 +36,9 @@ func CmdSendMessageWithCaller() *cobra.Command {
 			msg := types.NewMsgSendMessageWithCaller(
 				clientCtx.GetFromAddress().String(),
 				uint32(destinationDomain),
-				[]byte(args[1]),
+				recipient,
 				[]byte(args[2]),
-				[]byte(args[3]),
+				destinationCaller,
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)

@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/globalfee/types"
 )
 
 var _ types.QueryServer = &GrpcQuerier{}

@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	fiattokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
-	globalfeetypes "github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
+	fiattokenfactorytypes "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
+	globalfeetypes "github.com/circlefin/noble-cctp-private-builds/x/globalfee/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/strangelove-ventures/interchaintest/v3/chain/cosmos"
 	"github.com/strangelove-ventures/interchaintest/v3/ibc"

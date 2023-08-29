@@ -18,10 +18,10 @@ import (
 	tmrand "github.com/tendermint/tendermint/libs/rand"
 	tmdb "github.com/tendermint/tm-db"
 
-	"github.com/circlefin/noble-cctp-router-private/app"
-	"github.com/circlefin/noble-cctp-router-private/cmd"
-	"github.com/circlefin/noble-cctp-router-private/testutil/sample"
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/app"
+	"github.com/circlefin/noble-cctp-private-builds/cmd"
+	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	genutil "github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
@@ -104,7 +104,7 @@ func DefaultConfig() network.Config {
 	cfg.GenesisState[upgradetypes.ModuleName] = encoding.Marshaler.MustMarshalJSON(upgrade)
 
 	cctp := cctptypes.DefaultGenesis()
-	cctp.Authority = sample.AccAddress()
+	cctp.Owner = sample.AccAddress()
 	cctp.AttesterManager = sample.AccAddress()
 	cctp.Pauser = sample.AccAddress()
 	cctp.TokenController = sample.AccAddress()

@@ -17,7 +17,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/circlefin/noble-cctp-router-private/x/globalfee/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/globalfee/types"
 )
 
 func TestValidateGenesis(t *testing.T) {

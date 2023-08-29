@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"cosmossdk.io/math"
-	cctpkeeper "github.com/circlefin/noble-cctp-router-private/x/cctp/keeper"
-	cctptypes "github.com/circlefin/noble-cctp-router-private/x/cctp/types"
-	fiattokenfactorykeeper "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
+	cctpkeeper "github.com/circlefin/noble-cctp-private-builds/x/cctp/keeper"
+	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	fiattokenfactorykeeper "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradeTypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"

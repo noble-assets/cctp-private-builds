@@ -5,7 +5,7 @@ import (
 	storeTypes "github.com/cosmos/cosmos-sdk/store/types"
 
 	// FiatTokenFactory
-	fiatTokenFactoryTypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
+	fiatTokenFactoryTypes "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
 	// Upgrade
 	upgradeTypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 )

@@ -1,10 +1,10 @@
 package app
 
 import (
-	fiattokenfactory "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/keeper"
-	fiattokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/fiattokenfactory/types"
-	tokenfactory "github.com/circlefin/noble-cctp-router-private/x/tokenfactory/keeper"
-	tokenfactorytypes "github.com/circlefin/noble-cctp-router-private/x/tokenfactory/types"
+	fiattokenfactory "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/keeper"
+	fiattokenfactorytypes "github.com/circlefin/noble-cctp-private-builds/x/fiattokenfactory/types"
+	tokenfactory "github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/circlefin/noble-cctp-private-builds/x/tokenfactory/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -16,7 +16,7 @@ import (
 	ibcante "github.com/cosmos/ibc-go/v3/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v3/modules/core/keeper"
 
-	feeante "github.com/circlefin/noble-cctp-router-private/x/globalfee/ante"
+	feeante "github.com/circlefin/noble-cctp-private-builds/x/globalfee/ante"
 )
 
 type HandlerOptions struct {

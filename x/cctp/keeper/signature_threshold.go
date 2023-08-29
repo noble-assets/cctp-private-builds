@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -10,7 +10,6 @@ import (
 // GetSignatureThreshold returns the SignatureThreshold
 func (k Keeper) GetSignatureThreshold(ctx sdk.Context) (val types.SignatureThreshold, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SignatureThresholdKey))
-
 	b := store.Get(types.KeyPrefix(types.SignatureThresholdKey))
 	if b == nil {
 		return val, false

@@ -1,14 +1,14 @@
 package cli
 
 import (
-	"github.com/circlefin/noble-cctp-router-private/x/cctp/types"
+	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
 )
 
-func CmdUpdateAuthority() *cobra.Command {
+func CmdUpdateOwner() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-owner [address]",
 		Short: "Broadcast message update-owner",
