@@ -1,13 +1,13 @@
 package cli
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/spf13/cobra"
 )
 
@@ -22,8 +22,10 @@ func CmdAddRemoteTokenMessenger() *cobra.Command {
 				return err
 			}
 
-			address := make([]byte, 32)
-			copy(address[12:], common.FromHex(args[1]))
+			address, err := parseAddress(args[1])
+			if err != nil {
+				return fmt.Errorf("invalid address: %w", err)
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
