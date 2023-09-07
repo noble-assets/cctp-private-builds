@@ -3,11 +3,11 @@ package keeper
 import (
 	"bytes"
 	"crypto/ecdsa"
-	"encoding/hex"
 	"math/big"
 
 	sdkerrors "cosmossdk.io/errors"
 	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
@@ -47,6 +47,10 @@ func VerifyAttestationSignatures(
 	for i := uint32(0); i < signatureThreshold; i++ {
 		signature := attestation[i*types.SignatureLength : (i*types.SignatureLength)+types.SignatureLength]
 
+		if signature[len(signature)-1] == 27 || signature[len(signature)-1] == 28 {
+			signature[len(signature)-1] -= 27
+		}
+
 		recoveredKey, err := crypto.Ecrecover(digest, signature)
 		if err != nil {
 			return sdkerrors.Wrap(types.ErrSignatureVerification, "failed to recover public key")
@@ -67,10 +71,7 @@ func VerifyAttestationSignatures(
 		// check that recovered key is a valid attester
 		contains := false
 		for _, key := range publicKeys {
-			hexBz, err := hex.DecodeString(key.Attester)
-			if err != nil {
-				return sdkerrors.Wrap(types.ErrSignatureVerification, "invalid signature: not attester")
-			}
+			hexBz := common.FromHex(key.Attester)
 			if bytes.Equal(hexBz, recoveredKey) {
 				contains = true
 				break
