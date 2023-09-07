@@ -9,7 +9,7 @@ const TypeMsgEnableAttester = "enable_attester"
 
 var _ sdk.Msg = &MsgEnableAttester{}
 
-func NewMsgEnableAttester(from string, attester []byte) *MsgEnableAttester {
+func NewMsgEnableAttester(from string, attester string) *MsgEnableAttester {
 	return &MsgEnableAttester{
 		From:     from,
 		Attester: attester,
