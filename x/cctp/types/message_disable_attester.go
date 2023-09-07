@@ -3,6 +3,7 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 const TypeMsgDisableAttester = "disable_attester"
@@ -42,5 +43,11 @@ func (msg *MsgDisableAttester) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid from address (%s)", err)
 	}
+
+	attester := common.FromHex(msg.Attester)
+	if len(attester) == 0 {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid attester")
+	}
+
 	return nil
 }
