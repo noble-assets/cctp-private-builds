@@ -53,7 +53,7 @@ func VerifyAttestationSignatures(
 
 		recoveredKey, err := crypto.Ecrecover(digest, signature)
 		if err != nil {
-			return sdkerrors.Wrap(types.ErrSignatureVerification, "failed to recover public key")
+			return sdkerrors.Wrapf(types.ErrSignatureVerification, "failed to recover public key: %s", err)
 		}
 
 		// Signatures must be in increasing order of address, and may not duplicate signatures from same address
