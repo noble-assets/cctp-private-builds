@@ -121,7 +121,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 		// Adding an attester to protocal
 		msgs[i] = &cctptypes.MsgEnableAttester{
 			From:     gw.fiatTfRoles.Owner.FormattedAddress(),
-			Attester: []byte(attesterPub),
+			Attester: attesterPub,
 		}
 	}
 

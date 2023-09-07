@@ -84,19 +84,21 @@ func TestCCTP_NobleDepositForBurn(t *testing.T) {
 	)
 	require.NoError(t, err, "failed to execute mint to user tx")
 
-	// userBal, err := noble.GetBalance(ctx, gw.extraWallets.User.FormattedAddress(), denomMetadataDrachma.Base)
-	// require.Equal(t, )
+	_, err = nobleValidator.ExecTx(ctx, gw.fiatTfRoles.MasterMinter.KeyName(),
+		"fiat-tokenfactory", "configure-minter-controller", gw.fiatTfRoles.MinterController.FormattedAddress(), cctptypes.ModuleAddress.String(), "-b", "block",
+	)
+	require.NoError(t, err, "failed to configure cctp minter controller")
+
+	_, err = nobleValidator.ExecTx(ctx, gw.fiatTfRoles.MinterController.KeyName(),
+		"fiat-tokenfactory", "configure-minter", cctptypes.ModuleAddress.String(), "1000000000000"+denomMetadataDrachma.Base, "-b", "block",
+	)
+	require.NoError(t, err, "failed to configure cctp minter")
 
 	// ----
 
 	broadcaster := cosmos.NewBroadcaster(t, noble)
 	broadcaster.ConfigureClientContextOptions(func(clientContext sdkclient.Context) sdkclient.Context {
-		// clientContext = clientContext.WithInterfaceRegistry(noble.Config().EncodingConfig.InterfaceRegistry)
-		// clientContext = clientContext.WithCodec(noble.Config().EncodingConfig.Marshaler)
-		// clientContext = clientContext.WithTxConfig(noble.Config().EncodingConfig.TxConfig)
-		// clientContext = clientContext.WithLegacyAmino(noble.Config().EncodingConfig.Amino)
-		clientContext = clientContext.WithBroadcastMode(flags.BroadcastBlock)
-		return clientContext
+		return clientContext.WithBroadcastMode(flags.BroadcastBlock)
 	})
 
 	burnToken := make([]byte, 32)
@@ -135,13 +137,15 @@ func TestCCTP_NobleDepositForBurn(t *testing.T) {
 	beforeBurnBal, err := noble.GetBalance(ctx, gw.extraWallets.User.FormattedAddress(), denomMetadataDrachma.Base)
 	require.NoError(t, err)
 
-	receiver := make([]byte, 32)
+	mintRecipient := make([]byte, 32)
+	copy(mintRecipient[12:], common.FromHex("0xfCE4cE85e1F74C01e0ecccd8BbC4606f83D3FC90"))
+
 	depositForBurnNoble := &cctptypes.MsgDepositForBurn{
 		From:              gw.extraWallets.User.FormattedAddress(),
 		Amount:            cosmossdk_io_math.NewInt(1000000),
 		BurnToken:         denomMetadataDrachma.Base,
 		DestinationDomain: 0,
-		MintRecipient:     receiver,
+		MintRecipient:     mintRecipient,
 	}
 
 	tx, err = cosmos.BroadcastTx(
@@ -157,4 +161,25 @@ func TestCCTP_NobleDepositForBurn(t *testing.T) {
 	require.NoError(t, err)
 
 	require.Equal(t, afterBurnBal, beforeBurnBal-1000000)
+
+	for _, rawEvent := range tx.Events {
+		switch rawEvent.Type {
+		case "circle.cctp.v1.DepositForBurn":
+			continue
+		case "circle.cctp.v1.MessageSent":
+			parsedEvent, err := sdk.ParseTypedEvent(rawEvent)
+			require.NoError(t, err)
+			event, ok := parsedEvent.(*cctptypes.MessageSent)
+			require.True(t, ok)
+
+			message, err := new(cctptypes.Message).Parse(event.Message)
+			require.NoError(t, err)
+
+			body, err := new(cctptypes.BurnMessage).Parse(message.MessageBody)
+			require.NoError(t, err)
+
+			require.Equal(t, mintRecipient, body.MintRecipient)
+			// TODO: Add more checks.
+		}
+	}
 }
