@@ -89,6 +89,7 @@ import (
 
 	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/argon"
 	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/argon2"
+	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/argon3"
 	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/neon"
 	"github.com/circlefin/noble-cctp-private-builds/app/upgrades/radon"
 	"github.com/circlefin/noble-cctp-private-builds/cmd"
@@ -931,6 +932,14 @@ func (app *App) setupUpgradeHandlers() {
 			app.CCTPKeeper,
 		),
 	)
+	// argon3 upgrade
+	app.UpgradeKeeper.SetUpgradeHandler(
+		argon3.UpgradeName,
+		argon3.CreateUpgradeHandler(
+			app.mm,
+			app.configurator,
+		),
+	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
@@ -951,6 +960,8 @@ func (app *App) setupUpgradeHandlers() {
 		storeLoader = argon.CreateStoreLoader(upgradeInfo.Height)
 	case argon2.UpgradeName:
 		storeLoader = argon2.CreateStoreLoader(upgradeInfo.Height)
+	case argon3.UpgradeName:
+		storeLoader = argon3.CreateStoreLoader(upgradeInfo.Height)
 	}
 
 	if storeLoader != nil {
