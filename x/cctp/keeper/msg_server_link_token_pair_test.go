@@ -1,7 +1,6 @@
 package keeper_test
 
 import (
-	"encoding/hex"
 	"testing"
 
 	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
@@ -28,14 +27,14 @@ func TestLinkTokenPairHappyPath(t *testing.T) {
 	message := types.MsgLinkTokenPair{
 		From:         tokenController,
 		RemoteDomain: 1,
-		RemoteToken:  "0xabcd",
+		RemoteToken:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		LocalToken:   "uusdc",
 	}
 
 	_, err := server.LinkTokenPair(sdk.WrapSDKContext(ctx), &message)
 	require.NoError(t, err)
 
-	actual, found := testkeeper.GetTokenPairHex(ctx, message.RemoteDomain, message.RemoteToken)
+	actual, found := testkeeper.GetTokenPair(ctx, message.RemoteDomain, message.RemoteToken)
 	require.True(t, found)
 	require.Equal(t, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD}, actual.RemoteToken)
 	require.Equal(t, message.RemoteDomain, actual.RemoteDomain)
@@ -49,7 +48,7 @@ func TestLinkTokenPairAuthorityNotSet(t *testing.T) {
 	message := types.MsgLinkTokenPair{
 		From:         sample.AccAddress(),
 		RemoteDomain: 1,
-		RemoteToken:  "0xABCD",
+		RemoteToken:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		LocalToken:   "uusdc",
 	}
 
@@ -67,7 +66,7 @@ func TestLinkTokenPairInvalidAuthority(t *testing.T) {
 	message := types.MsgLinkTokenPair{
 		From:         "not authority",
 		RemoteDomain: 1,
-		RemoteToken:  "0xABCD",
+		RemoteToken:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		LocalToken:   "uusdc",
 	}
 
@@ -93,7 +92,7 @@ func TestLinkTokenPairExistingTokenPairFound(t *testing.T) {
 	message := types.MsgLinkTokenPair{
 		From:         tokenController,
 		RemoteDomain: existingTokenPair.RemoteDomain,
-		RemoteToken:  hex.EncodeToString(existingTokenPair.RemoteToken),
+		RemoteToken:  existingTokenPair.RemoteToken,
 		LocalToken:   existingTokenPair.LocalToken,
 	}
 

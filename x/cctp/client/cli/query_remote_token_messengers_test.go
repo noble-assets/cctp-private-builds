@@ -1,6 +1,7 @@
 package cli_test
 
 import (
+	"encoding/binary"
 	"fmt"
 	"strconv"
 	"testing"
@@ -19,16 +20,18 @@ import (
 	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
 )
 
-func networkWithRemoteTokenMessengerObjects(t *testing.T, n int) (*network.Network, []types.RemoteTokenMessenger) {
+func networkWithRemoteTokenMessengerObjects(t *testing.T, n uint32) (*network.Network, []types.RemoteTokenMessenger) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
-	for i := 0; i < n; i++ {
+	for i := uint32(0); i < n; i++ {
+		addr := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+		binary.BigEndian.PutUint32(addr[28:], i)
 		remoteTokenMessenger := types.RemoteTokenMessenger{
-			DomainId: uint32(i),
-			Address:  strconv.Itoa(i),
+			DomainId: i,
+			Address:  addr,
 		}
 		nullify.Fill(&remoteTokenMessenger)
 		state.TokenMessengerList = append(state.TokenMessengerList, remoteTokenMessenger)
@@ -49,7 +52,7 @@ func TestRemoteTokenMessenger(t *testing.T) {
 	for _, tc := range []struct {
 		desc         string
 		remoteDomain string
-		remoteToken  string
+		remoteToken  []byte
 
 		args []string
 		err  error
@@ -71,10 +74,7 @@ func TestRemoteTokenMessenger(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{
-				tc.remoteDomain,
-				tc.remoteToken,
-			}
+			args := []string{tc.remoteDomain}
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdRemoteTokenMessenger(), args)
 			if tc.err != nil {

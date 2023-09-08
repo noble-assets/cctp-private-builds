@@ -1,7 +1,7 @@
 package keeper_test
 
 import (
-	"strconv"
+	"encoding/binary"
 	"testing"
 
 	"github.com/circlefin/noble-cctp-private-builds/x/cctp/keeper"
@@ -14,11 +14,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createNRemoteTokenMessengers(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.RemoteTokenMessenger {
+func createNRemoteTokenMessengers(keeper *keeper.Keeper, ctx sdk.Context, n uint32) []types.RemoteTokenMessenger {
 	items := make([]types.RemoteTokenMessenger, n)
-	for i := range items {
-		items[i].DomainId = uint32(i)
-		items[i].Address = strconv.Itoa(i)
+	for i := uint32(0); i < n; i++ {
+		items[i].DomainId = i
+		addr := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+		binary.BigEndian.PutUint32(addr[28:], i)
+		items[i].Address = addr
 
 		keeper.SetRemoteTokenMessenger(ctx, items[i])
 	}

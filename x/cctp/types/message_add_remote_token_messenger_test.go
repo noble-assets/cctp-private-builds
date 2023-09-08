@@ -20,7 +20,7 @@ func TestAddRemoteTokenMessenger_ValidateBasic(t *testing.T) {
 			msg: MsgAddRemoteTokenMessenger{
 				From:     "invalid_address",
 				DomainId: uint32(123),
-				Address:  "123",
+				Address:  []byte{0x1, 0x23},
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},
@@ -29,7 +29,7 @@ func TestAddRemoteTokenMessenger_ValidateBasic(t *testing.T) {
 			msg: MsgAddRemoteTokenMessenger{
 				From:     sample.AccAddress(),
 				DomainId: uint32(123),
-				Address:  "123",
+				Address:  []byte{0x1, 0x23},
 			},
 		},
 	}

@@ -1,6 +1,7 @@
 package cli_test
 
 import (
+	"encoding/binary"
 	"fmt"
 	"strconv"
 	"testing"
@@ -18,16 +19,18 @@ import (
 	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 )
 
-func networkWithMintObjects(t *testing.T, n int) (*network.Network, []types.Mint) {
+func networkWithMintObjects(t *testing.T, n uint32) (*network.Network, []types.Mint) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
-	for i := 0; i < n; i++ {
+	for i := uint32(0); i < n; i++ {
+		addr := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+		binary.BigEndian.PutUint32(addr[28:], i)
 		Mints := types.Mint{
 			SourceDomain:       uint32(i),
-			SourceDomainSender: strconv.Itoa(i),
+			SourceDomainSender: addr,
 			Nonce:              uint64(i),
 		}
 		nullify.Fill(&Mints)
@@ -47,36 +50,32 @@ func TestShowMint(t *testing.T) {
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 	}
 	for _, tc := range []struct {
-		desc               string
-		sourceDomain       uint32
-		sourceDomainSender string
-		nonce              string
+		desc         string
+		sourceDomain uint32
+		nonce        string
 
 		args []string
 		err  error
 		obj  types.Mint
 	}{
 		{
-			desc:               "found",
-			sourceDomain:       objs[0].SourceDomain,
-			sourceDomainSender: objs[0].SourceDomainSender,
-			nonce:              strconv.Itoa(int(objs[0].Nonce)),
-			args:               common,
-			obj:                objs[0],
+			desc:         "found",
+			sourceDomain: objs[0].SourceDomain,
+			nonce:        strconv.Itoa(int(objs[0].Nonce)),
+			args:         common,
+			obj:          objs[0],
 		},
 		{
-			desc:               "not found",
-			sourceDomain:       uint32(99),
-			sourceDomainSender: "123",
-			nonce:              "456",
-			args:               common,
-			err:                status.Error(codes.NotFound, "not found"),
+			desc:         "not found",
+			sourceDomain: uint32(99),
+			nonce:        "456",
+			args:         common,
+			err:          status.Error(codes.NotFound, "not found"),
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{
 				strconv.Itoa(int(tc.sourceDomain)),
-				tc.sourceDomainSender,
 				tc.nonce,
 			}
 			args = append(args, tc.args...)

@@ -28,7 +28,7 @@ func TestRemoveRemoteTokenMessengerHappyPath(t *testing.T) {
 	addMessage := types.MsgAddRemoteTokenMessenger{
 		From:     owner,
 		DomainId: 16,
-		Address:  "address to remove",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
 	_, err := server.AddRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &addMessage)

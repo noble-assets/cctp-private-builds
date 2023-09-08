@@ -31,27 +31,24 @@ func TestIBCForwardQuerySingle(t *testing.T) {
 		{
 			desc: "First",
 			request: &types.QueryGetIBCForwardRequest{
-				SourceDomain:       msgs[0].SourceDomain,
-				SourceDomainSender: msgs[0].SourceDomainSender,
-				Nonce:              msgs[0].Metadata.Nonce,
+				SourceDomain: msgs[0].SourceDomain,
+				Nonce:        msgs[0].Metadata.Nonce,
 			},
 			response: &types.QueryGetIBCForwardResponse{IbcForward: msgs[0]},
 		},
 		{
 			desc: "Second",
 			request: &types.QueryGetIBCForwardRequest{
-				SourceDomain:       msgs[1].SourceDomain,
-				SourceDomainSender: msgs[1].SourceDomainSender,
-				Nonce:              msgs[1].Metadata.Nonce,
+				SourceDomain: msgs[1].SourceDomain,
+				Nonce:        msgs[1].Metadata.Nonce,
 			},
 			response: &types.QueryGetIBCForwardResponse{IbcForward: msgs[1]},
 		},
 		{
 			desc: "KeyNotFound",
 			request: &types.QueryGetIBCForwardRequest{
-				SourceDomain:       uint32(32),
-				SourceDomainSender: "nothing",
-				Nonce:              uint64(2),
+				SourceDomain: uint32(32),
+				Nonce:        uint64(2),
 			},
 			err: status.Error(codes.NotFound, "not found"),
 		},

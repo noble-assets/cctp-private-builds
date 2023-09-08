@@ -1,7 +1,6 @@
 package cli_test
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -11,17 +10,16 @@ import (
 	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 )
 
-func networkWithInFlightPacketObjects(t *testing.T, n int) (*network.Network, []types.InFlightPacket) {
+func networkWithInFlightPacketObjects(t *testing.T, n uint32) (*network.Network, []types.InFlightPacket) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
-	for i := 0; i < n; i++ {
+	for i := uint32(0); i < n; i++ {
 		InFlightPacket := types.InFlightPacket{
-			SourceDomain:       uint32(i),
-			SourceDomainSender: strconv.Itoa(i),
-			Nonce:              uint64(i),
+			SourceDomain: i,
+			Nonce:        uint64(i),
 		}
 		nullify.Fill(&InFlightPacket)
 		state.InFlightPackets = append(state.InFlightPackets, InFlightPacket)

@@ -33,15 +33,15 @@ func TestUnlinkTokenPairHappyPath(t *testing.T) {
 
 	message := types.MsgUnlinkTokenPair{
 		From:         tokenController,
-		RemoteDomain: 1,
-		RemoteToken:  "0xABCD",
-		LocalToken:   "uusdc",
+		RemoteDomain: tokenPair.RemoteDomain,
+		RemoteToken:  tokenPair.RemoteToken,
+		LocalToken:   tokenPair.LocalToken,
 	}
 
 	_, err := server.UnlinkTokenPair(sdk.WrapSDKContext(ctx), &message)
 	require.Nil(t, err)
 
-	_, found := testkeeper.GetTokenPairHex(ctx, message.RemoteDomain, message.RemoteToken)
+	_, found := testkeeper.GetTokenPair(ctx, message.RemoteDomain, message.RemoteToken)
 	require.False(t, found)
 }
 
@@ -52,7 +52,7 @@ func TestUnlinkTokenPairAuthorityNotSet(t *testing.T) {
 	message := types.MsgUnlinkTokenPair{
 		From:         sample.AccAddress(),
 		RemoteDomain: 1,
-		RemoteToken:  "0xABCD",
+		RemoteToken:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		LocalToken:   "uusdc",
 	}
 
@@ -71,7 +71,7 @@ func TestUnlinkTokenPairInvalidAuthority(t *testing.T) {
 	message := types.MsgUnlinkTokenPair{
 		From:         "not the authority",
 		RemoteDomain: 1,
-		RemoteToken:  "0xABCD",
+		RemoteToken:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		LocalToken:   "uusdc",
 	}
 
@@ -90,7 +90,7 @@ func TestUnlinkTokenPairTokenPairNotFound(t *testing.T) {
 	message := types.MsgUnlinkTokenPair{
 		From:         tokenController,
 		RemoteDomain: 1,
-		RemoteToken:  "0xABCD",
+		RemoteToken:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		LocalToken:   "uusdc",
 	}
 

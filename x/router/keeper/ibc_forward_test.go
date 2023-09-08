@@ -19,7 +19,6 @@ func createNIBCForward(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.St
 	items := make([]types.StoreIBCForwardMetadata, n)
 	for i := range items {
 		items[i].SourceDomain = uint32(i)
-		items[i].SourceDomainSender = strconv.Itoa(i)
 		items[i].Metadata = &types.IBCForwardMetadata{
 			Nonce: uint64(i),
 		}

@@ -11,11 +11,10 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/typ
 // @param nonce
 message InFlightPacket {
   uint32 source_domain = 1;
-  bytes source_domain_sender = 2;
-  uint64 nonce = 3;
+  uint64 nonce = 2;
 
   // needed for restoration on genesis export/import.
-  string port = 4;
-  string channel = 5;
-  uint64 sequence = 6;
+  string port = 3;
+  string channel = 4;
+  uint64 sequence = 5;
 }

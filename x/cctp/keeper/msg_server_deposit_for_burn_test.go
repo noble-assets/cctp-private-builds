@@ -35,7 +35,7 @@ func TestDepositForBurnHappyPath(t *testing.T) {
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "12345678901234567890123456789012",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 
@@ -51,7 +51,7 @@ func TestDepositForBurnHappyPath(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
 	}
 	resp, err := server.DepositForBurn(sdk.WrapSDKContext(ctx), &msg)
@@ -71,7 +71,7 @@ func TestDepositForBurnZeroAmount(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(0),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
 	}
 	_, err := server.DepositForBurn(sdk.WrapSDKContext(ctx), &msg)
@@ -87,7 +87,7 @@ func TestDepositForBurnNegativeAmount(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(-59),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
 	}
 	_, err := server.DepositForBurn(sdk.WrapSDKContext(ctx), &msg)
@@ -137,7 +137,7 @@ func TestDepositForBurnTokenMessengerNotFound(t *testing.T) {
 		From:              "sender address",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uusdc",
 	}
 	_, err := server.DepositForBurn(sdk.WrapSDKContext(ctx), &msg)
@@ -154,7 +154,7 @@ func TestDepositForBurnMintingDenomNotFound(t *testing.T) {
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "destination-remote-token-messenger",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 
@@ -162,7 +162,7 @@ func TestDepositForBurnMintingDenomNotFound(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "not usdc",
 	}
 
@@ -180,7 +180,7 @@ func TestDepositForBurnBurningAndMintingIsPaused(t *testing.T) {
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "destination-remote-token-messenger",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 
@@ -190,7 +190,7 @@ func TestDepositForBurnBurningAndMintingIsPaused(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uusdc",
 	}
 
@@ -208,7 +208,7 @@ func TestDepositForBurnAmountIsGreaterThanPerMessageBurnLimit(t *testing.T) {
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "destination-remote-token-messenger",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 
@@ -222,7 +222,7 @@ func TestDepositForBurnAmountIsGreaterThanPerMessageBurnLimit(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uusdc",
 	}
 
@@ -242,7 +242,7 @@ func TestDepositForBurnBurnFails(t *testing.T) {
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "destination-remote-token-messenger",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 	fiattfkeeper.SetMintingDenom(fiattfctx, fiattokenfactorytypes.MintingDenom{Denom: "uUsDC"})
@@ -257,7 +257,7 @@ func TestDepositForBurnBurnFails(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
 	}
 	_, err := server.DepositForBurn(sdk.WrapSDKContext(ctx), &msg)

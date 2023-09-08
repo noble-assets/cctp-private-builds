@@ -35,7 +35,7 @@ func TestDepositForBurnWithCallerHappyPath(t *testing.T) {
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "12345678901234567890123456789012",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 
@@ -51,9 +51,9 @@ func TestDepositForBurnWithCallerHappyPath(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	resp, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)
 	require.Nil(t, err)
@@ -72,7 +72,7 @@ func TestDepositForBurnWithCallerInvalidDestinationCaller(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(0),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
 		DestinationCaller: make([]byte, types.DestinationCallerLen),
 	}
@@ -89,9 +89,9 @@ func TestDepositForBurnWithCallerZeroAmount(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(0),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	_, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)
 	require.ErrorIs(t, types.ErrDepositForBurn, err)
@@ -106,9 +106,9 @@ func TestDepositForBurnWithCallerNegativeAmount(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(-4738),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	_, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)
 	require.ErrorIs(t, types.ErrDepositForBurn, err)
@@ -125,7 +125,7 @@ func TestDepositForBurnWithCallerNilMintRecipient(t *testing.T) {
 		DestinationDomain: 0,
 		MintRecipient:     make([]byte, types.MintRecipientLen),
 		BurnToken:         "uUsDC",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	_, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)
 	require.ErrorIs(t, types.ErrDepositForBurn, err)
@@ -141,7 +141,7 @@ func TestDepositForBurnWithCallerEmptyMintRecipient(t *testing.T) {
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
 		BurnToken:         "uUsDC",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	_, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)
 	require.ErrorIs(t, types.ErrDepositForBurn, err)
@@ -159,9 +159,9 @@ func TestDepositForBurnWithCallerTokenMessengerNotFound(t *testing.T) {
 		From:              "sender address",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uusdc",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	_, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)
 	require.ErrorIs(t, types.ErrDepositForBurn, err)
@@ -177,7 +177,7 @@ func TestDepositForBurnWithCallerMintingDenomNotFound(t *testing.T) {
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "destination-remote-token-messenger",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 
@@ -185,9 +185,9 @@ func TestDepositForBurnWithCallerMintingDenomNotFound(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "not usdc",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
 	_, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)
@@ -204,7 +204,7 @@ func TestDepositForBurnWithCallerBurningAndMintingIsPaused(t *testing.T) {
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "destination-remote-token-messenger",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 
@@ -214,9 +214,9 @@ func TestDepositForBurnWithCallerBurningAndMintingIsPaused(t *testing.T) {
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uusdc",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
 	_, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)
@@ -233,7 +233,7 @@ func TestDepositForBurnWithCallerAmountIsGreaterThanPerMessageBurnLimit(t *testi
 
 	remoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 0,
-		Address:  "destination-remote-token-messenger",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, remoteTokenMessenger)
 
@@ -247,9 +247,9 @@ func TestDepositForBurnWithCallerAmountIsGreaterThanPerMessageBurnLimit(t *testi
 		From:              "sender-address567890123456789012",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
-		MintRecipient:     []byte("12345678901234567890123456789012"),
+		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uusdc",
-		DestinationCaller: []byte("12345678901234567890123456789012"),
+		DestinationCaller: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
 	_, err := server.DepositForBurnWithCaller(sdk.WrapSDKContext(ctx), &msg)

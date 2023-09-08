@@ -37,10 +37,6 @@ func (m *Mint) Validate() error {
 
 // Validate ensures that the fields are populated with data that is semantically correct.
 func (i *InFlightPacket) Validate() error {
-	if len(i.SourceDomainSender) != 32 || bytes.Equal(i.SourceDomainSender, make([]byte, 32)) {
-		return sdkerrors.Wrap(ErrInvalidInFlightPacket, "the source domain sender cannot be an empty string")
-	}
-
 	if err := host.ChannelIdentifierValidator(i.Channel); err != nil {
 		return sdkerrors.Wrapf(ErrInvalidInFlightPacket, "invalid channel identifier: %s", err)
 	}
@@ -54,10 +50,6 @@ func (i *InFlightPacket) Validate() error {
 
 // Validate ensures that the fields are populated with data that is semantically correct.
 func (i *StoreIBCForwardMetadata) Validate() error {
-	if len(i.SourceDomainSender) != 32 || bytes.Equal(i.SourceDomainSender, make([]byte, 32)) {
-		return sdkerrors.Wrap(ErrInvalidStoreForwardMetadata, "the source domain sender cannot be an empty string")
-	}
-
 	if err := i.Metadata.Validate(); err != nil {
 		return sdkerrors.Wrap(ErrInvalidStoreForwardMetadata, err.Error())
 	}

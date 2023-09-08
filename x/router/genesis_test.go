@@ -15,26 +15,26 @@ func TestGenesis(t *testing.T) {
 		Params: types.DefaultParams(),
 		InFlightPackets: []types.InFlightPacket{
 			{
-				SourceDomainSender: "1",
+				SourceDomain: 1,
 			},
 			{
-				SourceDomainSender: "2",
+				SourceDomain: 2,
 			},
 		},
 		Mints: []types.Mint{
 			{
-				SourceDomainSender: "3",
+				SourceDomain: 3,
 			},
 			{
-				SourceDomainSender: "4",
+				SourceDomain: 4,
 			},
 		},
 		IbcForwards: []types.StoreIBCForwardMetadata{
 			{
-				SourceDomainSender: "5",
+				SourceDomain: 5,
 			},
 			{
-				SourceDomainSender: "6",
+				SourceDomain: 6,
 			},
 		},
 	}

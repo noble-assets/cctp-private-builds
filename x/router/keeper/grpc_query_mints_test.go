@@ -31,27 +31,24 @@ func TestMintQuerySingle(t *testing.T) {
 		{
 			desc: "First",
 			request: &types.QueryGetMintRequest{
-				SourceDomain:       msgs[0].SourceDomain,
-				SourceDomainSender: msgs[0].SourceDomainSender,
-				Nonce:              msgs[0].Nonce,
+				SourceDomain: msgs[0].SourceDomain,
+				Nonce:        msgs[0].Nonce,
 			},
 			response: &types.QueryGetMintResponse{Mint: msgs[0]},
 		},
 		{
 			desc: "Second",
 			request: &types.QueryGetMintRequest{
-				SourceDomain:       msgs[1].SourceDomain,
-				SourceDomainSender: msgs[1].SourceDomainSender,
-				Nonce:              msgs[1].Nonce,
+				SourceDomain: msgs[1].SourceDomain,
+				Nonce:        msgs[1].Nonce,
 			},
 			response: &types.QueryGetMintResponse{Mint: msgs[1]},
 		},
 		{
 			desc: "KeyNotFound",
 			request: &types.QueryGetMintRequest{
-				SourceDomain:       uint32(324),
-				SourceDomainSender: "nothing",
-				Nonce:              uint64(2),
+				SourceDomain: uint32(324),
+				Nonce:        uint64(2),
 			},
 			err: status.Error(codes.NotFound, "not found"),
 		},

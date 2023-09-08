@@ -19,7 +19,7 @@ func TestMsgLinkTokenPair_ValidateBasic(t *testing.T) {
 			msg: MsgLinkTokenPair{
 				From:         "invalid_address",
 				RemoteDomain: 1,
-				RemoteToken:  "0x12345",
+				RemoteToken:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x1, 0x23, 0x45},
 				LocalToken:   "uusdc",
 			},
 			err: sdkerrors.ErrInvalidAddress,
@@ -29,7 +29,7 @@ func TestMsgLinkTokenPair_ValidateBasic(t *testing.T) {
 			msg: MsgLinkTokenPair{
 				From:         sample.AccAddress(),
 				RemoteDomain: 1,
-				RemoteToken:  "0x012345",
+				RemoteToken:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x1, 0x23, 0x45},
 				LocalToken:   "uusdc",
 			},
 		},

@@ -42,11 +42,11 @@ func (msg *MsgLinkTokenPair) GetSignBytes() []byte {
 func (msg *MsgLinkTokenPair) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.From)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid from address (%s)", err)
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid from address: %s", err)
 	}
 
 	if len(msg.RemoteToken) != 32 {
-		return sdkerrors.Wrapf(ErrInvalidRemoteToken, "must be a byte32 array", err)
+		return sdkerrors.Wrapf(ErrInvalidRemoteToken, "must be a byte32 array: %s", err)
 	}
 
 	return nil

@@ -28,7 +28,7 @@ func TestAddRemoteTokenMessengerHappyPath(t *testing.T) {
 	message := types.MsgAddRemoteTokenMessenger{
 		From:     owner,
 		DomainId: 16,
-		Address:  "remote_token_messenger_address",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
 	_, err := server.AddRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &message)
@@ -48,7 +48,7 @@ func TestAddRemoteTokenMessengerAuthorityNotSet(t *testing.T) {
 	message := types.MsgAddRemoteTokenMessenger{
 		From:     sample.AccAddress(),
 		DomainId: 16,
-		Address:  "remote_token_messenger_address",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
 	_, err := server.AddRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &message)
@@ -66,7 +66,7 @@ func TestAddRemoteTokenMessengerInvalidAuthority(t *testing.T) {
 	message := types.MsgAddRemoteTokenMessenger{
 		From:     "not the authority address",
 		DomainId: 16,
-		Address:  "remote_token_messenger_address",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
 	_, err := server.AddRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &message)
@@ -83,14 +83,14 @@ func TestAddRemoteTokenMessengerTokenMessengerAlreadyFound(t *testing.T) {
 
 	existingRemoteTokenMessenger := types.RemoteTokenMessenger{
 		DomainId: 3,
-		Address:  sample.AccAddress(),
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 	testkeeper.SetRemoteTokenMessenger(ctx, existingRemoteTokenMessenger)
 
 	message := types.MsgAddRemoteTokenMessenger{
 		From:     owner,
 		DomainId: existingRemoteTokenMessenger.DomainId,
-		Address:  "remote_token_messenger_address",
+		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
 	_, err := server.AddRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &message)

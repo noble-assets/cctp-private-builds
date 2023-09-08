@@ -24,16 +24,16 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				Params: types.DefaultParams(),
 				InFlightPackets: []types.InFlightPacket{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 				Mints: []types.Mint{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 				IbcForwards: []types.StoreIBCForwardMetadata{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 			},
 			valid: true,
@@ -43,16 +43,16 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				Params: types.DefaultParams(),
 				InFlightPackets: []types.InFlightPacket{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 				Mints: []types.Mint{
-					{SourceDomainSender: "1"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 1},
+					{SourceDomain: 1},
 				},
 				IbcForwards: []types.StoreIBCForwardMetadata{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 			},
 			valid: false,
@@ -62,16 +62,16 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				Params: types.DefaultParams(),
 				InFlightPackets: []types.InFlightPacket{
-					{SourceDomainSender: "1"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 1},
+					{SourceDomain: 1},
 				},
 				Mints: []types.Mint{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 				IbcForwards: []types.StoreIBCForwardMetadata{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 			},
 			valid: false,
@@ -81,16 +81,16 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				Params: types.DefaultParams(),
 				InFlightPackets: []types.InFlightPacket{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 				Mints: []types.Mint{
-					{SourceDomainSender: "0"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 0},
+					{SourceDomain: 1},
 				},
 				IbcForwards: []types.StoreIBCForwardMetadata{
-					{SourceDomainSender: "1"},
-					{SourceDomainSender: "1"},
+					{SourceDomain: 1},
+					{SourceDomain: 1},
 				},
 			},
 			valid: false,
