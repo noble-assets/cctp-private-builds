@@ -168,6 +168,7 @@ var (
 		fiattokenfactorymoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 		stakingtypes.BondedPoolName:            {authtypes.Burner, authtypes.Staking},
 		stakingtypes.NotBondedPoolName:         {authtypes.Burner, authtypes.Staking},
+		cctptypes.ModuleName:                   nil,
 	}
 )
 

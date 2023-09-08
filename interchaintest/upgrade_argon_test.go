@@ -125,7 +125,7 @@ func testPostArgonUpgradeTestnet(
 		// Adding an attester to protocol
 		msgs[i] = &cctptypes.MsgEnableAttester{
 			From:     cctpAttesterManager.FormattedAddress(),
-			Attester: []byte(attesterPub),
+			Attester: attesterPub,
 		}
 	}
 
