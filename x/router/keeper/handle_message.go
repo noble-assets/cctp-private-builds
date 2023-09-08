@@ -40,7 +40,7 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 		// message is a Mint
 		mint := types.Mint{
 			SourceDomain:       outerMessage.SourceDomain,
-			SourceDomainSender: string(outerMessage.Sender),
+			SourceDomainSender: outerMessage.Sender,
 			Nonce:              outerMessage.Nonce,
 			Amount: &sdk.Coin{
 				Denom:  tokenPair.LocalToken,
@@ -50,7 +50,7 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 			MintRecipient:     addr,
 		}
 		k.SetMint(ctx, mint)
-		if existingIBCForward, found := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(burnMessage.MessageSender), outerMessage.Nonce); found {
+		if existingIBCForward, found := k.GetIBCForward(ctx, outerMessage.SourceDomain, outerMessage.Nonce); found {
 			return k.ForwardPacket(ctx, existingIBCForward.Metadata, mint)
 		}
 
@@ -59,9 +59,9 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 
 	// parse internal message into IBCForward
 	if ibcForward, err := new(types.IBCForwardMetadata).Parse(outerMessage.MessageBody); err == nil {
-		if storedForward, ok := k.GetIBCForward(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+		if storedForward, ok := k.GetIBCForward(ctx, outerMessage.SourceDomain, ibcForward.Nonce); ok {
 			if storedForward.AckError {
-				if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+				if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, ibcForward.Nonce); ok {
 					return k.ForwardPacket(ctx, ibcForward, existingMint)
 				}
 				panic("unexpected state")
@@ -72,10 +72,10 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 		// this is the first time we are seeing this forward info -> store it.
 		k.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
 			SourceDomain:       outerMessage.SourceDomain,
-			SourceDomainSender: string(outerMessage.Sender),
+			SourceDomainSender: outerMessage.Sender,
 			Metadata:           ibcForward,
 		})
-		if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, string(outerMessage.Sender), ibcForward.Nonce); ok {
+		if existingMint, ok := k.GetMint(ctx, outerMessage.SourceDomain, ibcForward.Nonce); ok {
 			return k.ForwardPacket(ctx, ibcForward, existingMint)
 		}
 

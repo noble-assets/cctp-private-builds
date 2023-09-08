@@ -9,14 +9,14 @@ import (
 
 // SetInFlightPacket sets a InFlightPacket in the store
 func (k Keeper) SetInFlightPacket(ctx sdk.Context, ifp types.InFlightPacket) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.InFlightPacketPrefix(types.InFlightPacketKeyPrefix))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.InFlightPacketPrefix)
 	b := k.cdc.MustMarshal(&ifp)
 	store.Set(types.InFlightPacketKey(ifp.Channel, ifp.Port, ifp.Sequence), b)
 }
 
 // GetInFlightPacket returns InFlightPacket
 func (k Keeper) GetInFlightPacket(ctx sdk.Context, channelID string, portID string, sequence uint64) (val types.InFlightPacket, found bool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.InFlightPacketPrefix(types.InFlightPacketKeyPrefix))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.InFlightPacketPrefix)
 
 	b := store.Get(types.InFlightPacketKey(channelID, portID, sequence))
 	if b == nil {
@@ -29,13 +29,13 @@ func (k Keeper) GetInFlightPacket(ctx sdk.Context, channelID string, portID stri
 
 // DeleteInFlightPacket removes a InFlightPacket from the store
 func (k Keeper) DeleteInFlightPacket(ctx sdk.Context, channelID string, portID string, sequence uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.InFlightPacketPrefix(types.InFlightPacketKeyPrefix))
-	store.Delete(types.InFlightPacketPrefix(string(types.InFlightPacketKey(channelID, portID, sequence))))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.InFlightPacketPrefix)
+	store.Delete(types.InFlightPacketKey(channelID, portID, sequence))
 }
 
 // GetAllInFlightPackets returns all InFlightPackets
 func (k Keeper) GetAllInFlightPackets(ctx sdk.Context) (list []types.InFlightPacket) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.InFlightPacketPrefix(types.InFlightPacketKeyPrefix))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.InFlightPacketPrefix)
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()

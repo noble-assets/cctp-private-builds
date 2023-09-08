@@ -18,7 +18,7 @@ func (k Keeper) Mint(c context.Context, req *types.QueryGetMintRequest) (*types.
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val, found := k.GetMint(ctx, req.SourceDomain, req.SourceDomainSender, req.Nonce)
+	val, found := k.GetMint(ctx, req.SourceDomain, req.Nonce)
 	if !found {
 		return nil, status.Error(codes.NotFound, "not found")
 	}
@@ -35,7 +35,7 @@ func (k Keeper) Mints(c context.Context, req *types.QueryAllMintsRequest) (*type
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := ctx.KVStore(k.storeKey)
-	MintsStore := prefix.NewStore(store, types.MintPrefix(types.MintKeyPrefix))
+	MintsStore := prefix.NewStore(store, types.MintPrefix)
 
 	pageRes, err := query.Paginate(MintsStore, req.Pagination, func(key []byte, value []byte) error {
 		var mint types.Mint

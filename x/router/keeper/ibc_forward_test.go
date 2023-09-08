@@ -36,7 +36,6 @@ func TestIBCForwardGet(t *testing.T) {
 		rst, found := routerKeeper.GetIBCForward(
 			ctx,
 			item.SourceDomain,
-			item.SourceDomainSender,
 			item.Metadata.Nonce,
 		)
 		require.True(t, found)
@@ -54,13 +53,11 @@ func TestIBCForwardRemove(t *testing.T) {
 		routerKeeper.DeleteIBCForward(
 			ctx,
 			item.SourceDomain,
-			item.SourceDomainSender,
 			item.Metadata.Nonce,
 		)
 		_, found := routerKeeper.GetIBCForward(
 			ctx,
 			item.SourceDomain,
-			item.SourceDomainSender,
 			item.Metadata.Nonce,
 		)
 		require.False(t, found)

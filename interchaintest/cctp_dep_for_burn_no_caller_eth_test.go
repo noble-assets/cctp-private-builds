@@ -195,7 +195,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	depositForBurnBz, err := depositForBurn.Bytes()
 	require.NoError(t, err)
 
-	var sender = []byte("12345678901234567890123456789012")
+	var senderBurn = []byte("12345678901234567890123456789012")
 
 	emptyDestinationCaller := make([]byte, 32)
 
@@ -204,7 +204,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 		SourceDomain:      0,
 		DestinationDomain: 4, // Noble is 4
 		Nonce:             0, // dif per message
-		Sender:            sender,
+		Sender:            senderBurn,
 		Recipient:         cctptypes.PaddedModuleAddress,
 		DestinationCaller: emptyDestinationCaller,
 		MessageBody:       depositForBurnBz,
@@ -223,12 +223,14 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	forwardBz, err := forward.Bytes(gaiaChainCfg.Bech32Prefix)
 	require.NoError(t, err)
 
+	var senderForward = []byte("12345678901234567890123456789015")
+
 	wrappedForward := cctptypes.Message{
 		Version:           0,
 		SourceDomain:      0, // same source domain !
 		DestinationDomain: 4,
-		Nonce:             1,      // cant be same nonce as above
-		Sender:            sender, // same sender !
+		Nonce:             1,             // cant be same nonce as above
+		Sender:            senderForward, // different sender !
 		Recipient:         burnRecipientPadded,
 		DestinationCaller: emptyDestinationCaller,
 		MessageBody:       forwardBz,

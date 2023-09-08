@@ -1,6 +1,7 @@
 package types
 
 import (
+	"bytes"
 	"fmt"
 
 	"github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
@@ -11,7 +12,7 @@ import (
 
 // Validate ensures that the fields are populated with data that is semantically correct.
 func (m *Mint) Validate() error {
-	if m.SourceDomainSender == "" {
+	if len(m.SourceDomainSender) != 32 || bytes.Equal(m.SourceDomainSender, make([]byte, 32)) {
 		return sdkerrors.Wrap(ErrInvalidMint, "the source domain sender cannot be an empty string")
 	}
 
@@ -36,7 +37,7 @@ func (m *Mint) Validate() error {
 
 // Validate ensures that the fields are populated with data that is semantically correct.
 func (i *InFlightPacket) Validate() error {
-	if i.SourceDomainSender == "" {
+	if len(i.SourceDomainSender) != 32 || bytes.Equal(i.SourceDomainSender, make([]byte, 32)) {
 		return sdkerrors.Wrap(ErrInvalidInFlightPacket, "the source domain sender cannot be an empty string")
 	}
 
@@ -53,7 +54,7 @@ func (i *InFlightPacket) Validate() error {
 
 // Validate ensures that the fields are populated with data that is semantically correct.
 func (i *StoreIBCForwardMetadata) Validate() error {
-	if i.SourceDomainSender == "" {
+	if len(i.SourceDomainSender) != 32 || bytes.Equal(i.SourceDomainSender, make([]byte, 32)) {
 		return sdkerrors.Wrap(ErrInvalidStoreForwardMetadata, "the source domain sender cannot be an empty string")
 	}
 

@@ -35,7 +35,7 @@ func (k Keeper) InFlightPackets(c context.Context, req *types.QueryAllInFlightPa
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := ctx.KVStore(k.storeKey)
-	InFlightPacketsStore := prefix.NewStore(store, types.InFlightPacketPrefix(types.InFlightPacketKeyPrefix))
+	InFlightPacketsStore := prefix.NewStore(store, types.InFlightPacketPrefix)
 
 	pageRes, err := query.Paginate(InFlightPacketsStore, req.Pagination, func(key []byte, value []byte) error {
 		var InFlightPacket types.InFlightPacket

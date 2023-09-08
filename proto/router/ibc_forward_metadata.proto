@@ -16,7 +16,7 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/typ
 // @param ack_error
 message StoreIBCForwardMetadata {
   uint32 source_domain = 1;
-  string source_domain_sender = 2;
+  bytes source_domain_sender = 2;
   IBCForwardMetadata metadata = 3;
   bool ack_error = 4;
 }

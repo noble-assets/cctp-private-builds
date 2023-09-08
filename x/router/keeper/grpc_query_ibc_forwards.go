@@ -18,7 +18,7 @@ func (k Keeper) IBCForward(c context.Context, req *types.QueryGetIBCForwardReque
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val, found := k.GetIBCForward(ctx, req.SourceDomain, req.SourceDomainSender, req.Nonce)
+	val, found := k.GetIBCForward(ctx, req.SourceDomain, req.Nonce)
 	if !found {
 		return nil, status.Error(codes.NotFound, "not found")
 	}
@@ -35,7 +35,7 @@ func (k Keeper) IBCForwards(c context.Context, req *types.QueryAllIBCForwardsReq
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := ctx.KVStore(k.storeKey)
-	IBCForwardsStore := prefix.NewStore(store, types.IBCForwardPrefix(types.IBCForwardKeyPrefix))
+	IBCForwardsStore := prefix.NewStore(store, types.IBCForwardPrefix)
 
 	pageRes, err := query.Paginate(IBCForwardsStore, req.Pagination, func(key []byte, value []byte) error {
 		var IBCForward types.StoreIBCForwardMetadata

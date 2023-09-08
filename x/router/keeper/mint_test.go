@@ -34,7 +34,6 @@ func TestMintGet(t *testing.T) {
 		rst, found := routerKeeper.GetMint(
 			ctx,
 			item.SourceDomain,
-			item.SourceDomainSender,
 			item.Nonce,
 		)
 		require.True(t, found)
@@ -52,13 +51,11 @@ func TestMintRemove(t *testing.T) {
 		routerKeeper.DeleteMint(
 			ctx,
 			item.SourceDomain,
-			item.SourceDomainSender,
 			item.Nonce,
 		)
 		_, found := routerKeeper.GetMint(
 			ctx,
 			item.SourceDomain,
-			item.SourceDomainSender,
 			item.Nonce,
 		)
 		require.False(t, found)
