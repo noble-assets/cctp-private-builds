@@ -6,6 +6,9 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"encoding/hex"
+	"fmt"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/ethereum/go-ethereum/crypto"
 	"sort"
 	"testing"
 	"time"
@@ -13,26 +16,19 @@ import (
 	cosmossdk_io_math "cosmossdk.io/math"
 	"github.com/circlefin/noble-cctp-private-builds/cmd"
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
-	routertypes "github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/bech32"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/strangelove-ventures/interchaintest/v3"
 	"github.com/strangelove-ventures/interchaintest/v3/chain/cosmos"
-	"github.com/strangelove-ventures/interchaintest/v3/ibc"
 	"github.com/strangelove-ventures/interchaintest/v3/testreporter"
-	"github.com/strangelove-ventures/interchaintest/v3/testutil"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
 )
 
 // run `make local-image`to rebuild updated binary before running test
-func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
+func TestCCTP_NobleReplaceDepositForBurn(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
@@ -66,26 +62,9 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 
 	gw.chain = chains[0].(*cosmos.CosmosChain)
 	noble := gw.chain
-	gaia := chains[1].(*cosmos.CosmosChain)
-
-	r := interchaintest.NewBuiltinRelayerFactory(
-		ibc.CosmosRly,
-		zaptest.NewLogger(t),
-		relayerImage,
-	).Build(t, client, network)
-
-	pathName := "noble-gaia"
 
 	ic := interchaintest.NewInterchain().
-		AddChain(noble).
-		AddChain(gaia).
-		AddRelayer(r, "r").
-		AddLink(interchaintest.InterchainLink{
-			Chain1:  noble,
-			Chain2:  gaia,
-			Relayer: r,
-			Path:    pathName,
-		})
+		AddChain(noble)
 
 	require.NoError(t, ic.Build(ctx, eRep, interchaintest.InterchainBuildOptions{
 		TestName:  t.Name(),
@@ -100,7 +79,6 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	})
 
 	nobleChainCfg := noble.Config()
-	gaiaChainCfg := gaia.Config()
 
 	cmd.SetPrefixes(nobleChainCfg.Bech32Prefix)
 
@@ -176,35 +154,30 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	receiverBz, err := hex.DecodeString(receiver)
 	require.NoError(t, err)
 
-	nobleReceiver, err := bech32.ConvertAndEncode(nobleChainCfg.Bech32Prefix, receiverBz)
-	require.NoError(t, err)
-
-	gaiaReceiver, err := bech32.ConvertAndEncode(gaiaChainCfg.Bech32Prefix, receiverBz)
-	require.NoError(t, err)
-
 	burnRecipientPadded := append([]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, receiverBz...)
+
+	messageSender := make([]byte, 32)
+	copy(messageSender[12:], sdk.MustAccAddressFromBech32(gw.extraWallets.User.FormattedAddress()))
 
 	// someone burned USDC on Ethereum -> Mint on Noble
 	depositForBurn := cctptypes.BurnMessage{
 		BurnToken:     burnToken,
 		MintRecipient: burnRecipientPadded,
 		Amount:        cosmossdk_io_math.NewInt(1000000),
-		MessageSender: burnRecipientPadded,
+		MessageSender: messageSender,
 	}
 
 	depositForBurnBz, err := depositForBurn.Bytes()
 	require.NoError(t, err)
 
-	var senderBurn = []byte("12345678901234567890123456789012")
-
 	emptyDestinationCaller := make([]byte, 32)
 
 	wrappedDepositForBurn := cctptypes.Message{
 		Version:           0,
-		SourceDomain:      0,
-		DestinationDomain: 4, // Noble is 4
+		SourceDomain:      4, // noble is 4
+		DestinationDomain: 0,
 		Nonce:             0, // dif per message
-		Sender:            senderBurn,
+		Sender:            messageSender,
 		Recipient:         cctptypes.PaddedModuleAddress,
 		DestinationCaller: emptyDestinationCaller,
 		MessageBody:       depositForBurnBz,
@@ -213,37 +186,9 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	wrappedDepositForBurnBz, err := wrappedDepositForBurn.Bytes()
 	require.NoError(t, err)
 
-	// in mainnet this would forward to dydx chain
-	forward := routertypes.IBCForwardMetadata{
-		Port:                "transfer",
-		Channel:             "channel-0",
-		DestinationReceiver: gaiaReceiver,
-	}
-
-	forwardBz, err := forward.Bytes(gaiaChainCfg.Bech32Prefix)
-	require.NoError(t, err)
-
-	var senderForward = []byte("12345678901234567890123456789015")
-
-	wrappedForward := cctptypes.Message{
-		Version:           0,
-		SourceDomain:      0, // same source domain !
-		DestinationDomain: 4,
-		Nonce:             1,             // cant be same nonce as above
-		Sender:            senderForward, // different sender !
-		Recipient:         burnRecipientPadded,
-		DestinationCaller: emptyDestinationCaller,
-		MessageBody:       forwardBz,
-	}
-
-	wrappedForwardBz, err := wrappedForward.Bytes()
-	require.NoError(t, err)
-
 	digestBurn := crypto.Keccak256(wrappedDepositForBurnBz) // hashed message is the key to the attestation
-	digestForward := crypto.Keccak256(wrappedForwardBz)
 
 	attestationBurn := make([]byte, 0, len(attesters)*65) //65 byte
-	attestationForward := make([]byte, 0, len(attesters)*65)
 
 	// CCTP requires attestations to have signatures sorted by address
 	sort.Slice(attesters, func(i, j int) bool {
@@ -258,85 +203,81 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 		require.NoError(t, err)
 
 		attestationBurn = append(attestationBurn, sig...)
-
-		sig, err = crypto.Sign(digestForward, attesters[i])
-		require.NoError(t, err)
-
-		attestationForward = append(attestationForward, sig...)
 	}
 
 	t.Logf("Attested to messages: %s", tx.TxHash)
 
-	bCtx, bCancel = context.WithTimeout(ctx, 20*time.Second)
-	defer bCancel()
-	tx, err = cosmos.BroadcastTx(
-		bCtx,
-		broadcaster,
-		gw.fiatTfRoles.Owner,
-		&cctptypes.MsgReceiveMessage{ //note: all messages that go to noble go through MsgReceiveMessage
-			From:        gw.fiatTfRoles.Owner.FormattedAddress(),
-			Message:     wrappedDepositForBurnBz,
-			Attestation: attestationBurn,
-		},
-	)
-	require.NoError(t, err, "error submitting cctp burn recv tx")
-	require.Zerof(t, tx.Code, "cctp burn recv transaction failed: %s - %s - %s", tx.Codespace, tx.RawLog, tx.Data)
-
-	t.Logf("CCTP burn message successfully received: %s", tx.TxHash)
-
-	balance, err := noble.GetBalance(ctx, nobleReceiver, denomMetadataDrachma.Base)
-	require.NoError(t, err)
-
-	require.Equal(t, int64(1000000), balance)
-
-	err = r.StartRelayer(ctx, eRep, pathName)
-	require.NoError(t, err)
-	t.Cleanup(func() {
-		_ = r.StopRelayer(ctx, eRep)
-	})
+	newDestCaller := []byte("12345678901234567890123456789012")
+	newMintRecipient := []byte("12345678901234567890123456789012")
 
 	bCtx, bCancel = context.WithTimeout(ctx, 20*time.Second)
 	defer bCancel()
 	tx, err = cosmos.BroadcastTx(
 		bCtx,
 		broadcaster,
-		gw.fiatTfRoles.Owner,
-		&cctptypes.MsgReceiveMessage{
-			From:        gw.fiatTfRoles.Owner.FormattedAddress(),
-			Message:     wrappedForwardBz,
-			Attestation: attestationForward,
+		gw.extraWallets.User,
+		&cctptypes.MsgReplaceDepositForBurn{
+			From:                 gw.extraWallets.User.FormattedAddress(),
+			OriginalMessage:      wrappedDepositForBurnBz,
+			OriginalAttestation:  attestationBurn,
+			NewDestinationCaller: newDestCaller,
+			NewMintRecipient:     newMintRecipient,
 		},
 	)
+	require.NoError(t, err, "error submitting cctp replace deposit for burn tx")
+	require.Zerof(t, tx.Code, "cctp replace deposit for burn transaction failed: %s - %s - %s", tx.Codespace, tx.RawLog, tx.Data)
 
-	require.NoError(t, err, "error submitting cctp forward recv tx")
-	require.Zerof(t, tx.Code, "cctp forward recv transaction failed: %s - %s - %s", tx.Codespace, tx.RawLog, tx.Data)
+	t.Logf("CCTP replace message successfully received: %s", tx.TxHash)
 
-	t.Logf("CCTP IBC forward message successfully received: %s", tx.TxHash)
+	for _, rawEvent := range tx.Events {
+		switch rawEvent.Type {
+		case "circle.cctp.v1.DepositForBurn":
+			parsedEvent, err := sdk.ParseTypedEvent(rawEvent)
+			require.NoError(t, err)
+			actualDepositForBurn, ok := parsedEvent.(*cctptypes.DepositForBurn)
+			require.True(t, ok)
 
-	err = testutil.WaitForBlocks(ctx, 10, noble, gaia)
-	require.NoError(t, err)
+			expectedBurnToken := hex.EncodeToString(crypto.Keccak256(depositForBurn.BurnToken))
 
-	srcDenomTrace := transfertypes.ParseDenomTrace(transfertypes.GetPrefixedDenom("transfer", "channel-0", denomMetadataDrachma.Base))
-	dstIbcDenom := srcDenomTrace.IBCDenom()
+			require.Equal(t, wrappedDepositForBurn.Nonce, actualDepositForBurn.Nonce)
+			require.Equal(t, expectedBurnToken, actualDepositForBurn.BurnToken)
+			require.Equal(t, depositForBurn.Amount, actualDepositForBurn.Amount)
+			require.Equal(t, gw.extraWallets.User.FormattedAddress(), actualDepositForBurn.Depositor)
+			require.Equal(t, newMintRecipient, actualDepositForBurn.MintRecipient) // new
+			require.Equal(t, wrappedDepositForBurn.DestinationDomain, actualDepositForBurn.DestinationDomain)
+			require.Equal(t, wrappedDepositForBurn.Recipient, actualDepositForBurn.DestinationTokenMessenger)
+			require.Equal(t, newDestCaller, actualDepositForBurn.DestinationCaller) // new
+		case "circle.cctp.v1.MessageSent":
+			parsedEvent, err := sdk.ParseTypedEvent(rawEvent)
+			require.NoError(t, err)
+			event, ok := parsedEvent.(*cctptypes.MessageSent)
+			require.True(t, ok)
 
-	gaiaBal, err := gaia.GetBalance(ctx, gaiaReceiver, dstIbcDenom)
-	require.NoError(t, err)
-	require.Equal(t, int64(999900), gaiaBal)
+			message, err := new(cctptypes.Message).Parse(event.Message)
+			require.NoError(t, err)
 
-	// now test deposit for burn noble -> eth
+			expectedBurnToken := hex.EncodeToString(crypto.Keccak256(depositForBurn.BurnToken))
+			fmt.Println(expectedBurnToken)
 
-	// gaia.Validators[0].CreateKey(ctx, "my_key")
+			moduleAddress := make([]byte, 32)
+			copy(moduleAddress[12:], sdk.MustAccAddressFromBech32(gw.extraWallets.User.FormattedAddress()))
 
-	// send ibc tx back to noble
-	// gaia.Validators[0].SendIBCTransfer(ctx, "channel-0", )
+			require.Equal(t, wrappedDepositForBurn.Version, message.Version)
+			require.Equal(t, wrappedDepositForBurn.SourceDomain, message.SourceDomain)
+			require.Equal(t, wrappedDepositForBurn.DestinationDomain, message.DestinationDomain)
+			require.Equal(t, wrappedDepositForBurn.Nonce, message.Nonce)
+			require.True(t, bytes.Equal(messageSender, message.Sender))
+			require.Equal(t, cctptypes.PaddedModuleAddress, message.Recipient)
+			require.Equal(t, newDestCaller, message.DestinationCaller)
 
-	// depositForBurnNoble := &cctptypes.MsgDepositForBurn{
-	// 	BurnToken:uusdc
-	// 	Amount:    cosmossdk_io_math.NewInt(1000000),
-	// }
+			body, err := new(cctptypes.BurnMessage).Parse(message.MessageBody)
+			require.NoError(t, err)
 
-	// broad cast... take tx..
-	// tx.event
-
-	// make sure balance went down
+			require.Equal(t, depositForBurn.Version, body.Version)
+			require.Equal(t, newMintRecipient, body.MintRecipient)
+			require.Equal(t, depositForBurn.Amount, body.Amount)
+			require.True(t, bytes.Equal(depositForBurn.BurnToken, body.BurnToken))
+			require.Equal(t, depositForBurn.MessageSender, body.MessageSender)
+		}
+	}
 }

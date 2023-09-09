@@ -184,7 +184,7 @@ func TestCCTP_DepForBurnWithCallerOnEth(t *testing.T) {
 
 	burnRecipientPadded := append([]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, receiverBz...)
 
-	// someone burned USDC on Etherium -> Mint on Noble
+	// someone burned USDC on Ethereum -> Mint on Noble
 	depositForBurn := cctptypes.BurnMessage{
 		BurnToken:     burnToken,
 		MintRecipient: burnRecipientPadded,

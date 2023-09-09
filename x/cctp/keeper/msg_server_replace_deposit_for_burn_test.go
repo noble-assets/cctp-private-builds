@@ -38,12 +38,17 @@ func TestReplaceDepositForBurnHappyPath(t *testing.T) {
 	burnMessageBytes, err := burnMessage.Bytes()
 	require.NoError(t, err)
 
+	// we encode the message sender when sending messages, so we must use an encoded message in the original message
+	senderBech32 := "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a"
+	senderEncoded := make([]byte, 32)
+	copy(senderEncoded[12:], sdk.MustAccAddressFromBech32(senderBech32))
+
 	originalMessage := types.Message{
 		Version:           1,
 		SourceDomain:      4, // Noble domain id
 		DestinationDomain: 3,
 		Nonce:             2,
-		Sender:            []byte("sender78901234567890123456789012"),
+		Sender:            senderEncoded,
 		Recipient:         []byte("recipient01234567890123456789012"),
 		DestinationCaller: []byte("destination caller90123456789012"),
 		MessageBody:       burnMessageBytes,
@@ -62,7 +67,7 @@ func TestReplaceDepositForBurnHappyPath(t *testing.T) {
 	testkeeper.SetSignatureThreshold(ctx, types.SignatureThreshold{Amount: signatureThreshold})
 
 	msg := types.MsgReplaceDepositForBurn{
-		From:                 string(originalMessage.Sender),
+		From:                 senderBech32,
 		OriginalMessage:      originalMessageBytes,
 		OriginalAttestation:  originalAttestation,
 		NewDestinationCaller: []byte("new destination caller3456789012"),
@@ -201,12 +206,17 @@ func TestReplaceDepositForBurnInvalidSender(t *testing.T) {
 	burnMessageBytes, err := burnMessage.Bytes()
 	require.NoError(t, err)
 
+	// we encode the message sender when sending messages, so we must use an encoded message in the original message
+	senderBech32 := "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a"
+	senderEncoded := make([]byte, 32)
+	copy(senderEncoded[12:], sdk.MustAccAddressFromBech32(senderBech32))
+
 	originalMessage := types.Message{
 		Version:           1,
 		SourceDomain:      4, // Noble domain id
 		DestinationDomain: 3,
 		Nonce:             2,
-		Sender:            []byte("sender78901234567890123456789012"),
+		Sender:            senderEncoded, // different sender than the replaceMessage sender
 		Recipient:         []byte("recipient01234567890123456789012"),
 		DestinationCaller: []byte("destination caller90123456789012"),
 		MessageBody:       burnMessageBytes,
@@ -225,7 +235,7 @@ func TestReplaceDepositForBurnInvalidSender(t *testing.T) {
 	testkeeper.SetSignatureThreshold(ctx, types.SignatureThreshold{Amount: signatureThreshold})
 
 	msg := types.MsgReplaceDepositForBurn{
-		From:                 "not the original sender",
+		From:                 "cosmos169xaqmxumqa829gg73nxrenkhhd2mrs36j3vrz", // different sender
 		OriginalMessage:      originalMessageBytes,
 		OriginalAttestation:  originalAttestation,
 		NewDestinationCaller: []byte("new destination caller3456789012"),
@@ -255,12 +265,17 @@ func TestReplaceDepositForBurnInvalidNewMintRecipient(t *testing.T) {
 	burnMessageBytes, err := burnMessage.Bytes()
 	require.NoError(t, err)
 
+	// we encode the message sender when sending messages, so we must use an encoded message in the original message
+	senderBech32 := "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a"
+	senderEncoded := make([]byte, 32)
+	copy(senderEncoded[12:], sdk.MustAccAddressFromBech32(senderBech32))
+
 	originalMessage := types.Message{
 		Version:           1,
 		SourceDomain:      4, // Noble domain id
 		DestinationDomain: 3,
 		Nonce:             2,
-		Sender:            []byte("sender78901234567890123456789012"),
+		Sender:            senderEncoded,
 		Recipient:         []byte("recipient01234567890123456789012"),
 		DestinationCaller: []byte("destination caller90123456789012"),
 		MessageBody:       burnMessageBytes,
@@ -279,7 +294,7 @@ func TestReplaceDepositForBurnInvalidNewMintRecipient(t *testing.T) {
 	testkeeper.SetSignatureThreshold(ctx, types.SignatureThreshold{Amount: signatureThreshold})
 
 	msg := types.MsgReplaceDepositForBurn{
-		From:                 string(originalMessage.Sender),
+		From:                 senderBech32,
 		OriginalMessage:      originalMessageBytes,
 		OriginalAttestation:  originalAttestation,
 		NewDestinationCaller: []byte("new destination caller3456789012"),

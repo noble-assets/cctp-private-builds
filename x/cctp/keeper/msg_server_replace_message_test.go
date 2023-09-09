@@ -39,12 +39,17 @@ func TestReplaceMessageHappyPath(t *testing.T) {
 	burnMessageBytes, err := burnMessage.Bytes()
 	require.Nil(t, err)
 
+	// we encode the message sender when sending messages, so we must use an encoded message in the original message
+	senderBech32 := "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a"
+	senderEncoded := make([]byte, 32)
+	copy(senderEncoded[12:], sdk.MustAccAddressFromBech32(senderBech32))
+
 	originalMessage := types.Message{
 		Version:           1,
 		SourceDomain:      4, // Noble domain id
 		DestinationDomain: 3,
 		Nonce:             2,
-		Sender:            []byte("sender78901234567890123456789012"),
+		Sender:            senderEncoded,
 		Recipient:         []byte("recipient01234567890123456789012"),
 		DestinationCaller: []byte("destination caller90123456789012"),
 		MessageBody:       burnMessageBytes,
@@ -62,7 +67,7 @@ func TestReplaceMessageHappyPath(t *testing.T) {
 	testkeeper.SetSignatureThreshold(ctx, types.SignatureThreshold{Amount: signatureThreshold})
 
 	msg := types.MsgReplaceMessage{
-		From:                 string(originalMessage.Sender),
+		From:                 senderBech32,
 		OriginalMessage:      originalMessageBytes,
 		OriginalAttestation:  originalAttestation,
 		NewMessageBody:       []byte("123"),
@@ -266,12 +271,17 @@ func TestReplaceMessageInvalidSender(t *testing.T) {
 	burnMessageBytes, err := burnMessage.Bytes()
 	require.Nil(t, err)
 
+	// we encode the message sender when sending messages, so we must use an encoded message in the original message
+	senderBech32 := "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a"
+	senderEncoded := make([]byte, 32)
+	copy(senderEncoded[12:], sdk.MustAccAddressFromBech32(senderBech32))
+
 	originalMessage := types.Message{
 		Version:           1,
 		SourceDomain:      4, // Noble domain id
 		DestinationDomain: 3,
 		Nonce:             2,
-		Sender:            []byte("sender78901234567890123456789012"),
+		Sender:            senderEncoded,
 		Recipient:         []byte("recipient01234567890123456789012"),
 		DestinationCaller: []byte("destination caller90123456789012"),
 		MessageBody:       burnMessageBytes,
@@ -289,7 +299,7 @@ func TestReplaceMessageInvalidSender(t *testing.T) {
 	testkeeper.SetSignatureThreshold(ctx, types.SignatureThreshold{Amount: signatureThreshold})
 
 	msg := types.MsgReplaceMessage{
-		From:                 "not the original sender",
+		From:                 "cosmos169xaqmxumqa829gg73nxrenkhhd2mrs36j3vrz", // different sender than in original message
 		OriginalMessage:      originalMessageBytes,
 		OriginalAttestation:  originalAttestation,
 		NewMessageBody:       []byte("123"),
@@ -319,12 +329,17 @@ func TestReplaceMessageMessageNotOriginallySentFromThisDomain(t *testing.T) {
 	burnMessageBytes, err := burnMessage.Bytes()
 	require.Nil(t, err)
 
+	// we encode the message sender when sending messages, so we must use an encoded message in the original message
+	senderBech32 := "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a"
+	senderEncoded := make([]byte, 32)
+	copy(senderEncoded[12:], sdk.MustAccAddressFromBech32(senderBech32))
+
 	originalMessage := types.Message{
 		Version:           1,
 		SourceDomain:      8, // not Noble's domain id
 		DestinationDomain: 3,
 		Nonce:             2,
-		Sender:            []byte("sender78901234567890123456789012"),
+		Sender:            senderEncoded,
 		Recipient:         []byte("recipient01234567890123456789012"),
 		DestinationCaller: []byte("destination caller90123456789012"),
 		MessageBody:       burnMessageBytes,
@@ -342,7 +357,7 @@ func TestReplaceMessageMessageNotOriginallySentFromThisDomain(t *testing.T) {
 	testkeeper.SetSignatureThreshold(ctx, types.SignatureThreshold{Amount: signatureThreshold})
 
 	msg := types.MsgReplaceMessage{
-		From:                 string(originalMessage.Sender),
+		From:                 senderBech32,
 		OriginalMessage:      originalMessageBytes,
 		OriginalAttestation:  originalAttestation,
 		NewMessageBody:       []byte("123"),
