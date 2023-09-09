@@ -27,7 +27,7 @@ func LookupKey(sourceDomain uint32, nonce uint64) []byte {
 	binary.BigEndian.PutUint32(sourceDomainBytes, sourceDomain)
 	nonceBytes := make([]byte, 8)
 	binary.BigEndian.PutUint64(nonceBytes, nonce)
-	return append(nonceBytes, []byte(sourceDomainBytes)...)
+	return append(nonceBytes, sourceDomainBytes...)
 }
 
 func InFlightPacketKey(channelID, portID string, sequence uint64) []byte {

@@ -26,14 +26,13 @@ func networkWithRemoteTokenMessengerObjects(t *testing.T, n uint32) (*network.Ne
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
-	for i := uint32(0); i < n; i++ {
+	for i := uint32(1); i <= n; i++ {
 		addr := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 		binary.BigEndian.PutUint32(addr[28:], i)
 		remoteTokenMessenger := types.RemoteTokenMessenger{
 			DomainId: i,
 			Address:  addr,
 		}
-		nullify.Fill(&remoteTokenMessenger)
 		state.TokenMessengerList = append(state.TokenMessengerList, remoteTokenMessenger)
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

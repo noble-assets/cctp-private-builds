@@ -3,6 +3,7 @@ package cli_test
 import (
 	"encoding/binary"
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"testing"
 
@@ -25,15 +26,20 @@ func networkWithMintObjects(t *testing.T, n uint32) (*network.Network, []types.M
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
-	for i := uint32(0); i < n; i++ {
+	for i := uint32(1); i <= n; i++ {
 		addr := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 		binary.BigEndian.PutUint32(addr[28:], i)
 		Mints := types.Mint{
-			SourceDomain:       uint32(i),
+			SourceDomain:       i,
 			SourceDomainSender: addr,
 			Nonce:              uint64(i),
+			Amount: &sdk.Coin{
+				Denom:  "uusdc",
+				Amount: sdk.NewInt(1),
+			},
+			DestinationDomain: 4,
+			MintRecipient:     "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		}
-		nullify.Fill(&Mints)
 		state.Mints = append(state.Mints, Mints)
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

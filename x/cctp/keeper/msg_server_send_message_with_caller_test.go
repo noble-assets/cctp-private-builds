@@ -30,7 +30,7 @@ func TestSendMessageWithCallerHappyPath(t *testing.T) {
 	testkeeper.SetNextAvailableNonce(ctx, nonce)
 
 	msg := types.MsgSendMessageWithCaller{
-		From:              "12345678901234567890123456789012",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		DestinationDomain: 3,
 		Recipient:         []byte("12345678901234567890123456789012"),
 		MessageBody:       []byte("It's not about money, it's about sending a message"),
@@ -59,7 +59,7 @@ func TestSendMessageWithCallerInvalidDestinationCaller(t *testing.T) {
 	testkeeper.SetNextAvailableNonce(ctx, nonce)
 
 	msg := types.MsgSendMessageWithCaller{
-		From:              "12345678901234567890123456789012",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		DestinationDomain: 3,
 		Recipient:         []byte("12345678901234567890123456789012"),
 		MessageBody:       []byte("It's not about money, it's about sending a message"),
@@ -78,7 +78,7 @@ func TestSendMessageWithCallerSendingAndReceivingMessagesPaused(t *testing.T) {
 	testkeeper.SetSendingAndReceivingMessagesPaused(ctx, paused)
 
 	msg := types.MsgSendMessageWithCaller{
-		From:              "12345678901234567890123456789012",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		DestinationDomain: 3,
 		Recipient:         []byte("12345678901234567890123456789012"),
 		MessageBody:       []byte("It's not about money, it's about sending a message"),
@@ -103,7 +103,7 @@ func TestSendMessageWithCallerRecipientEmpty(t *testing.T) {
 	testkeeper.SetNextAvailableNonce(ctx, nonce)
 
 	msg := types.MsgSendMessageWithCaller{
-		From:              "anything",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		DestinationDomain: 3,
 		Recipient:         make([]byte, types.MintRecipientLen),
 		MessageBody:       []byte("It's not about money, it's about sending a message"),
@@ -131,7 +131,7 @@ func TestSendMessageWithCallerMessageBodyTooLong(t *testing.T) {
 	testkeeper.SetNextAvailableNonce(ctx, nonce)
 
 	msg := types.MsgSendMessageWithCaller{
-		From:              "anything",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		DestinationDomain: 3,
 		Recipient:         []byte("12345678901234567890123456789012"),
 		MessageBody:       []byte("It's not about money, it's about sending a message"),

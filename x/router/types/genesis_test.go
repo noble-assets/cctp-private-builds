@@ -1,6 +1,7 @@
 package types_test
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"testing"
 
 	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
@@ -24,16 +25,60 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				Params: types.DefaultParams(),
 				InFlightPackets: []types.InFlightPacket{
-					{SourceDomain: 0},
-					{SourceDomain: 1},
+					{
+						SourceDomain: 0,
+						Channel:      "channel-0",
+						Port:         "port-0",
+					},
+					{
+						SourceDomain: 1,
+						Channel:      "channel-1",
+						Port:         "port-1",
+					},
 				},
 				Mints: []types.Mint{
-					{SourceDomain: 0},
-					{SourceDomain: 1},
+					{
+						SourceDomain:       0,
+						SourceDomainSender: []byte("12345678901234567890123456789012"),
+						Nonce:              0,
+						Amount: &sdk.Coin{
+							Denom:  "uusdc",
+							Amount: sdk.NewInt(1),
+						},
+						DestinationDomain: 4,
+						MintRecipient:     "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
+					},
+					{
+						SourceDomain:       1,
+						SourceDomainSender: []byte("12345678901234567890123456789012"),
+						Nonce:              1,
+						Amount: &sdk.Coin{
+							Denom:  "uusdc",
+							Amount: sdk.NewInt(2),
+						},
+						DestinationDomain: 4,
+						MintRecipient:     "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
+					},
 				},
 				IbcForwards: []types.StoreIBCForwardMetadata{
-					{SourceDomain: 0},
-					{SourceDomain: 1},
+					{
+						SourceDomain: 0,
+						Metadata: &types.IBCForwardMetadata{
+							Nonce:               0,
+							DestinationReceiver: "1234",
+							Channel:             "channel-1",
+							Port:                "port-1",
+						},
+					},
+					{
+						SourceDomain: 1,
+						Metadata: &types.IBCForwardMetadata{
+							Nonce:               1,
+							DestinationReceiver: "1234",
+							Channel:             "channel-1",
+							Port:                "port-1",
+						},
+					},
 				},
 			},
 			valid: true,

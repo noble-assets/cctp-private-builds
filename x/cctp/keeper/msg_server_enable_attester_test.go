@@ -34,7 +34,7 @@ func TestEnableAttesterHappyPath(t *testing.T) {
 
 	actual, found := testkeeper.GetAttester(ctx, message.Attester)
 	require.True(t, found)
-	require.Equal(t, message.Attester, []byte(actual.Attester))
+	require.Equal(t, message.Attester, actual.Attester)
 }
 
 func TestEnableAttesterAuthorityNotSet(t *testing.T) {
@@ -46,9 +46,9 @@ func TestEnableAttesterAuthorityNotSet(t *testing.T) {
 		Attester: "attester",
 	}
 
-	_, err := server.EnableAttester(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
+	require.Panicsf(t, func() {
+		_, _ = server.EnableAttester(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestEnableAttesterInvalidAuthority(t *testing.T) {

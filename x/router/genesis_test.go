@@ -32,9 +32,11 @@ func TestGenesis(t *testing.T) {
 		IbcForwards: []types.StoreIBCForwardMetadata{
 			{
 				SourceDomain: 5,
+				Metadata:     &types.IBCForwardMetadata{Nonce: 5},
 			},
 			{
 				SourceDomain: 6,
+				Metadata:     &types.IBCForwardMetadata{Nonce: 6},
 			},
 		},
 	}

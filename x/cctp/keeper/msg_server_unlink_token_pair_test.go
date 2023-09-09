@@ -56,9 +56,9 @@ func TestUnlinkTokenPairAuthorityNotSet(t *testing.T) {
 		LocalToken:   "uusdc",
 	}
 
-	_, err := server.UnlinkTokenPair(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
+	require.Panicsf(t, func() {
+		_, _ = server.UnlinkTokenPair(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestUnlinkTokenPairInvalidAuthority(t *testing.T) {

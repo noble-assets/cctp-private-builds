@@ -29,7 +29,7 @@ func TestSendMessageHappyPath(t *testing.T) {
 	testkeeper.SetNextAvailableNonce(ctx, nonce)
 
 	msg := types.MsgSendMessage{
-		From:              "12345678901234567890123456789012",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		DestinationDomain: 3,
 		Recipient:         []byte("12345678901234567890123456789012"),
 		MessageBody:       []byte("It's not about money, it's about sending a message"),
@@ -51,7 +51,7 @@ func TestSendMessageSendingAndReceivingMessagesPaused(t *testing.T) {
 	paused := types.SendingAndReceivingMessagesPaused{Paused: true}
 	testkeeper.SetSendingAndReceivingMessagesPaused(ctx, paused)
 
-	_, err := server.SendMessage(sdk.WrapSDKContext(ctx), &types.MsgSendMessage{})
+	_, err := server.SendMessage(sdk.WrapSDKContext(ctx), &types.MsgSendMessage{From: "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a"})
 	require.ErrorIs(t, types.ErrSendMessage, err)
 	require.Contains(t, err.Error(), "sending and receiving messages is paused")
 }
@@ -72,7 +72,7 @@ func TestSendMessageMessageBodyTooLong(t *testing.T) {
 	testkeeper.SetNextAvailableNonce(ctx, nonce)
 
 	msg := types.MsgSendMessage{
-		From:              "anything",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		DestinationDomain: 3,
 		Recipient:         []byte("12345678901234567890123456789012"),
 		MessageBody:       []byte("It's not about money, it's about sending a message"),
@@ -96,7 +96,7 @@ func TestSendMessageRecipientEmpty(t *testing.T) {
 	testkeeper.SetNextAvailableNonce(ctx, nonce)
 
 	msg := types.MsgSendMessage{
-		From:              "anything",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		DestinationDomain: 3,
 		Recipient:         make([]byte, types.MintRecipientLen),
 		MessageBody:       []byte("It's not about money, it's about sending a message"),

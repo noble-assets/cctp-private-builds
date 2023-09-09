@@ -26,13 +26,15 @@ func networkWithTokenPairObjects(t *testing.T, n int) (*network.Network, []types
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
-	for i := 0; i < n; i++ {
+	for i := 1; i <= n; i++ {
+		remoteToken, err := types.RemoteTokenPadded(hex.EncodeToString([]byte{byte(i)}))
+		require.NoError(t, err)
+
 		tokenPair := types.TokenPair{
 			RemoteDomain: uint32(i),
-			RemoteToken:  []byte{byte(i)},
+			RemoteToken:  remoteToken,
 			LocalToken:   strconv.Itoa(i),
 		}
-		nullify.Fill(&tokenPair)
 		state.TokenPairList = append(state.TokenPairList, tokenPair)
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

@@ -50,9 +50,9 @@ func TestSetMaxBurnAmountPerMessageAuthorityNotSet(t *testing.T) {
 		Amount:     math.NewInt(123),
 	}
 
-	_, err := server.SetMaxBurnAmountPerMessage(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
+	require.Panicsf(t, func() {
+		_, _ = server.SetMaxBurnAmountPerMessage(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestSetMaxBurnAmountPerMessageInvalidAuthority(t *testing.T) {

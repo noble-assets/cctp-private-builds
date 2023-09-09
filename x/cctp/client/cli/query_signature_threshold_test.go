@@ -21,7 +21,7 @@ func networkWithSignatureThresholdObjects(t *testing.T) (*network.Network, types
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
-	SignatureThreshold := &types.SignatureThreshold{}
+	SignatureThreshold := &types.SignatureThreshold{Amount: 2}
 	nullify.Fill(&SignatureThreshold)
 	state.SignatureThreshold = SignatureThreshold
 	buf, err := cfg.Codec.MarshalJSON(&state)

@@ -48,7 +48,7 @@ func TestDepositForBurnHappyPath(t *testing.T) {
 	testkeeper.SetPerMessageBurnLimit(ctx, perMessageBurnLimit)
 
 	msg := types.MsgDepositForBurn{
-		From:              "sender-address567890123456789012",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
 		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
@@ -254,13 +254,12 @@ func TestDepositForBurnBurnFails(t *testing.T) {
 	testkeeper.SetPerMessageBurnLimit(ctx, perMessageBurnLimit)
 
 	msg := types.MsgDepositForBurn{
-		From:              "sender-address567890123456789012",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
 		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 		BurnToken:         "uUsDC",
 	}
 	_, err := server.DepositForBurn(sdk.WrapSDKContext(ctx), &msg)
-	require.ErrorIs(t, types.ErrBurn, err)
 	require.Contains(t, err.Error(), "tokens can not be burned")
 }

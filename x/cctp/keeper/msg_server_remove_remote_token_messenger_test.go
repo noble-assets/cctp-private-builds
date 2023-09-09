@@ -55,9 +55,9 @@ func TestRemoveRemoteTokenMessengerAuthorityNotSet(t *testing.T) {
 		DomainId: 16,
 	}
 
-	_, err := server.RemoveRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
+	require.Panicsf(t, func() {
+		_, _ = server.RemoveRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestRemoveRemoteTokenMessengerInvalidAuthority(t *testing.T) {

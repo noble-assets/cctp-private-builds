@@ -48,7 +48,7 @@ func TestDepositForBurnWithCallerHappyPath(t *testing.T) {
 	testkeeper.SetPerMessageBurnLimit(ctx, perMessageBurnLimit)
 
 	msg := types.MsgDepositForBurnWithCaller{
-		From:              "sender-address567890123456789012",
+		From:              "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		Amount:            math.NewInt(531),
 		DestinationDomain: 0,
 		MintRecipient:     []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},

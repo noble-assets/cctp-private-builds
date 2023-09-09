@@ -28,7 +28,10 @@ func networkWithIBCForwardObjects(t *testing.T, n uint32) (*network.Network, []t
 		IBCForward := types.StoreIBCForwardMetadata{
 			SourceDomain: i,
 			Metadata: &types.IBCForwardMetadata{
-				Nonce: uint64(i),
+				Nonce:               uint64(i),
+				DestinationReceiver: "1234",
+				Channel:             "channel-1",
+				Port:                "port-1",
 			},
 		}
 		nullify.Fill(&IBCForward)

@@ -44,9 +44,9 @@ func TestUpdateAuthorityAuthorityNotSet(t *testing.T) {
 		From:     sample.AccAddress(),
 		NewOwner: "new address",
 	}
-	_, err := server.UpdateOwner(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
+	require.Panicsf(t, func() {
+		_, _ = server.UpdateOwner(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestUpdateAuthorityInvalidAuthority(t *testing.T) {

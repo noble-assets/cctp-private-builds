@@ -58,7 +58,7 @@ func CmdShowIBCForward() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			nonce, err := strconv.ParseUint(args[2], 10, 64)
+			nonce, err := strconv.ParseUint(args[1], 10, 64)
 			if err != nil {
 				return err
 			}

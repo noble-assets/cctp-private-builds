@@ -48,10 +48,11 @@ func TestInvalidMessageBodyNoOp(t *testing.T) {
 func TestForwardOnAckErrWithExistingMint(t *testing.T) {
 	routerKeeper, ctx := keepertest.RouterKeeper(t)
 
-	sourceDomainSender, nonce := string(fillByteArray(0, 32)), uint64(4)
+	sourceDomain, sourceDomainSender, nonce := uint32(8), string(fillByteArray(0, 32)), uint64(4)
 	port, channel, sequence := "transfer", "channel-10", uint64(0)
 
 	routerKeeper.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
+		SourceDomain: sourceDomain,
 		Metadata: &types.IBCForwardMetadata{
 			Nonce:                nonce,
 			Port:                 port,
@@ -64,7 +65,8 @@ func TestForwardOnAckErrWithExistingMint(t *testing.T) {
 	})
 
 	routerKeeper.SetMint(ctx, types.Mint{
-		Nonce: nonce,
+		SourceDomain: sourceDomain,
+		Nonce:        nonce,
 		Amount: &sdk.Coin{
 			Denom:  "uusdc",
 			Amount: sdk.NewInt(10000),
@@ -78,7 +80,7 @@ func TestForwardOnAckErrWithExistingMint(t *testing.T) {
 
 	msg := bytesFromMessage(keeper.Message{
 		Version:           1,
-		SourceDomain:      2,
+		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
 		Sender:            []byte(sourceDomainSender),
@@ -98,10 +100,11 @@ func TestForwardOnAckErrWithExistingMint(t *testing.T) {
 func TestForwardOnAckErrWithNoMint(t *testing.T) {
 	routerKeeper, ctx := keepertest.RouterKeeper(t)
 
-	sourceDomainSender, nonce := string(fillByteArray(0, 32)), uint64(4)
+	sourceDomain, sourceDomainSender, nonce := uint32(8), string(fillByteArray(0, 32)), uint64(4)
 	port, channel, sequence := "transfer", "channel-10", uint64(0)
 
 	routerKeeper.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
+		SourceDomain: sourceDomain,
 		Metadata: &types.IBCForwardMetadata{
 			Nonce:                nonce,
 			Port:                 port,
@@ -118,7 +121,7 @@ func TestForwardOnAckErrWithNoMint(t *testing.T) {
 
 	msg := bytesFromMessage(keeper.Message{
 		Version:           1,
-		SourceDomain:      2,
+		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
 		Sender:            []byte(sourceDomainSender),
@@ -137,10 +140,11 @@ func TestForwardOnAckErrWithNoMint(t *testing.T) {
 func TestForwardWithFoundForwardAndNoAckError(t *testing.T) {
 	routerKeeper, ctx := keepertest.RouterKeeper(t)
 
-	sourceDomainSender, nonce := string(fillByteArray(0, 32)), uint64(4)
+	sourceDomain, sourceDomainSender, nonce := uint32(8), string(fillByteArray(0, 32)), uint64(4)
 	port, channel, sequence := "transfer", "channel-10", uint64(0)
 
 	routerKeeper.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
+		SourceDomain: sourceDomain,
 		Metadata: &types.IBCForwardMetadata{
 			Nonce:                nonce,
 			Port:                 port,
@@ -157,7 +161,7 @@ func TestForwardWithFoundForwardAndNoAckError(t *testing.T) {
 
 	msg := bytesFromMessage(keeper.Message{
 		Version:           1,
-		SourceDomain:      2,
+		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
 		Sender:            []byte(sourceDomainSender),
@@ -178,7 +182,8 @@ func TestForwardWithNoForwardFoundAndExistingMint(t *testing.T) {
 	port, channel, sequence := "transfer", "channel-10", uint64(0)
 
 	routerKeeper.SetMint(ctx, types.Mint{
-		Nonce: nonce,
+		SourceDomain: sourceDomain,
+		Nonce:        nonce,
 		Amount: &sdk.Coin{
 			Denom:  "uusdc",
 			Amount: sdk.NewInt(10000),
@@ -192,7 +197,7 @@ func TestForwardWithNoForwardFoundAndExistingMint(t *testing.T) {
 
 	msg := bytesFromMessage(keeper.Message{
 		Version:           1,
-		SourceDomain:      2,
+		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
 		Sender:            []byte(sourceDomainSender),
@@ -221,7 +226,7 @@ func TestForwardWithNoForwardFoundAndNoMint(t *testing.T) {
 
 	msg := bytesFromMessage(keeper.Message{
 		Version:           1,
-		SourceDomain:      2,
+		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
 		Sender:            []byte(sourceDomainSender),
@@ -250,7 +255,7 @@ func TestMintWithNoForward(t *testing.T) {
 
 	msg := bytesFromMessage(keeper.Message{
 		Version:           1,
-		SourceDomain:      2,
+		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
 		Sender:            []byte(sourceDomainSender),
@@ -270,7 +275,7 @@ func TestMintWithNoForward(t *testing.T) {
 
 	mint, found := routerKeeper.GetMint(ctx, sourceDomain, nonce)
 	require.True(t, found)
-	require.Equal(t, sourceDomainSender, mint.SourceDomainSender)
+	require.Equal(t, sourceDomain, mint.SourceDomain)
 	require.Equal(t, nonce, mint.Nonce)
 
 }
@@ -285,6 +290,7 @@ func TestMintWithExistingForward(t *testing.T) {
 	port, channel, sequence := "transfer", "channel-10", uint64(0)
 
 	routerKeeper.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
+		SourceDomain: sourceDomain,
 		Metadata: &types.IBCForwardMetadata{
 			Nonce:                nonce,
 			Port:                 port,
@@ -301,7 +307,7 @@ func TestMintWithExistingForward(t *testing.T) {
 
 	msg := bytesFromMessage(keeper.Message{
 		Version:           1,
-		SourceDomain:      2,
+		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
 		Sender:            []byte(sourceDomainSender),
@@ -324,7 +330,8 @@ func TestMintWithExistingForward(t *testing.T) {
 
 	mint, found := routerKeeper.GetMint(ctx, sourceDomain, nonce)
 	require.True(t, found)
-	require.Equal(t, sourceDomainSender, mint.SourceDomainSender)
+	require.Equal(t, sourceDomain, mint.SourceDomain)
+	require.Equal(t, []byte(sourceDomainSender), mint.SourceDomainSender)
 	require.Equal(t, nonce, mint.Nonce)
 
 }

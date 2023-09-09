@@ -26,7 +26,7 @@ func TestMsgEnableAttester_ValidateBasic(t *testing.T) {
 			name: "valid from",
 			msg: MsgEnableAttester{
 				From:     sample.AccAddress(),
-				Attester: "",
+				Attester: "1234",
 			},
 		},
 	}

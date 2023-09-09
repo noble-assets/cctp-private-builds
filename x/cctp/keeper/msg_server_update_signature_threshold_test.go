@@ -51,9 +51,9 @@ func TestUpdateSignatureThresholdAuthorityNotSet(t *testing.T) {
 		Amount: 1,
 	}
 
-	_, err := server.UpdateSignatureThreshold(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
+	require.Panicsf(t, func() {
+		_, _ = server.UpdateSignatureThreshold(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestUpdateSignatureThresholdInvalidAuthority(t *testing.T) {

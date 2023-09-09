@@ -52,8 +52,9 @@ func TestLinkTokenPairAuthorityNotSet(t *testing.T) {
 		LocalToken:   "uusdc",
 	}
 
-	_, err := server.LinkTokenPair(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
+	require.Panicsf(t, func() {
+		_, _ = server.LinkTokenPair(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestLinkTokenPairInvalidAuthority(t *testing.T) {

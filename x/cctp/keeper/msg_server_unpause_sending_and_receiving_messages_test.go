@@ -41,9 +41,9 @@ func TestUnpauseSendingAndReceivingMessagesAuthorityNotSet(t *testing.T) {
 	message := types.MsgUnpauseSendingAndReceivingMessages{
 		From: "authority",
 	}
-	_, err := server.UnpauseSendingAndReceivingMessages(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
+	require.Panicsf(t, func() {
+		_, _ = server.UnpauseSendingAndReceivingMessages(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestUnpauseSendingAndReceivingMessagesInvalidAuthority(t *testing.T) {

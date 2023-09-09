@@ -51,9 +51,9 @@ func TestAddRemoteTokenMessengerAuthorityNotSet(t *testing.T) {
 		Address:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xAB, 0xCD},
 	}
 
-	_, err := server.AddRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &message)
-	require.ErrorIs(t, types.ErrAuthorityNotSet, err)
-	require.Contains(t, err.Error(), "authority not set")
+	require.Panicsf(t, func() {
+		_, _ = server.AddRemoteTokenMessenger(sdk.WrapSDKContext(ctx), &message)
+	}, "cctp owner not found in state")
 }
 
 func TestAddRemoteTokenMessengerInvalidAuthority(t *testing.T) {
