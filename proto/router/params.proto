@@ -6,4 +6,10 @@ import "gogoproto/gogo.proto";
 option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/types";
 
 // Params defines the parameters for the module.
-message Params { option (gogoproto.goproto_stringer) = false; }
+message Params { 
+    uint64 mint_prune_blocks = 2 [
+        (gogoproto.jsontag) = "mint_prune_blocks,omitempty",
+        (gogoproto.moretags) = "yaml:\"mint_prune_blocks\""
+    ];
+    option (gogoproto.goproto_stringer) = false;
+ }

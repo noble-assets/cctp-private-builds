@@ -22,6 +22,7 @@ import (
 	"github.com/circlefin/noble-cctp-private-builds/cmd"
 	"github.com/circlefin/noble-cctp-private-builds/testutil/sample"
 	cctptypes "github.com/circlefin/noble-cctp-private-builds/x/cctp/types"
+	routertypes "github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	genutil "github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
@@ -102,6 +103,10 @@ func DefaultConfig() network.Config {
 	upgrade := paramauthorityupgradetypes.DefaultGenesis()
 	upgrade.Params.Authority = sample.AccAddress()
 	cfg.GenesisState[upgradetypes.ModuleName] = encoding.Marshaler.MustMarshalJSON(upgrade)
+
+	router := routertypes.DefaultGenesis()
+	router.Owner = params.Params.Authority
+	cfg.GenesisState[routertypes.ModuleName] = encoding.Marshaler.MustMarshalJSON(router)
 
 	cctp := cctptypes.DefaultGenesis()
 	cctp.Owner = sample.AccAddress()

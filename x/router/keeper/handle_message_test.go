@@ -178,8 +178,10 @@ func TestForwardWithFoundForwardAndNoAckError(t *testing.T) {
 func TestForwardWithNoForwardFoundAndExistingMint(t *testing.T) {
 	routerKeeper, ctx := keepertest.RouterKeeper(t)
 
-	sourceDomain, sourceDomainSender, nonce := uint32(1), string(fillByteArray(0, 32)), uint64(4)
+	sourceDomain, sourceDomainSender, nonce := uint32(1), fillByteArray(0, 32), uint64(4)
 	port, channel, sequence := "transfer", "channel-10", uint64(0)
+
+	routerKeeper.AddAllowedSourceDomainSender(ctx, sourceDomain, sourceDomainSender)
 
 	routerKeeper.SetMint(ctx, types.Mint{
 		SourceDomain: sourceDomain,
@@ -200,7 +202,7 @@ func TestForwardWithNoForwardFoundAndExistingMint(t *testing.T) {
 		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
-		Sender:            []byte(sourceDomainSender),
+		Sender:            sourceDomainSender,
 		Recipient:         fillByteArray(32, 32),
 		DestinationCaller: fillByteArray(64, 32),
 		MessageBody:       createMockMetadata(nonce, channel, sdk.Bech32PrefixAccAddr, sample.AccAddress(), "12345"),
@@ -221,15 +223,17 @@ func TestForwardWithNoForwardFoundAndExistingMint(t *testing.T) {
 func TestForwardWithNoForwardFoundAndNoMint(t *testing.T) {
 	routerKeeper, ctx := keepertest.RouterKeeper(t)
 
-	sourceDomain, sourceDomainSender, nonce := uint32(1), string(fillByteArray(0, 32)), uint64(4)
+	sourceDomain, sourceDomainSender, nonce := uint32(1), fillByteArray(0, 32), uint64(4)
 	_, channel, _ := "transfer", "channel-10", uint64(0)
+
+	routerKeeper.AddAllowedSourceDomainSender(ctx, sourceDomain, sourceDomainSender)
 
 	msg := bytesFromMessage(keeper.Message{
 		Version:           1,
 		SourceDomain:      sourceDomain,
 		DestinationDomain: 3,
 		Nonce:             nonce,
-		Sender:            []byte(sourceDomainSender),
+		Sender:            sourceDomainSender,
 		Recipient:         fillByteArray(32, 32),
 		DestinationCaller: fillByteArray(64, 32),
 		MessageBody:       createMockMetadata(nonce, channel, sdk.Bech32PrefixAccAddr, sample.AccAddress(), "12345"),

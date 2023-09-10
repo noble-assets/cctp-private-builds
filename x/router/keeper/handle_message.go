@@ -17,7 +17,7 @@ import (
 // on relayer resources.
 var MinimumRelativePacketTimeoutTimestamp = uint64((time.Duration(30) * time.Second).Nanoseconds())
 
-func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
+func (k *Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 
 	// parse outer message
 	outerMessage, err := new(cctptypes.Message).Parse(msg)
@@ -48,6 +48,7 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 			},
 			DestinationDomain: outerMessage.DestinationDomain,
 			MintRecipient:     addr,
+			Height:            uint64(ctx.BlockHeight()),
 		}
 		k.SetMint(ctx, mint)
 		if existingIBCForward, found := k.GetIBCForward(ctx, outerMessage.SourceDomain, outerMessage.Nonce); found {
@@ -69,6 +70,12 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 
 			return sdkerrors.Wrapf(types.ErrHandleMessage, "previous operation still in progress")
 		}
+
+		// Source domain sender must be allowed to forward packets
+		if !k.IsAllowedSourceDomainSender(ctx, outerMessage.SourceDomain, outerMessage.Sender) {
+			return sdkerrors.Wrapf(types.ErrHandleMessage, "sender is not allowed to forward packets")
+		}
+
 		// this is the first time we are seeing this forward info -> store it.
 		k.SetIBCForward(ctx, types.StoreIBCForwardMetadata{
 			SourceDomain: outerMessage.SourceDomain,
@@ -84,7 +91,7 @@ func (k Keeper) HandleMessage(ctx sdk.Context, msg []byte) error {
 	return nil
 }
 
-func (k Keeper) ForwardPacket(ctx sdk.Context, ibcForward *types.IBCForwardMetadata, mint types.Mint) error {
+func (k *Keeper) ForwardPacket(ctx sdk.Context, ibcForward *types.IBCForwardMetadata, mint types.Mint) error {
 	timeout := ibcForward.TimeoutInNanoseconds
 	if timeout < MinimumRelativePacketTimeoutTimestamp {
 		timeout = transfertypes.DefaultRelativePacketTimeoutTimestamp

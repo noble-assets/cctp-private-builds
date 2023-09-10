@@ -8,6 +8,7 @@ import "router/ibc_forward_metadata.proto";
 import "router/in_flight_packet.proto";
 import "router/mint.proto";
 import "router/params.proto";
+import "router/allowed_source_domain_sender.proto";
 
 option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/types";
 
@@ -46,6 +47,18 @@ service Query {
   rpc InFlightPackets(QueryAllInFlightPacketsRequest)
       returns (QueryAllInFlightPacketsResponse) {
     option (google.api.http).get = "/noble/router/in_flight_packets";
+  }
+
+  // Query a specific AllowedSourceDomainSender
+  rpc AllowedSourceDomainSender(QueryAllowedSourceDomainSenderRequest)
+      returns (QueryAllowedSourceDomainSenderResponse) {
+    option (google.api.http).get =
+        "/noble/router/allowed_source_domain_senders/{domain_id}/{address}";
+  }
+  // Query all AllowedSourceDomainSender's.
+  rpc AllowedSourceDomainSenders(QueryAllowedSourceDomainSendersRequest)
+      returns (QueryAllowedSourceDomainSendersResponse) {
+    option (google.api.http).get = "/noble/router/allowed_source_domain_senders";
   }
 }
 
@@ -107,5 +120,25 @@ message QueryAllInFlightPacketsRequest {
 
 message QueryAllInFlightPacketsResponse {
   repeated InFlightPacket inFlightPackets = 1 [ (gogoproto.nullable) = false ];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryAllowedSourceDomainSenderRequest {
+  uint32 domain_id = 1;
+  bytes address = 2;
+}
+
+message QueryAllowedSourceDomainSenderResponse {
+  AllowedSourceDomainSender allowedSourceDomainSender = 1
+      [ (gogoproto.nullable) = false ];
+}
+
+message QueryAllowedSourceDomainSendersRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllowedSourceDomainSendersResponse {
+  repeated AllowedSourceDomainSender allowedSourceDomainSenders = 1
+      [ (gogoproto.nullable) = false ];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

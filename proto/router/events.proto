@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package noble.router;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/types";
+
+/**
+ * Event signatures in the router module
+ */
+
+/**
+ * Emitted when owner address is updated
+ * @param previous_owner representing the address of the previous owner
+ * @param new_owner representing the address of the new owner
+ */
+message OwnerUpdated {
+  string previous_owner = 1;
+  string new_owner = 2;
+}
+
+/**
+ * Emitted when an allowed source domain sender is added
+ * @param domain remote domain
+ * @param address source domain sender address on domain
+ */
+message AllowedSourceDomainSenderAdded {
+  uint32 domain = 1;
+  bytes address = 2;
+}
+
+/**
+ * Emitted when a allowed source domain sender is removed
+ * @param domain remote domain
+ * @param address source domain sender address on domain
+ */
+message AllowedSourceDomainSenderRemoved {
+  uint32 domain = 1;
+  bytes address = 2;
+}

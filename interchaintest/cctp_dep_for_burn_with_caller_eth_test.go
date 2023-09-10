@@ -157,6 +157,24 @@ func TestCCTP_DepForBurnWithCallerOnEth(t *testing.T) {
 
 	t.Logf("Submitted add public keys tx: %s", tx.TxHash)
 
+	var senderForward = []byte("12345678901234567890123456789015")
+
+	bCtx, bCancel = context.WithTimeout(ctx, 20*time.Second)
+	defer bCancel()
+
+	tx, err = cosmos.BroadcastTx(
+		bCtx,
+		broadcaster,
+		gw.paramAuthority,
+		&routertypes.MsgAddAllowedSourceDomainSender{
+			From:     gw.paramAuthority.FormattedAddress(),
+			DomainId: 0,
+			Address:  senderForward,
+		},
+	)
+	require.NoError(t, err, "error submitting add allowed source domain sender tx")
+	require.Zero(t, tx.Code, "cctp add allowed source domain sender transaction failed: %s - %s - %s", tx.Codespace, tx.RawLog, tx.Data)
+
 	nobleValidator := noble.Validators[0]
 
 	cctpModuleAccount := authtypes.NewModuleAddress(cctptypes.ModuleName).String()
@@ -223,8 +241,6 @@ func TestCCTP_DepForBurnWithCallerOnEth(t *testing.T) {
 
 	forwardBz, err := forward.Bytes(gaiaChainCfg.Bech32Prefix)
 	require.NoError(t, err)
-
-	var senderForward = []byte("12345678901234567890123456789015")
 
 	wrappedForward := cctptypes.Message{
 		Version:           0,

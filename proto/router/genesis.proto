@@ -6,6 +6,7 @@ import "router/ibc_forward_metadata.proto";
 import "router/in_flight_packet.proto";
 import "router/mint.proto";
 import "router/params.proto";
+import "router/allowed_source_domain_sender.proto";
 
 option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/types";
 
@@ -17,4 +18,7 @@ message GenesisState {
       [ (gogoproto.nullable) = false ];
   repeated InFlightPacket in_flight_packets = 5
       [ (gogoproto.nullable) = false ];
+  repeated AllowedSourceDomainSender allowed_source_domain_senders = 6
+      [ (gogoproto.nullable) = false ];
+  string owner = 7;
 }

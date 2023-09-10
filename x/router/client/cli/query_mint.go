@@ -14,6 +14,7 @@ func CmdListMints() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list-mints",
 		Short: "lists all mints",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 

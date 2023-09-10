@@ -3,19 +3,20 @@ package keeper
 import (
 	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // SetIBCForward sets a IBCForward in the store
-func (k Keeper) SetIBCForward(ctx sdk.Context, forward types.StoreIBCForwardMetadata) {
+func (k *Keeper) SetIBCForward(ctx sdk.Context, forward types.StoreIBCForwardMetadata) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.IBCForwardPrefix)
 	b := k.cdc.MustMarshal(&forward)
 	store.Set(types.LookupKey(forward.SourceDomain, forward.Metadata.Nonce), b)
 }
 
 // GetIBCForward returns IBCForward
-func (k Keeper) GetIBCForward(ctx sdk.Context, sourceDomain uint32, nonce uint64) (val types.StoreIBCForwardMetadata, found bool) {
+func (k *Keeper) GetIBCForward(ctx sdk.Context, sourceDomain uint32, nonce uint64) (val types.StoreIBCForwardMetadata, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.IBCForwardPrefix)
 
 	b := store.Get(types.LookupKey(sourceDomain, nonce))
@@ -28,13 +29,13 @@ func (k Keeper) GetIBCForward(ctx sdk.Context, sourceDomain uint32, nonce uint64
 }
 
 // DeleteIBCForward removes a IBCForward from the store
-func (k Keeper) DeleteIBCForward(ctx sdk.Context, sourceDomain uint32, nonce uint64) {
+func (k *Keeper) DeleteIBCForward(ctx sdk.Context, sourceDomain uint32, nonce uint64) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.IBCForwardPrefix)
 	store.Delete(types.LookupKey(sourceDomain, nonce))
 }
 
 // GetAllIBCForwards returns all IBCForwards
-func (k Keeper) GetAllIBCForwards(ctx sdk.Context) (list []types.StoreIBCForwardMetadata) {
+func (k *Keeper) GetAllIBCForwards(ctx sdk.Context) (list []types.StoreIBCForwardMetadata) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.IBCForwardPrefix)
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
@@ -47,4 +48,26 @@ func (k Keeper) GetAllIBCForwards(ctx sdk.Context) (list []types.StoreIBCForward
 	}
 
 	return
+}
+
+func (k *Keeper) GetAllIBCForwardsPaginated(ctx sdk.Context, pagination *query.PageRequest) ([]types.StoreIBCForwardMetadata, *query.PageResponse, error) {
+	var ibcForwards []types.StoreIBCForwardMetadata
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.IBCForwardPrefix)
+
+	pageRes, err := query.Paginate(store, pagination, func(key []byte, value []byte) error {
+		var ibcForward types.StoreIBCForwardMetadata
+		if err := k.cdc.Unmarshal(value, &ibcForward); err != nil {
+			return err
+		}
+
+		ibcForwards = append(ibcForwards, ibcForward)
+		return nil
+	})
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return ibcForwards, pageRes, nil
 }

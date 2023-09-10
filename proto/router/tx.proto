@@ -4,4 +4,35 @@ package noble.router;
 option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/types";
 
 // Msg defines the Msg service.
-service Msg {}
+service Msg {
+    rpc AcceptOwner(MsgAcceptOwner) returns (MsgAcceptOwnerResponse);
+    rpc AddAllowedSourceDomainSender(MsgAddAllowedSourceDomainSender) returns (MsgAddAllowedSourceDomainSenderResponse);
+    rpc RemoveAllowedSourceDomainSender(MsgRemoveAllowedSourceDomainSender) returns (MsgRemoveAllowedSourceDomainSenderResponse);
+}
+
+message MsgUpdateOwner {
+    string from = 1;
+    string new_owner = 2;
+}
+
+message MsgUpdateOwnerResponse {}
+
+message MsgAcceptOwner { string from = 1; }
+
+message MsgAcceptOwnerResponse {}
+
+message MsgAddAllowedSourceDomainSender {
+    string from = 1;
+    uint32 domain_id = 2;
+    bytes address = 3;
+}
+
+message MsgAddAllowedSourceDomainSenderResponse {}
+
+message MsgRemoveAllowedSourceDomainSender {
+    string from = 1;
+    uint32 domain_id = 3;
+    bytes address = 2;
+}
+
+message MsgRemoveAllowedSourceDomainSenderResponse {}

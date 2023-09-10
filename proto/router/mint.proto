@@ -15,6 +15,7 @@ option go_package = "github.com/circlefin/noble-cctp-private-builds/x/router/typ
 // @param amount - amount of minted tokens
 // @param destination_domain - destination domain id
 // @param mint_recipient - address to receive minted tokens on destination
+// @param height - height at which the mint occurred
 // domain
 message Mint {
   uint32 source_domain = 1;
@@ -23,4 +24,5 @@ message Mint {
   cosmos.base.v1beta1.Coin amount = 4;
   uint32 destination_domain = 5;
   string mint_recipient = 6;
+  uint64 height = 7;
 }

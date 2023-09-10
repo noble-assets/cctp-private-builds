@@ -17,9 +17,10 @@ const (
 )
 
 var (
-	IBCForwardPrefix     = []byte("forward/")
-	InFlightPacketPrefix = []byte("inflight/")
-	MintPrefix           = []byte("mint/")
+	IBCForwardPrefix                   = []byte("forward/")
+	InFlightPacketPrefix               = []byte("inflight/")
+	MintPrefix                         = []byte("mint/")
+	AllowedSourceDomainSenderKeyPrefix = []byte("allowedsourcedomainsender/")
 )
 
 func LookupKey(sourceDomain uint32, nonce uint64) []byte {
@@ -32,4 +33,11 @@ func LookupKey(sourceDomain uint32, nonce uint64) []byte {
 
 func InFlightPacketKey(channelID, portID string, sequence uint64) []byte {
 	return []byte(fmt.Sprintf("%s/%s/%d", channelID, portID, sequence))
+}
+
+func SourceDomainSenderKey(domainID uint32, address []byte) []byte {
+	key := make([]byte, 36)
+	binary.BigEndian.PutUint32(key, domainID)
+	copy(key[4:], address)
+	return key
 }

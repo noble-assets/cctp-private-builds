@@ -31,7 +31,7 @@ func RouterKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 	paramsSubspace := typesparams.NewSubspace(cdc,
 		codec.NewLegacyAmino(),
 		storeKey,
-		nil,
+		storeKey,
 		"RouterParams",
 	)
 	k := keeper.NewKeeper(

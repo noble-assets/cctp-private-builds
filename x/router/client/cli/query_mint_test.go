@@ -3,9 +3,10 @@ package cli_test
 import (
 	"encoding/binary"
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"testing"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"google.golang.org/grpc/codes"
 
@@ -41,6 +42,10 @@ func networkWithMintObjects(t *testing.T, n uint32) (*network.Network, []types.M
 			MintRecipient:     "cosmos1x8rynykqla7cnc0tf2f3xn0wa822ztt788yd5a",
 		}
 		state.Mints = append(state.Mints, Mints)
+		state.AllowedSourceDomainSenders = append(state.AllowedSourceDomainSenders, types.AllowedSourceDomainSender{
+			DomainId: i,
+			Address:  addr,
+		})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)

@@ -12,6 +12,7 @@ import (
 
 	keepertest "github.com/circlefin/noble-cctp-private-builds/testutil/keeper"
 	"github.com/circlefin/noble-cctp-private-builds/testutil/nullify"
+	routerkeeper "github.com/circlefin/noble-cctp-private-builds/x/router/keeper"
 	"github.com/circlefin/noble-cctp-private-builds/x/router/types"
 )
 
@@ -20,6 +21,7 @@ var _ = strconv.IntSize
 
 func TestMintQuerySingle(t *testing.T) {
 	keeper, ctx := keepertest.RouterKeeper(t)
+	queryServer := routerkeeper.NewQueryServer(keeper)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNMint(keeper, ctx, 2)
 	for _, tc := range []struct {
@@ -58,7 +60,7 @@ func TestMintQuerySingle(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Mint(wctx, tc.request)
+			response, err := queryServer.Mint(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -74,6 +76,7 @@ func TestMintQuerySingle(t *testing.T) {
 
 func TestMintQueryPaginated(t *testing.T) {
 	keeper, ctx := keepertest.RouterKeeper(t)
+	queryServer := routerkeeper.NewQueryServer(keeper)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNMint(keeper, ctx, 5)
 	Mint := make([]types.Mint, len(msgs))
@@ -92,7 +95,7 @@ func TestMintQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(Mint); i += step {
-			resp, err := keeper.Mints(wctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := queryServer.Mints(wctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Mints), step)
 			require.Subset(t,
@@ -105,7 +108,7 @@ func TestMintQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(Mint); i += step {
-			resp, err := keeper.Mints(wctx, request(next, 0, uint64(step), false))
+			resp, err := queryServer.Mints(wctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
 			require.LessOrEqual(t, len(resp.Mints), step)
 			require.Subset(t,
@@ -116,7 +119,7 @@ func TestMintQueryPaginated(t *testing.T) {
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.Mints(wctx, request(nil, 0, 0, true))
+		resp, err := queryServer.Mints(wctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(Mint), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
@@ -125,7 +128,7 @@ func TestMintQueryPaginated(t *testing.T) {
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.Mints(wctx, nil)
+		_, err := queryServer.Mints(wctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }

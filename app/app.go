@@ -938,6 +938,8 @@ func (app *App) setupUpgradeHandlers() {
 		argon3.CreateUpgradeHandler(
 			app.mm,
 			app.configurator,
+			app.ParamsKeeper,
+			app.RouterKeeper,
 		),
 	)
 

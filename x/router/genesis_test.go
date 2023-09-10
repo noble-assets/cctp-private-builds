@@ -39,6 +39,16 @@ func TestGenesis(t *testing.T) {
 				Metadata:     &types.IBCForwardMetadata{Nonce: 6},
 			},
 		},
+		AllowedSourceDomainSenders: []types.AllowedSourceDomainSender{
+			{
+				DomainId: 7,
+				Address:  []byte{0x01},
+			},
+			{
+				DomainId: 8,
+				Address:  []byte{0x02},
+			},
+		},
 	}
 
 	k, ctx := keepertest.RouterKeeper(t)
@@ -52,4 +62,5 @@ func TestGenesis(t *testing.T) {
 	require.ElementsMatch(t, genesisState.InFlightPackets, got.InFlightPackets)
 	require.ElementsMatch(t, genesisState.Mints, got.Mints)
 	require.ElementsMatch(t, genesisState.IbcForwards, got.IbcForwards)
+	require.ElementsMatch(t, genesisState.AllowedSourceDomainSenders, got.AllowedSourceDomainSenders)
 }
