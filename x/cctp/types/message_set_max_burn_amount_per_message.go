@@ -44,5 +44,13 @@ func (msg *MsgSetMaxBurnAmountPerMessage) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid from address (%s)", err)
 	}
+
+	if len(msg.LocalToken) == 0 {
+		return sdkerrors.Wrapf(ErrInvalidToken, "local token cannot be empty")
+	}
+
+	if msg.Amount.IsNegative() {
+		return sdkerrors.Wrapf(ErrInvalidAmount, "amount must be >= 0")
+	}
 	return nil
 }
