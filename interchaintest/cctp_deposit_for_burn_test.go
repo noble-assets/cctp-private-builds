@@ -22,7 +22,7 @@ import (
 )
 
 // run `make local-image`to rebuild updated binary before running test
-func TestCCTP_NobleDepositForBurnWithCaller(t *testing.T) {
+func TestCCTP_DepositForBurn(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
@@ -142,25 +142,22 @@ func TestCCTP_NobleDepositForBurnWithCaller(t *testing.T) {
 	mintRecipient := make([]byte, 32)
 	copy(mintRecipient[12:], common.FromHex("0xfCE4cE85e1F74C01e0ecccd8BbC4606f83D3FC90"))
 
-	destinationCaller := []byte("12345678901234567890123456789012")
-
-	depositForBurnWithCallerNoble := &cctptypes.MsgDepositForBurnWithCaller{
+	depositForBurnNoble := &cctptypes.MsgDepositForBurn{
 		From:              gw.extraWallets.User.FormattedAddress(),
 		Amount:            cosmossdk_io_math.NewInt(1000000),
 		BurnToken:         denomMetadataDrachma.Base,
 		DestinationDomain: 0,
 		MintRecipient:     mintRecipient,
-		DestinationCaller: destinationCaller,
 	}
 
 	tx, err = cosmos.BroadcastTx(
 		bCtx,
 		broadcaster,
 		gw.extraWallets.User,
-		depositForBurnWithCallerNoble,
+		depositForBurnNoble,
 	)
-	require.NoError(t, err, "error broadcasting msgDepositForBurnWithCaller")
-	require.Zero(t, tx.Code, "msgDepositForBurnWithCaller failed: %s - %s - %s", tx.Codespace, tx.RawLog, tx.Data)
+	require.NoError(t, err, "error broadcasting msgDepositForBurn")
+	require.Zero(t, tx.Code, "msgDepositForBurn failed: %s - %s - %s", tx.Codespace, tx.RawLog, tx.Data)
 
 	afterBurnBal, err := noble.GetBalance(ctx, gw.extraWallets.User.FormattedAddress(), denomMetadataDrachma.Base)
 	require.NoError(t, err)
@@ -179,12 +176,12 @@ func TestCCTP_NobleDepositForBurnWithCaller(t *testing.T) {
 
 			require.Equal(t, uint64(0), depositForBurn.Nonce)
 			require.Equal(t, expectedBurnToken, depositForBurn.BurnToken)
-			require.Equal(t, depositForBurnWithCallerNoble.Amount, depositForBurn.Amount)
+			require.Equal(t, depositForBurnNoble.Amount, depositForBurn.Amount)
 			require.Equal(t, gw.extraWallets.User.FormattedAddress(), depositForBurn.Depositor)
 			require.Equal(t, mintRecipient, depositForBurn.MintRecipient)
 			require.Equal(t, uint32(0), depositForBurn.DestinationDomain)
 			require.Equal(t, tokenMessenger, depositForBurn.DestinationTokenMessenger)
-			require.Equal(t, destinationCaller, depositForBurn.DestinationCaller)
+			require.Equal(t, []byte{}, depositForBurn.DestinationCaller)
 
 		case "circle.cctp.v1.MessageSent":
 			parsedEvent, err := sdk.ParseTypedEvent(rawEvent)
@@ -198,10 +195,12 @@ func TestCCTP_NobleDepositForBurnWithCaller(t *testing.T) {
 			messageSender := make([]byte, 32)
 			copy(messageSender[12:], sdk.MustAccAddressFromBech32(cctptypes.ModuleAddress.String()))
 
-			expectedBurnToken := crypto.Keccak256([]byte(depositForBurnWithCallerNoble.BurnToken))
+			expectedBurnToken := crypto.Keccak256([]byte(depositForBurnNoble.BurnToken))
 
 			moduleAddress := make([]byte, 32)
 			copy(moduleAddress[12:], sdk.MustAccAddressFromBech32(gw.extraWallets.User.FormattedAddress()))
+
+			destinationCaller := make([]byte, 32)
 
 			require.Equal(t, uint32(0), message.Version)
 			require.Equal(t, uint32(4), message.SourceDomain)
@@ -216,7 +215,7 @@ func TestCCTP_NobleDepositForBurnWithCaller(t *testing.T) {
 
 			require.Equal(t, uint32(0), body.Version)
 			require.Equal(t, mintRecipient, body.MintRecipient)
-			require.Equal(t, depositForBurnWithCallerNoble.Amount, body.Amount)
+			require.Equal(t, depositForBurnNoble.Amount, body.Amount)
 			require.Equal(t, expectedBurnToken, body.BurnToken)
 			require.Equal(t, moduleAddress, body.MessageSender)
 		}

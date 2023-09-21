@@ -28,7 +28,7 @@ import (
 )
 
 // run `make local-image`to rebuild updated binary before running test
-func TestCCTP_NobleReplaceDepositForBurn(t *testing.T) {
+func TestCCTP_ReplaceDepositForBurn(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}

@@ -32,7 +32,7 @@ import (
 )
 
 // run `make local-image`to rebuild updated binary before running test
-func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
+func TestCCTP_ReceiveMessageWithCaller(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
@@ -215,7 +215,8 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 
 	var senderBurn = []byte("12345678901234567890123456789012")
 
-	emptyDestinationCaller := make([]byte, 32)
+	destinationCaller := make([]byte, 32)
+	copy(destinationCaller[12:], gw.fiatTfRoles.Owner.Address())
 
 	wrappedDepositForBurn := cctptypes.Message{
 		Version:           0,
@@ -224,7 +225,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 		Nonce:             0, // dif per message
 		Sender:            senderBurn,
 		Recipient:         cctptypes.PaddedModuleAddress,
-		DestinationCaller: emptyDestinationCaller,
+		DestinationCaller: destinationCaller,
 		MessageBody:       depositForBurnBz,
 	}
 
@@ -248,7 +249,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 		Nonce:             1,             // cant be same nonce as above
 		Sender:            senderForward, // different sender !
 		Recipient:         burnRecipientPadded,
-		DestinationCaller: emptyDestinationCaller,
+		DestinationCaller: destinationCaller,
 		MessageBody:       forwardBz,
 	}
 
@@ -347,7 +348,7 @@ func TestCCTP_DepForBurnNoCallerOnEth(t *testing.T) {
 	// gaia.Validators[0].SendIBCTransfer(ctx, "channel-0", )
 
 	// depositForBurnNoble := &cctptypes.MsgDepositForBurn{
-	// 	BurnToken:uusdc
+	// 	BurnToken: "is this the sam as coming from e TRY UUSDC",
 	// 	Amount:    cosmossdk_io_math.NewInt(1000000),
 	// }
 
