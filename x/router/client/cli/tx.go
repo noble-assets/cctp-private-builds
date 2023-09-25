@@ -18,5 +18,10 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
+	cmd.AddCommand(CmdUpdateOwner())
+	cmd.AddCommand(CmdAcceptOwner())
+	cmd.AddCommand(CmdAddAllowedSourceDomainSender())
+	cmd.AddCommand(CmdRemoveAllowedSourceDomainSender())
+
 	return cmd
 }
